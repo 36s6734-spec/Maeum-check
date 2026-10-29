@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마음 점검 - 서비스직 스트레스 자가진단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F5FA;--card:#fff;--ink:#2B2A33;--sub:#7A7885;--line:#E7E5EF;--pill:#2B2A33;--mint:#B6EBD2;--yel:#FFE27A;--ora:#FFC18F;--pink:#FFB8C9;--pur:#C9B8FF}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding:20px 16px 110px}
+h1{font-size:22px;margin:8px 0 4px}h2{font-size:18px;margin:0 0 8px}p{margin:0 0 8px}
+.sub{color:var(--sub);font-size:14px}
+.card{background:var(--card);border-radius:22px;padding:18px;margin:12px 0;box-shadow:0 2px 10px rgba(43,42,51,.06)}
+.big{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;cursor:pointer;width:100%;border:0;text-align:left;font:inherit}
+.big svg{flex:none;width:56px;height:56px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0}
+.opt{border:0;background:none;padding:0;text-align:center;font:inherit;font-size:12px;color:var(--sub);cursor:pointer}
+.opt svg{width:100%;max-width:56px;border-radius:50%;border:3px solid transparent}
+.opt.on svg{border-color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn{border:0;border-radius:999px;background:var(--ink);color:#fff;padding:12px 22px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.row{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden;margin:4px 0 12px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--pur)}
+.bar.me i{background:var(--ink)}
+.lab{display:flex;justify-content:space-between;font-size:14px}
+.prog{height:6px;background:var(--line);border-radius:99px;overflow:hidden}.prog i{display:block;height:100%;background:var(--ink)}
+.notice{border-radius:16px;padding:12px 14px;margin:12px 0;font-size:14px;background:#fff;border:1.5px solid var(--line)}
+.notice.err{background:#FFF0F3;border-color:var(--pink)}.notice.crisis{background:#FFF7DB;border-color:var(--yel)}
+.map{height:220px;border-radius:18px;border:2px dashed var(--line);display:grid;place-items:center;color:var(--sub);font-size:14px}
+.src{font-size:12px;color:var(--sub);margin:18px 4px}
+.nav{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:6px;background:var(--pill);padding:8px;border-radius:999px}
+.nav a{color:#C9C7D4;text-decoration:none;font-size:14px;padding:9px 16px;border-radius:999px}
+.nav a.on{background:#fff;color:var(--ink);font-weight:600}
+a:focus-visible,button:focus-visible{outline:3px solid var(--pur);outline-offset:2px}
+.hl{text-align:center}.hl svg{width:96px;height:96px}
+ul{padding-left:18px;margin:6px 0}
+body{font-family:"Gowun Dodum",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.65}
+h1,h2{font-family:"Jua","Gowun Dodum","Malgun Gothic",sans-serif;font-weight:400}
+.ttl{text-align:center;font-size:36px;margin:14px 0 6px}.ctr{text-align:center}
+.ib{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;flex:none;color:#2B2A33}
+.big .ib svg{width:28px;height:28px}
+.nav a{display:flex;align-items:center;gap:6px}.nav svg{width:18px;height:18px}
+.talk{background:#FFFDF3}.talk p{line-height:1.85}
+.in{animation:inR .35s ease both}.inl{animation:inL .35s ease both}
+@keyframes inR{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.in,.inl{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="err" class="notice err" hidden></div>
+  <main id="view"></main>
+  <footer id="src" class="src"></footer>
+  <nav class="nav" aria-label="메뉴">
+    <a href="#home">홈</a><a href="#test">진단</a><a href="#result">결과</a><a href="#map">지도</a>
+  </nav>
+</div>
+<script>
+// KOSIS 「산업안전보건실태조사」 2020 (한국산업안전보건공단) 통계표 2개를 변환한 데이터
+const DATA={"stress":{"meta":{"id":"DT_380004_MS16_1_1","title":"스트레스 요인별 심각도 - 고객 대상 감정 노동","period":"[3년] 2020~2020","source":"「산업안전보건실태조사」, 한국산업안전보건공단","downloaded":"2026.10.27 08:35"},"rows":[{"industry":"전체","size":"소계","n":5806,"p1":30.2,"p2":31.1,"neg":61.3,"p3":25.6,"p4":10.7,"p5":2.5,"pos":13.1,"avg":2.24},{"industry":"제조업","size":"소계","n":3255,"p1":39.5,"p2":37.4,"neg":76.9,"p3":19.5,"p4":3.2,"p5":0.4,"pos":3.6,"avg":1.88},{"industry":"제조업","size":"20-49인","n":2277,"p1":41.1,"p2":36.5,"neg":77.6,"p3":19.3,"p4":2.9,"p5":0.3,"pos":3.2,"avg":1.85},{"industry":"제조업","size":"50-99인","n":608,"p1":35.1,"p2":38.9,"neg":74,"p3":20.6,"p4":4.6,"p5":0.8,"pos":5.4,"avg":1.97},{"industry":"제조업","size":"100-299인","n":264,"p1":34.1,"p2":41.9,"neg":76,"p3":20.8,"p4":3.3,"p5":0,"pos":3.3,"avg":1.93},{"industry":"제조업","size":"300-999인","n":96,"p1":45.4,"p2":39.2,"neg":84.6,"p3":12.4,"p4":2.4,"p5":0.5,"pos":2.9,"avg":1.73},{"industry":"제조업","size":"1,000인 이상","n":11,"p1":28.3,"p2":35.5,"neg":63.8,"p3":36.2,"p4":0,"p5":0,"pos":0,"avg":2.08},{"industry":"서비스업","size":"소계","n":2551,"p1":18.3,"p2":23.1,"neg":41.4,"p3":33.3,"p4":20.2,"p5":5.1,"pos":25.3,"avg":2.71},{"industry":"서비스업","size":"20-49인","n":1477,"p1":19.6,"p2":23.7,"neg":43.2,"p3":32.9,"p4":18.7,"p5":5.1,"pos":23.8,"avg":2.66},{"industry":"서비스업","size":"50-99인","n":559,"p1":18.5,"p2":24.1,"neg":42.7,"p3":31.9,"p4":21.5,"p5":4,"pos":25.5,"avg":2.68},{"industry":"서비스업","size":"100-299인","n":358,"p1":16.8,"p2":18.2,"neg":35,"p3":36.2,"p4":21.9,"p5":6.8,"pos":28.8,"avg":2.84},{"industry":"서비스업","size":"300-999인","n":140,"p1":8.8,"p2":26.9,"neg":35.7,"p3":34.9,"p4":24.6,"p5":4.8,"pos":29.4,"avg":2.9},{"industry":"서비스업","size":"1,000인 이상","n":16,"p1":17.4,"p2":9.2,"neg":26.6,"p3":36.6,"p4":32.2,"p5":4.6,"pos":36.8,"avg":2.97}]},"effort":{"meta":{"id":"DT_380004_MS16_2_1","title":"스트레스 요인별 관리 노력 정도 - 고객 대상 감정 노동","period":"[3년] 2020~2020","source":"「산업안전보건실태조사」, 한국산업안전보건공단","downloaded":"2026.10.27 08:40"},"rows":[{"industry":"전체","size":"소계","n":5806,"p1":3,"p2":4.6,"neg":7.6,"p3":30.2,"p4":33.1,"p5":29.1,"pos":62.2,"avg":3.81},{"industry":"제조업","size":"소계","n":3255,"p1":4.2,"p2":5.2,"neg":9.3,"p3":33.8,"p4":32,"p5":24.9,"pos":56.9,"avg":3.68},{"industry":"제조업","size":"20-49인","n":2277,"p1":3.6,"p2":3.9,"neg":7.5,"p3":33.4,"p4":32.9,"p5":26.3,"pos":59.2,"avg":3.74},{"industry":"제조업","size":"50-99인","n":608,"p1":3.3,"p2":6.6,"neg":9.9,"p3":33.7,"p4":32.2,"p5":24.2,"pos":56.4,"avg":3.67},{"industry":"제조업","size":"100-299인","n":264,"p1":7.4,"p2":9.2,"neg":16.6,"p3":33.8,"p4":30.1,"p5":19.5,"pos":49.7,"avg":3.45},{"industry":"제조업","size":"300-999인","n":96,"p1":14.5,"p2":16.8,"neg":31.3,"p3":42.8,"p4":12.7,"p5":13.2,"pos":25.9,"avg":2.93},{"industry":"제조업","size":"1,000인 이상","n":11,"p1":3.8,"p2":0,"neg":3.8,"p3":38.6,"p4":44.9,"p5":12.7,"pos":57.7,"avg":3.63},{"industry":"서비스업","size":"소계","n":2551,"p1":1.6,"p2":3.8,"neg":5.5,"p3":25.6,"p4":34.6,"p5":34.3,"pos":68.9,"avg":3.96},{"industry":"서비스업","size":"20-49인","n":1477,"p1":1.9,"p2":4.7,"neg":6.6,"p3":25.6,"p4":34.1,"p5":33.7,"pos":67.8,"avg":3.93},{"industry":"서비스업","size":"50-99인","n":559,"p1":0.8,"p2":2.8,"neg":3.6,"p3":26.3,"p4":32.9,"p5":37.2,"pos":70.1,"avg":4.03},{"industry":"서비스업","size":"100-299인","n":358,"p1":1.5,"p2":1.9,"neg":3.4,"p3":23,"p4":37.5,"p5":36.1,"pos":73.6,"avg":4.05},{"industry":"서비스업","size":"300-999인","n":140,"p1":2.5,"p2":4.1,"neg":6.6,"p3":30.2,"p4":40.7,"p5":22.4,"pos":63.2,"avg":3.76},{"industry":"서비스업","size":"1,000인 이상","n":16,"p1":0,"p2":4.6,"neg":4.6,"p3":19.5,"p4":26.3,"p5":49.6,"pos":75.9,"avg":4.21}]}};
+const Q=[['A1','감정노동 부담','고객을 대하는 일로 받는 스트레스가 심각한 편이다.'],['A2','감정노동 부담','일하는 동안 내 감정을 숨기고 표정·말투를 억지로 맞춘다.'],['A3','감정노동 부담','고객이 화를 내도 끝까지 웃거나 침착해야 한다는 압박을 느낀다.'],
+['B1','악성 민원 경험 (최근 3개월)','고객에게 욕설, 폭언, 반말을 들은 적이 있다.'],['B2','악성 민원 경험 (최근 3개월)','부당한 요구나 같은 내용의 반복 항의로 곤란했던 적이 있다.'],['B3','악성 민원 경험 (최근 3개월)','신체적 위협이나 성적 언행을 겪은 적이 있다.'],
+['C1','심신 상태 (최근 2주)','일 때문에 잠들기 어렵거나 자주 깼다.'],['C2','심신 상태 (최근 2주)','몸이 쉽게 피로하고 두통·소화불량 등이 잦았다.'],['C3','심신 상태 (최근 2주)','사소한 일에도 예민해지거나 짜증이 늘었다.'],['C4','심신 상태 (최근 2주)','퇴근 후에도 고객 응대 장면이 떠올라 마음이 편하지 않았다.'],
+['D1','보호·회복 환경','우리 사업장은 감정노동 스트레스를 줄이려고 노력한다.'],['D2','보호·회복 환경','그 노력이 실제로 내 스트레스를 줄이는 데 도움이 된다.'],['D3','보호·회복 환경','고객 응대 후 마음을 가라앉힐 휴식이 충분히 보장된다.'],
+['E1','마무리','감정노동 때문에 이직을 고민한 적이 있다.']];
+const SCALE=['전혀 아니다','아니다','보통','그렇다','매우 그렇다'];
+const E2=['마음 털어놓을 상담','사업장에 요구할 수 있는 권리','회복 방법','지금은 괜찮다'];
+const E3=['아니요','가끔','자주','답하고 싶지 않다'];
+const LV=[{n:'안정',m:'지금은 괜찮지만 예방이 중요해요',h:'지금처럼 잘 지내고 있다니 다행이에요. 그래도 사람을 대하는 일은 조금씩 쌓이는 일이라서, 퇴근길에 잠깐 숨을 고르는 시간을 만들어 두면 좋아요. 마음이 편할 때 내 권리도 미리 알아 두면 든든해요.'},
+{n:'주의',m:'쌓이기 시작한 단계예요',h:'요즘 마음에 조금씩 쌓이고 있는 것 같아요. 그건 이상한 게 아니에요. 사람을 계속 상대하다 보면 누구나 지치거든요. 오늘은 잠깐이라도 나를 챙기는 시간을 가져 보면 어때요? 힘든 일이 반복되면 혼자 삼키지 말고, 믿을 만한 사람이나 상담 기관에 이야기해 보세요.'},
+{n:'위험',m:'혼자 버티기엔 무거운 상태예요',h:'많이 애쓰고 있었네요. 지금 느끼는 무거움은 약해서가 아니라, 그만큼 오래 열심히 버텨 왔다는 신호예요. 혼자 해결하려 하지 말고, 이야기를 들어 줄 상담 기관에 먼저 연락해 보세요. 쉬는 시간도 꼭 챙겨 주세요.'},
+{n:'고위험',m:'지금 도움을 받는 게 필요해요',h:'지금 많이 힘든 상태로 보여요. 여기까지 혼자 버텨 온 것만으로도 정말 애썼어요. 이제는 도움을 받아도 괜찮아요. 가장 먼저 상담 기관에 연락해 보세요. 오늘 하루는 나를 쉬게 해 주는 것도 잊지 말아 주세요.'}];
+const COL=['#B6EBD2','#FFE27A','#FFC18F','#FFB8C9','#C9B8FF'],MOUTH=['M12 25Q20 33 28 25','M13 26Q20 30 27 26','M13 27L27 27','M13 29Q20 24 27 29','M12 30Q20 21 28 30'];
+const V=document.getElementById('view');
+let stats=null,S,lastE3='';
+const face=(c,m)=>`<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="${COL[c]}"/><circle cx="14" cy="17" r="2.2" fill="#2B2A33"/><circle cx="26" cy="17" r="2.2" fill="#2B2A33"/><path d="${MOUTH[m]}" fill="none" stroke="#2B2A33" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,f1=x=>x.toFixed(1);
+const load=()=>{try{return JSON.parse(localStorage.getItem('mc.results')||'[]')}catch(e){return[]}};
+const save=a=>{try{localStorage.setItem('mc.results',JSON.stringify(a.slice(-20)))}catch(e){}};
+const row=(k,size)=>stats&&(stats[k].rows.find(r=>r.industry==='서비스업'&&r.size===size)||stats[k].rows.find(r=>r.industry==='서비스업'&&r.size==='소계'));
+
+const IC={home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',test:'<rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/>',result:'<path d="M5 20V11M12 20V4M19 20v-6"/>',map:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>'};
+const ico=k=>`<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
+function anim(d){V.classList.remove('in','inl');void V.offsetWidth;V.classList.add(d>0?'in':'inl')}
+function home(){V.innerHTML=`<h1 class="ttl">마음 점검</h1><p class="sub ctr">고객을 대하는 일, 요즘 얼마나 무거운가요? 3분이면 내 상태를 확인할 수 있어요.</p>
+<a class="card big" href="#test"><span class="ib" style="background:#B6EBD2">${ico('test')}</span><span><h2>자가진단</h2><span class="sub">16문항으로 스트레스 수준 점검하기</span></span></a>
+<a class="card big" href="#result"><span class="ib" style="background:#FFE27A">${ico('result')}</span><span><h2>결과 확인</h2><span class="sub">내 결과와 지난 결과 비교하기</span></span></a>
+<a class="card big" href="#map"><span class="ib" style="background:#C9B8FF">${ico('map')}</span><span><h2>지도</h2><span class="sub">근처 도움 기관 (추후 제공)</span></span></a>
+<p class="sub ctr">이 검사는 의학적 진단이 아니라 스트레스 점검 도구예요.</p>`}
+
+function test(dir){if(!S)S={step:0,a:{},e2:[],e3:''};const n=Q.length+2,s=S.step;let body,ok;
+if(s<Q.length){const q=Q[s];ok=!!S.a[q[0]];body=`<p class="sub">${q[1]}</p><h2>${q[2]}</h2><div class="grid">${SCALE.map((t,i)=>`<button class="opt ${S.a[q[0]]===i+1?'on':''}" data-v="${i+1}">${face(i,i)}${t}</button>`).join('')}</div>`}
+else if(s===Q.length){ok=S.e2.length>0;body=`<h2>지금 가장 필요한 도움은?</h2><p class="sub">여러 개 고를 수 있어요.</p><div class="chips">${E2.map(t=>`<button class="chip ${S.e2.includes(t)?'on':''}" data-e2="${t}">${t}</button>`).join('')}</div>`}
+else{ok=!!S.e3;body=`<h2>최근 2주 사이 스스로를 해치고 싶다는 생각이 들었다.</h2><p class="sub">이 답변은 저장하지 않아요.</p><div class="chips">${E3.map(t=>`<button class="chip ${S.e3===t?'on':''}" data-e3="${t}">${t}</button>`).join('')}</div>`}
+V.innerHTML=`<div class="prog"><i style="width:${(s/(n-1))*100}%"></i></div><div class="card">${body}<div class="row"><button class="btn ghost" id="pv" ${s?'':'disabled'}>이전</button><button class="btn" id="nx" ${ok?'':'disabled'}>${s===n-1?'결과 확인':'다음'}</button></div></div>`;
+V.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{S.a[Q[s][0]]=+b.dataset.v;test()});
+V.querySelectorAll('[data-e2]').forEach(b=>b.onclick=()=>{const t=b.dataset.e2;S.e2=S.e2.includes(t)?S.e2.filter(x=>x!==t):[...S.e2,t];test()});
+V.querySelectorAll('[data-e3]').forEach(b=>b.onclick=()=>{S.e3=b.dataset.e3;test()});
+document.getElementById('pv').onclick=()=>{S.step--;test(-1)};
+document.getElementById('nx').onclick=()=>{if(s<n-1){S.step++;test(1)}else finish()};
+if(dir)anim(dir)}
+
+function finish(){const a=S.a,g=k=>Q.filter(q=>q[0][0]===k).map(q=>a[q[0]]),A=mean(g('A')),B=mean(g('B')),C=mean(g('C')),st=mean([...g('A'),...g('B'),...g('C')]);
+const lv=st<2?0:st<3?1:st<4?2:3,r={t:Date.now(),A,B,C,st,lv,d1:a.D1,d2:a.D2,d3:a.D3,b3:a.B3,a1:a.A1,e1:a.E1,e2:S.e2};
+lastE3=S.e3;const h=load();h.push(r);save(h);S=null;location.hash='#result'}
+
+const bar=(l,v,max,cls='')=>`<div class="lab"><span>${l}</span><b>${f1(v)}</b></div><div class="bar ${cls}"><i style="width:${v/max*100}%"></i></div>`;
+function result(){const h=load();if(!h.length){V.innerHTML=`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>`;return}
+const r=h[h.length-1],p=h[h.length-2],L=LV[r.lv],ss=row('stress','소계'),ef=row('effort','소계'),d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?`${f1(x-y)} 높아졌어요`:`${f1(y-x)} 낮아졌어요`;
+const small=x=>x&&x.n<30?' (표본이 적어 참고용)':'';
+let o=`<h1>내 결과</h1>`;
+if(lastE3==='가끔'||lastE3==='자주')o+=`<div class="notice crisis"><b>먼저 확인해 주세요.</b> 지금 마음이 많이 힘들다면 혼자 있지 말고 자살예방상담전화 109로 연락해 보세요. 위급하면 112 또는 119에 바로 연락하세요.</div>`;
+o+=`<div class="card hl">${face(r.lv===0?0:r.lv===1?1:r.lv===2?2:3,[0,1,3,4][r.lv])}<h2>${L.n} 단계</h2><p>${L.m}</p><p class="sub">스트레스 평균 ${f1(r.st)}점 (1~5점, 높을수록 힘든 상태)</p></div>`;
+o+=`<div class="card"><h2>영역별 점수</h2>${bar('감정노동 부담',r.A,5)}${bar('악성 민원 경험',r.B,5)}${bar('심신 상태',r.C,5)}${bar('보호 부족도 (D2·D3 역채점)',mean([6-r.d2,6-r.d3]),5)}<p class="sub">사업장 노력 인지(D1): ${r.d1}점${r.d1>=4&&r.d2<=2?' · 노력은 있지만 내게는 체감되지 않는 상태예요.':''}</p></div>`;
+o+=`<div class="card"><h2>같은 업종과 비교</h2>`+(ss?`${bar('내 응답(A1)',r.a1,5,'me')}${bar('서비스업 전체 평균',ss.avg,5)}<p>서비스업 전체 중 <b>${ss.pos}%</b>가 스트레스가 심각하다고 답했어요${small(ss)}.</p>${ef?`<p>같은 업종에서 <b>${ef.pos}%</b>는 사업장이 관리에 노력한다고 답했어요${small(ef)}.</p>`:''}<p class="sub">출처: ${stats.stress.meta.source}, ${stats.stress.meta.period.replace('[3년] ','')}, 단위: % · 점</p>`:`<div class="notice err">통계 데이터를 불러오지 못해 비교할 수 없어요.</div>`)+`</div>`;
+if(p)o+=`<div class="card"><h2>지난 결과와 비교</h2><p>스트레스 평균이 지난번(${new Date(p.t).toLocaleDateString('ko-KR')}, ${LV[p.lv].n})보다 ${d(r.st,p.st)}.</p><p class="sub">감정노동 부담 ${d(r.A,p.A)} · 악성 민원 ${d(r.B,p.B)} · 심신 상태 ${d(r.C,p.C)}</p></div>`;
+else o+=`<div class="notice">지난 결과가 없어서 비교할 수 없어요. 다음 진단부터 비교해 드려요.</div>`;
+o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>${r.b3>=3?'<p>몸을 위협하거나 성적인 말·행동을 겪으셨다면, 그건 어떤 이유로도 참아야 할 일이 아니에요. 일어난 일을 기록해 두고 사업장이나 상담 기관에 꼭 알려 주세요.</p>':''}${r.e2.length?`<p class="sub">원하는 도움: ${r.e2.join(', ')}</p>`:''}<a class="btn" href="#map" style="display:inline-block;text-decoration:none">근처 상담 기관 찾아보기</a></div>
+<div class="card talk"><h2>내 권리 안내</h2><p>혹시 "이 정도는 참아야 하는 거 아닌가" 하고 생각한 적 있나요? 고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 투정이 아니라 법에서 보장하는 권리예요. 그렇게 말했다고 불이익을 받아서도 안 되고요.</p><p>말하기 어렵다면, 힘들었던 일을 날짜와 함께 메모해 두는 것부터 시작해 보세요. 나중에 도움을 받을 때 큰 힘이 돼요.</p><p class="sub">근거: 산업안전보건법 제41조</p></div>`;
+o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>${new Date(x.t).toLocaleDateString('ko-KR')} · ${LV[x.lv].n} · ${f1(x.st)}점</li>`).join('')}</ul><button class="btn ghost" id="del">저장된 결과 모두 지우기</button></div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">다시 진단하기</a>`;
+V.innerHTML=o;document.getElementById('del').onclick=()=>{if(confirm('이 기기에 저장된 결과를 모두 지울까요?')){save([]);lastE3='';result()}}}
+
+function map(){V.innerHTML=`<h1>지도</h1><p class="sub">근처에서 도움받을 수 있는 기관의 위치를 보여줄 예정이에요.</p><div class="card"><div class="map" id="map">지도 영역 (추후 구현 예정)</div></div>`}
+
+const routes={home,test,result,map};
+function go(){const r=(location.hash||'#home').slice(1);(routes[r]||home)();document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.hash==='#'+r));scrollTo(0,0);anim(1)}
+addEventListener('hashchange',go);
+try{stats=DATA;const m=stats.stress.meta,e=stats.effort.meta;document.getElementById('src').textContent=`통계 출처: ${m.source} (KOSIS ${m.id}, ${e.id}) · 기준 시점: ${m.period.replace('[3년] ','')}년 · 다운로드 ${m.downloaded.slice(0,10)}`}catch(x){const e=document.getElementById('err');e.hidden=false;e.textContent='통계 데이터를 불러오지 못했어요. 코드의 DATA 부분이 손상되지 않았는지 확인해 주세요. 자가진단과 채점은 계속 쓸 수 있어요.'}
+document.querySelector('.nav').innerHTML=[['home','홈'],['test','진단'],['result','결과'],['map','지도']].map(([k,t])=>`<a href="#${k}">${ico(k)}<span>${t}</span></a>`).join('');
+go();
+</script>
+</body>
+</html>
