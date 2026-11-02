@@ -148,42 +148,167 @@ o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>${r.b3>=3?'<p>몸�
 o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>${new Date(x.t).toLocaleDateString('ko-KR')} · ${LV[x.lv].n} · ${f1(x.st)}점</li>`).join('')}</ul><button class="btn ghost" id="del">저장된 결과 모두 지우기</button></div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">다시 진단하기</a>`;
 V.innerHTML=o;document.getElementById('del').onclick=()=>{if(confirm('이 기기에 저장된 결과를 모두 지울까요?')){save([]);lastE3='';result()}}}
 
+// 상담·정신과 목록: 아래 따옴표(`) 사이에 팀이 모은 목록을 그대로 붙여 넣으세요.
+// 형식: 구 이름 한 줄, 다음 줄에 "상담: 이름(전화), 이름(전화)" / "정신과: 이름(전화), ..."
+const RAW=`
+`;강남구
+상담: 강남심리상담센터(02-2135-1131), 강남심리상담센터 해맑음(010-9510-2022), 양소영 심리상담센터(02-557-9701), 숨&쉼 심리상담센터(50-71336-3616), 호시담 선릉점(02-745-1052)
+정신과: Seoul Psychiatry Clinic Gangnam(영어 가능, 02-3453-8856), 마음소담(02-565-0199), 사유(02-566-9946), 삼성공감 강남점(02-6956-1771)
+서초구
+상담: 심리플러스상담센터(02-577-0606), 별마음심리상담센터(070-4119-5919), 심리상담 늘품(010-2655-3750), 기쁨심리상담센터(02-534-9285), 한국종합심리상담교육센터(02-3471-5522)
+정신과: 강남푸른(02-523-7008), 디에프 서초(02-597-2005), 연세휴(02-3473-7575), 이지브레인서초(02-6338-8559), 최신경정신과(02-2267-3970), 윌(02-582-7755)
+송파구
+상담: 다온(010-4981-5334), 잠실심리상담센터 해맑음(010-5150-1707), 유해피 송파잠실점(02-421-1070), 허그맘허그인 송파잠실문정점(010-4731-0051), 라파(010-6397-3927)
+정신과: 송파성모(02-2054-8977), 서울더나은(02-401-2012), 송파삼성(02-2203-7582), 송파서울신경정신과(02-415-8468), 타임(02-404-0321)
+강동구
+상담: 말하기듣기 심리상담센터(02-3427-1127), 신은혜 심리상담센터(010-2229-3512), Therapist Grace(010-2572-2683), 오후4시 심리상담센터(50-71467-1078), 조은심리상담연구소(02-442-8810)
+정신과: 강동신경정신과(02-487-6220), 대성(02-485-4288), 테오(02-427-7583), 평온(02-488-8555), 연세필(02-6383-7700)
+관악구
+상담: 다담심리상담센터(02-6396-7255), 온길심리상담센터, 관악구정신건강복지센터(02-879-4911), 한울지역정신건강센터(02-877-9964), 관악구청소년상담복지센터(02-871-7942)
+정신과: 한빛(02-887-2158), 연세훈(02-888-9860), 가람(02-859-8500), 맑음(02-6052-0004), 마음챙김(02-534-8856)
+종로구
+상담: 종로구정신건강복지센터(02-745-0199), 지와감심리상담센터(02-2252-9004), You&Me 심리상담연구소(영어 가능, 02-6929-3014), 트라우마 인 소마(010-8283-1513), 광화문심리상담센터
+정신과: 연세 정신건강의학과(02-765-9441), 김창윤(02-794-3418), 연세광화문(02-735-0602), 광화문숲(02-722-7977), 송신경정신과(02-734-5648)
+중구
+상담: 마음산책(02-821-5953), OCEAN Counseling(영어 가능, 02-2088-8225), 중구정신건강증진센터(02-2236-6606), 서울라운지 부부상담클리닉(02-310-9612), 시립인터넷중독예방상담센터 중부(02-912-6410)
+정신과: Seoul Central Mental Health Clinic(영어 가능, 02-779-7660), 시청역성모(02-318-5330), 연세웰(02-3789-9888), 다산로 정신건강의학과(02-2234-5510), 당신의숲(02-2135-1898)
+용산구
+상담: 마인드카페 용산점(02-790-9811), 인정심리상담센터, 맑은샘심리상담연구소(02-385-6494), 용산구정신건강복지센터(02-703-8340), 밝은희망부부상담클리닉(1522-5239)
+정신과: 지혜샘(02-3272-8275), 윤혜리(02-2138-7588), 오늘(02-797-8272), 서울휴, 디에프 용산(02-794-7278)
+성동구
+상담: 살구마인드 성수점(010-7400-6934), 해피팝(02-469-9942), 헬로스마일 성수점(02-6953-5412), 새벽별심리상담센터, 마음온기(010-2313-7659)
+정신과: 서울알파(02-499-0787), 김용호(02-2291-4002), 서울숲봄(02-6954-7503), 서울나아가는(02-6953-0706)
+광진구
+상담: 마음데이 1호(010-6751-8904), 마음과수용(02-466-1787), 마음행복(02-461-3010), 광진구청소년상담복지센터(02-2205-2300), 허밍랜드(010-4232-3883)
+정신과: 성모힐(02-2138-5568), 건대하늘, 프레즌트(02-452-9275), 가온(02-464-6051), 유지민(02-452-2030)
+동대문구
+상담: 다움심리상담센터(02-3394-7906), 이정상심리상담부부가족상담센터(02-877-1279), 허그맘허그인 동대문구센터(02-3390-3080), 동대문구건강가정지원센터(02-957-0760)
+정신과: 마음과 마음(02-6959-0456), 밝은봄(02-3295-3058), 더봄(02-962-6300), 오정신건강의학과(02-969-7341), 최태영(02-2245-9940)
+중랑구
+상담: 지혜로운마음(010-4674-5916), 마음상봉(010-9819-5005), 위심리언어상담센터(02-412-8489), 봄햇살(010-2230-7792), 마음캐치(010-7977-6367)
+정신과: 서울윤(02-433-9400), 마음담은(02-2038-3070), 지음(02-434-4345), 세화정신과(02-439-5522)
+성북구
+상담: 허그맘허그인 성북센터(010-4201-0207), 성북구심리지원센터(02-2241-6256), 호시담 성북동점(02-745-1052), 심리상담센터 곁에,(010-6611-1725), 엠브레스마인드 성북본점(02-941-6255), 성북구정신건강복지센터(02-2241-6314)
+정신과: 무지개(02-928-8899), 휴앤힐(02-922-1183), 정릉손(02-918-7582), 아린(02-989-7907)
+강북구 (검색 결과 6곳)
+상담: 담아드는심리상담센터(010-6858-4044), 강북구정신건강복지센터(02-985-0222), 강북구청소년상담복지센터(02-6715-6661)
+정신과: 같은마음(02-903-7557), 박동언(02-6952-9777), 수유다니엘(02-987-0175)
+도봉구 (8곳)
+상담: 다정한마음(010-4286-2475), 도봉아동심리발달센터(02-900-7955), 도봉구청소년상담복지센터(02-950-8640), 도봉구건강가정다문화가족지원센터(02-995-6800)
+정신과: 푸른고래(070-8880-9999), 연세한별(02-955-9924), 성모샘(02-951-0552), 율담
+노원구 (9곳)
+상담: 잇다심리상담연구소 노원센터(02-933-4750), 헬로스마일 노원점(02-936-5412), chesed(02-931-1307), 우리마음심리상담소(02-6221-6544), 허그맘허그인 노원점(02-930-0744)
+정신과: 디딤(02-909-8782), 이앤정(02-939-0909), 김태영(02-937-0118), 연세소울 노원클리닉(02-933-7501)
+은평구 (8곳)
+상담: 심리상담센터 숨(02-382-3123), 엠브레스마인드 은평직영점(02-389-9280), 심리상담센터 채운(50-71379-8462)
+정신과: 서울지음(02-356-6212), 성모열린(02-356-8210), 연세봄(02-354-5511), Yonsei Forest Clinic(02-352-1872), 성모서울(02-6956-7715)
+서대문구 (6곳)
+상담: 서대문구청소년상담복지센터(02-3141-1318)
+정신과: 서대문봄(02-365-1334), 연세밝은마음(02-3417-1122), 좋은(02-302-7711), 고려힐링 아현(02-6354-8275), 조이(02-6949-5551)
+마포구
+상담: KimYon 심리상담센터(02-336-0707), 마인드카페 마포공덕점(02-6952-0233), 힐다임(02-6958-5258), 마음앤마음(02-707-1122), 허그맘허그인 마포센터(02-2138-6255)
+정신과: 마포성모(02-6953-7531), 동교(02-333-3572), 연세자인(02-717-7706), 정유리(02-711-9900), 연세하늘(02-332-8788)
+양천구
+상담: 양천구정신건강복지센터(02-2061-8881), 한결(02-2690-9413), 보듬과아우름(02-2642-3375), 자기다운(02-2168-4050), 양천구청소년상담복지센터(02-2646-8341)
+정신과: 마음의뜰(02-2643-6435), 한마음(02-2696-0074), 목동필(02-2696-8114), 서울연
+강서구
+상담: Enssiyi(02-3661-7276), 마음담아(50-5747-7979), 마인드카페 강서점(02-6952-9816), 허그맘허그인 강서점(02-2088-3515), 강서구정신건강복지센터(02-2600-5926), 강서구청소년상담복지센터(02-2649-1318)
+정신과: 이지, 마음의지도(02-6406-7575), 마음과(02-2697-8575), 김슬기(070-7657-9293), 마곡(02-6053-1416), 화곡(02-2608-5558)
+구로구
+상담: 마음치유클리닉(02-2678-7119), 심리상담클리닉 동그란(010-8022-3844), 조이심리상담센터(010-7632-5997), 구로구청소년상담복지센터(02-2060-1388), 마음사서함(010-2981-1784)
+정신과: 푸른솔, 연세봄(02-867-2022), 성모연(02-2038-7785), 연세정신건강의학과(02-855-9996), 고려제일(02-859-4469), 김경률(02-2678-2679)
+금천구
+상담: 심리상담센터 오늘은, 금천구정신건강복지센터(02-3281-9314), 마음클릭(010-2685-2429), 다르마심리상담명상센터(02-808-8718), 금천구건강가정다문화가족지원센터(02-803-7747)
+정신과: 금천 키다리(02-857-7015), 연세가산숲(02-6954-0707), 에스, 나래(02-802-3180), 슬기로운(02-837-1256), 가산성모(02-6952-7551)
+영등포구 (9곳)
+상담: 마음in(010-9469-0911), 영등포구정신건강복지센터(02-2670-4793), 여의도 더마음공간(010-9946-1379), 여의도심리상담센터(02-6274-0030)
+정신과: 같은마음 영등포점(02-2677-7582), 연세봄날(02-3667-1338), 영등포서영(02-2677-0902), 그래(50-71441-8306), 여의도힐(02-785-7008)
+동작구
+상담: 마음나루심리상담연구소(02-532-5628), 동작구정신건강복지센터(02-820-9540), 동작구청소년상담복지센터(02-834-1355), Healing Counseling Center(02-3280-7572), 남영(50-71310-4606)
+정신과: 사당숲(02-521-0923), 나란히(02-6484-8110), 상도연세(02-822-0345), 봄(02-812-2226), 연세광(02-3280-0375), 변재영(02-815-0353)
 const keyOk=()=>javascriptKey&&javascriptKey!=='YOUR_JAVASCRIPT_KEY';
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let kakaoP=null,kro=null;
+let kakaoP=null,kro=null,myPos=null;
+const CACHE={};
+const km=(a,b)=>{const t=x=>x*Math.PI/180,u=t(b.lat-a.lat),v=t(b.lng-a.lng),h=Math.sin(u/2)**2+Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(v/2)**2;return 12742*Math.asin(Math.sqrt(h))};
+const fmt=d=>d<1?Math.round(d*100)*10+'m':d.toFixed(1)+'km';
+function parseRaw(t){const db={};let gu='';
+t.split('\n').forEach(l=>{l=l.trim();if(!l)return;const m=l.match(/^(상담|정신과)\s*:\s*(.*)$/);
+if(!m){gu=l.replace(/\(.*?\)/g,'').trim();db[gu]=db[gu]||[];return}
+if(!gu)return;let d=0,cur='';const parts=[];
+for(const ch of m[2]){if(ch==='(')d++;if(ch===')')d--;if(ch===','&&d===0){parts.push(cur);cur=''}else cur+=ch}parts.push(cur);
+parts.forEach(s=>{s=s.trim();if(!s)return;const q=s.match(/^(.*?)\s*(?:\((.*)\))?$/),name=q[1].trim(),inn=(q[2]||'').split(',').map(x=>x.trim()).filter(Boolean),tel=inn.find(x=>/^[\d-]{7,}$/.test(x))||'';
+if(name)db[gu].push({gu,kind:m[1],name,tel,note:inn.filter(x=>x!==tel).join(', ')})})});return db}
+const DB=parseRaw(RAW);
 function loadKakao(){if(kakaoP)return kakaoP;
 kakaoP=new Promise((ok,ng)=>{const fin=()=>{try{kakao.maps.load(ok)}catch(e){ng(e)}};
 if(window.kakao&&kakao.maps){fin();return}
-const s=document.createElement('script');s.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+encodeURIComponent(javascriptKey)+'&autoload=false';
+const s=document.createElement('script');s.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+encodeURIComponent(javascriptKey)+'&libraries=services&autoload=false';
 s.onload=fin;s.onerror=()=>{s.remove();ng(new Error('sdk'))};document.head.appendChild(s)});
 kakaoP.catch(()=>{kakaoP=null});return kakaoP}
+const ready=()=>Promise.race([loadKakao(),new Promise((_,ng)=>setTimeout(()=>ng(new Error('timeout')),8000))]);
+const tail=x=>String(x||'').replace(/\D/g,'').slice(-8),nm=x=>String(x||'').replace(/\s/g,'').toLowerCase();
+const find=(ps,p)=>new Promise(res=>ps.keywordSearch('서울 '+p.gu+' '+p.name,(d,s)=>{
+if(s!==kakao.maps.services.Status.OK){res(null);return}
+const h=d.find(r=>tail(p.tel).length===8?tail(r.phone)===tail(p.tel):nm(r.place_name)===nm(p.name)&&String(r.address_name).includes(p.gu));
+res(h?{lat:+h.y,lng:+h.x,addr:h.road_address_name||h.address_name,tel:h.phone||p.tel}:null)},{size:5}));
 function map(){if(kro){kro.disconnect();kro=null}
-const places=[...REAL_PLACES.map(p=>({...p,practice:false})),...PRACTICE_PLACES.map(p=>({...p,practice:true}))];
+const guList=Object.keys(DB),demo=!guList.length;let gu='',ctl=null;
+let items=demo?[...REAL_PLACES.map(p=>({...p,kind:'',practice:false})),...PRACTICE_PLACES.map(p=>({...p,kind:'',practice:true}))]:[];
 const origin=location.protocol==='file:'?'(파일로 직접 연 상태)':location.origin;
-V.innerHTML=`<h1>지도</h1><p class="sub">근처에서 도움받을 수 있는 기관의 위치를 보여줄 예정이에요.</p>
-<div class="notice crisis"><b>지금 보이는 3곳은 가상 연습 위치예요.</b> 실제 상담 기관이 아니에요.${REAL_PLACES.length?'':' 실제 기관 자료는 아직 연결되지 않았어요.'}</div>
-<div class="card"><div class="kwrap"><div id="kakao-map" class="kmap" aria-label="지도"></div><div id="kstate" class="kstate">지도를 준비하고 있어요…</div></div>
-<p class="src">지도: Kakao 지도 · 장소 정보: ${REAL_PLACES.length?'팀 자료':'연습용 가상 데이터(실제 자료 아님)'}</p></div>
-<div class="card"><h2>장소 목록</h2>${places.length?`<ul class="plist">${places.map((p,i)=>`<li><button class="pl" data-i="${i}">${esc(p.name)}<span class="sub">${p.practice?'가상 연습 위치 · 실제 자료 아님':esc(p.address||'')}</span></button></li>`).join('')}</ul>`:'<p class="sub">표시할 장소가 아직 없어요.</p>'}</div>
+V.innerHTML=`<h1>지도</h1><p class="sub">근처에서 도움받을 수 있는 곳의 위치를 보여줘요.</p>
+${demo?`<div class="notice crisis"><b>지금 보이는 3곳은 가상 연습 위치예요.</b> 실제 상담 기관이 아니에요.</div>`:`<div class="notice">이 목록은 팀이 직접 모은 정보이고 특정 곳을 추천하는 게 아니에요. 운영 여부와 전화번호는 연락하기 전에 한 번 더 확인해 주세요.</div>`}
+<div class="card">${demo?'':`<select id="gu" class="sel" aria-label="구 선택"><option value="">구를 선택하세요</option>${guList.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('')}</select>`}
+<div class="locrow"><button class="btn" id="loc">내 위치 찾기</button><span id="locmsg" class="sub" role="status"></span></div>
+<p class="sub">내 위치는 거리 계산에만 쓰고 저장하지 않아요.</p>
+<div class="kwrap"><div id="kakao-map" class="kmap" aria-label="지도"></div><div id="kstate" class="kstate">지도를 준비하고 있어요…</div></div>
+<p class="src">지도: Kakao 지도 · 장소 정보: ${demo?'연습용 가상 데이터(실제 자료 아님)':'팀이 모은 목록, 위치는 카카오맵 장소 검색으로 확인'}</p></div>
+<div class="card"><h2>장소 목록</h2><p id="gmsg" class="sub">${demo?'':'구를 선택하면 상담센터와 정신건강의학과를 보여줘요.'}</p><ul class="plist" id="plist"></ul></div>
 <details class="card"><summary>지도가 안 보이면 확인해 보세요</summary><ol>
 <li>카카오 개발자 콘솔에서 이 키가 속한 앱의 <b>카카오맵 사용 설정이 ON</b>인지 확인해요.</li>
 <li>코드의 <b>javascriptKey</b>에 같은 앱의 <b>JavaScript 키</b>(REST 키 아님)를 넣었는지 확인해요.</li>
 <li>앱 키의 <b>JavaScript SDK 도메인</b>에 지금 이 사이트 주소의 프로토콜·호스트·포트를 등록했는지 확인해요. 지금 주소: <b>${esc(origin)}</b></li>
 ${location.protocol==='file:'?'<li><b>파일을 더블클릭해서 연 상태</b>에서는 등록할 도메인이 없어 지도가 안 뜰 수 있어요. localhost 서버나 배포 주소로 열어 보세요.</li>':''}
 <li>광고 차단·보안 프로그램이 dapi.kakao.com을 막고 있지 않은지 확인해요.</li></ol></details>`;
-const st=(t,bad)=>{const e=document.getElementById('kstate');if(e){e.textContent=t;e.hidden=!t;e.classList.toggle('bad',!!bad)}};
-if(!places.length){st('표시할 장소가 아직 없어요.');return}
-if(!keyOk()){st('지도를 쓰려면 카카오 JavaScript 키 설정이 필요해요. 코드 위쪽의 javascriptKey 값을 바꿔 주세요.',1);return}
-Promise.race([loadKakao(),new Promise((_,ng)=>setTimeout(()=>ng(new Error('timeout')),8000))]).then(()=>{
-const c=document.getElementById('kakao-map');if(!c)return;
-const m=new kakao.maps.Map(c,{center:new kakao.maps.LatLng(places[0].lat,places[0].lng),level:4}),b=new kakao.maps.LatLngBounds(),iw=new kakao.maps.InfoWindow({removable:true});
-const show=(p,mk)=>{iw.setContent(`<div style="padding:8px 10px;font-size:13px;line-height:1.5;min-width:170px"><b>${esc(p.name)}</b><br>${p.practice?'가상 연습 위치 · 실제 자료 아님':esc([p.address,p.tel].filter(Boolean).join(' · '))}</div>`);iw.open(m,mk);m.panTo(mk.getPosition())};
-const marks=places.map(p=>{const pos=new kakao.maps.LatLng(p.lat,p.lng);b.extend(pos);const mk=new kakao.maps.Marker({map:m,position:pos,title:p.name});kakao.maps.event.addListener(mk,'click',()=>show(p,mk));return mk});
-const fit=()=>{if(!c.isConnected)return;m.relayout();m.setBounds(b,40,40,40,40)};
-fit();st('');
-V.querySelectorAll('.pl').forEach(x=>x.onclick=()=>{const i=+x.dataset.i;show(places[i],marks[i]);c.scrollIntoView({behavior:'smooth',block:'center'})});
+const $=id=>document.getElementById(id),st=(t,bad)=>{const e=$('kstate');if(e){e.textContent=t;e.hidden=!t;e.classList.toggle('bad',!!bad)}};
+const msg=t=>{const e=$('locmsg');if(e)e.textContent=t},setG=t=>{const e=$('gmsg');if(e)e.textContent=t};
+const renderList=()=>{const ord=items.map((p,i)=>i);
+if(myPos){items.forEach(p=>{p.d=p.lat!=null?km(myPos,p):null});ord.sort((a,b)=>(items[a].d==null?1e9:items[a].d)-(items[b].d==null?1e9:items[b].d))}
+const ul=$('plist');if(ul)ul.innerHTML=ord.map(i=>{const p=items[i],ok=p.lat!=null;
+return `<li><button class="pl" data-i="${i}" ${ok?'':'disabled'}>${esc(p.name)}${p.d!=null?' · 약 '+fmt(p.d):''}<span class="sub">${esc(p.kind)}${p.practice?'가상 연습 위치 · 실제 자료 아님':ok?(p.addr?' · '+esc(p.addr):''):' · 지도 위치를 확인하지 못했어요'}${p.note?' · '+esc(p.note):''}</span></button>${p.tel?`<a class="tel" href="tel:${p.tel.replace(/[^\d+]/g,'')}">${esc(p.tel)}</a>${ok||p.practice?'':'<span class="sub"> (전화번호 확인 필요)</span>'}`:'<span class="sub tel">전화번호 정보 없음</span>'}</li>`}).join('')};
+renderList();
+$('plist').onclick=e=>{const b=e.target.closest('.pl');if(b&&ctl)ctl.pick(+b.dataset.i)};
+const loadGu=async g=>{gu=g;items=(DB[g]||[]).map(x=>({...x}));renderList();if(ctl)ctl.set();if(!g){setG('구를 선택하면 상담센터와 정신건강의학과를 보여줘요.');return}
+setG('위치를 확인하는 중이에요…');
+try{await ready();const ps=new kakao.maps.services.Places();
+await Promise.all(items.map(async p=>{const k=g+'|'+p.name;if(!(k in CACHE))CACHE[k]=await find(ps,p);if(CACHE[k])Object.assign(p,CACHE[k])}))}
+catch(e){setG('지도 서비스를 불러오지 못해 목록만 보여드려요.');renderList();return}
+if(gu!==g)return;setG(items.length+'곳 중 '+items.filter(p=>p.lat!=null).length+'곳을 지도에서 확인했어요. 나머지는 연락처만 보여드려요.');renderList();if(ctl)ctl.set()};
+if(!demo)$('gu').onchange=e=>loadGu(e.target.value);
+const pickGu=async()=>{try{await ready();const r=await new Promise(res=>new kakao.maps.services.Geocoder().coord2RegionCode(myPos.lng,myPos.lat,(d,s)=>res(s===kakao.maps.services.Status.OK?d:[])));
+const g=(r[0]||{}).region_2depth_name;if(!g)return;if(DB[g]){if(g!==gu){$('gu').value=g;await loadGu(g)}}else setG('지금 있는 지역('+g+')의 목록은 아직 준비되지 않았어요. 구를 직접 골라 보세요.')}catch(e){}};
+$('loc').onclick=()=>{if(!navigator.geolocation||!window.isSecureContext){msg('이 주소에서는 위치 기능을 쓸 수 없어요. https 주소나 localhost에서 열어 주세요.');return}
+msg('내 위치를 확인하는 중이에요…');
+navigator.geolocation.getCurrentPosition(async pos=>{myPos={lat:pos.coords.latitude,lng:pos.coords.longitude};renderList();if(ctl)ctl.me();if(!demo)await pickGu();
+const pl=items.filter(p=>p.d!=null);msg(pl.length?'가장 가까운 곳: '+pl.reduce((a,p)=>p.d<a.d?p:a).name+' 약 '+fmt(Math.min(...pl.map(p=>p.d))):'내 위치를 찾았어요.')},
+err=>msg(err.code===1?'위치 사용이 허용되지 않았어요. 브라우저 주소창에서 위치 권한을 허용으로 바꿔 주세요.':err.code===3?'위치를 확인하는 데 시간이 너무 오래 걸렸어요. 다시 눌러 주세요.':'지금은 위치를 확인할 수 없어요. 잠시 뒤 다시 시도해 주세요.'),
+{enableHighAccuracy:true,timeout:10000,maximumAge:60000})};
+if(!keyOk()){st('지도를 쓰려면 카카오 JavaScript 키 설정이 필요해요. 코드 위쪽의 javascriptKey 값을 바꿔 주세요. (목록은 그대로 볼 수 있어요)',1);return}
+ready().then(()=>{const c=$('kakao-map');if(!c)return;
+const m=new kakao.maps.Map(c,{center:new kakao.maps.LatLng(37.5665,126.9780),level:7}),iw=new kakao.maps.InfoWindow({removable:true});let marks=[],bnd=null,meOv=null;
+const show=(p,mk)=>{iw.setContent(`<div style="padding:8px 10px;font-size:13px;line-height:1.5;min-width:170px"><b>${esc(p.name)}</b><br>${p.practice?'가상 연습 위치 · 실제 자료 아님':esc([p.addr||p.address,p.tel].filter(Boolean).join(' · '))}</div>`);iw.open(m,mk);m.panTo(mk.getPosition())};
+const fit=()=>{if(!c.isConnected)return;m.relayout();if(myPos)ctl.me();else if(marks.length>1)m.setBounds(bnd,40,40,40,40);else if(marks.length===1){m.setCenter(marks[0].getPosition());m.setLevel(3)}};
+ctl={set:()=>{marks.forEach(k=>k.setMap(null));marks=[];bnd=new kakao.maps.LatLngBounds();
+items.forEach(p=>{if(p.lat==null)return;const pos=new kakao.maps.LatLng(p.lat,p.lng);bnd.extend(pos);const mk=new kakao.maps.Marker({map:m,position:pos,title:p.name});kakao.maps.event.addListener(mk,'click',()=>show(p,mk));p.mk=mk;marks.push(mk)});fit()},
+pick:i=>{const p=items[i];if(p&&p.mk){show(p,p.mk);c.scrollIntoView({behavior:'smooth',block:'center'})}},
+me:()=>{const pos=new kakao.maps.LatLng(myPos.lat,myPos.lng);if(meOv)meOv.setMap(null);
+meOv=new kakao.maps.CustomOverlay({position:pos,content:'<div class="medot" title="내 위치"></div>',xAnchor:.5,yAnchor:.5});meOv.setMap(m);
+const near=items.filter(p=>p.mk&&p.d!=null).sort((a,b)=>a.d-b.d)[0];
+if(near){const bb=new kakao.maps.LatLngBounds();bb.extend(pos);bb.extend(near.mk.getPosition());m.setBounds(bb,60,60,60,60)}else m.setCenter(pos)}};
+ctl.set();st('');
 if(window.ResizeObserver){kro=new ResizeObserver(()=>{if(c.isConnected)m.relayout()});kro.observe(c)}
-setTimeout(fit,450)}).catch(()=>st('지도를 불러오지 못했어요. 아래 "지도가 안 보이면 확인해 보세요"를 확인해 주세요.',1))}
+setTimeout(fit,450)}).catch(()=>st('지도를 불러오지 못했어요. 아래 "지도가 안 보이면 확인해 보세요"를 확인해 주세요. (목록은 그대로 볼 수 있어요)',1))}
+
 
 const routes={home,test,result,map};
 function go(){const r=(location.hash||'#home').slice(1);(routes[r]||home)();document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.hash==='#'+r));scrollTo(0,0);anim(1)}
