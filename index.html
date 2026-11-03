@@ -140,12 +140,12 @@ let o=`<h1>내 결과</h1>`;
 if(lastE3==='가끔'||lastE3==='자주')o+=`<div class="notice crisis"><b>먼저 확인해 주세요.</b> 지금 마음이 많이 힘들다면 혼자 있지 말고 자살예방상담전화 109로 연락해 보세요. 위급하면 112 또는 119에 바로 연락하세요.</div>`;
 o+=`<div class="card hl">face(r.lv===0?0:r.lv===1?1:r.lv===2?2:3,[0,1,3,4][r.lv])<h2>{L.n} 단계</h2><p>${L.m}</p><p class="sub">스트레스 평균 ${f1(r.st)}점 (1~5점, 높을수록 힘든 상태)</p></div>`;
 o+=`<div class="card"><h2>영역별 점수</h2>bar('감정노동부담',r.A,5){bar('악성 민원 경험',r.B,5)}bar('심신상태',r.C,5){bar('보호 부족도 (D2·D3 역채점)',mean([6-r.d2,6-r.d3]),5)}<p class="sub">사업장 노력 인지(D1): r.d1점{r.d1>=4&&r.d2<=2?' · 노력은 있지만 내게는 체감되지 않는 상태예요.':''}</p></div>`;
-o+=`<div class="card"><h2>같은 업종과 비교</h2>`+(ss?`${bar('내 응답(A1)',r.a1,5,'me')}${bar('서비스업 전체 평균',ss.avg,5)}<p>서비스업 전체 중 <b>${ss.pos}%</b>가 스트레스가 심각하다고 답했어요${small(ss)}.</p>${ef?`<p>같은 업종에서 <b>${ef.pos}%</b>는 사업장이 관리에 노력한다고 답했어요${small(ef)}.</p>`:''}<p class="sub">출처: ${stats.stress.meta.source}, ${stats.stress.meta.period.replace('[3년] ','')}, 단위: % · 점</p>`:`<div class="notice err">통계 데이터를 불러오지 못해 비교할 수 없어요.</div>`)+`</div>`;
+o+=`<div class="card"><h2>같은 업종과 비교</h2>`+ (ss?`${bar('내 응답(A1)',r.a1,5,'me')}${bar('서비스업 전체 평균',ss.avg,5)}<p>서비스업 전체 중 <b>${ss.pos}%</b>가 스트레스가 심각하다고 답했어요${small(ss)}.</p>${ef?...
 if(p)o+=`<div class="card"><h2>지난 결과와 비교</h2><p>스트레스 평균이 지난번(${new Date(p.t).toLocaleDateString('ko-KR')}, ${LV[p.lv].n})보다 ${d(r.st,p.st)}.</p><p class="sub">감정노동 부담 ${d(r.A,p.A)} · 악성 민원 ${d(r.B,p.B)} · 심신 상태 ${d(r.C,p.C)}</p></div>`;
 else o+=`<div class="notice">지난 결과가 없어서 비교할 수 없어요. 다음 진단부터 비교해 드려요.</div>`;
-o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>${r.b3>=3?'<p>몸을 위협하거나 성적인 말·행동을 겪으셨다면, 그건 어떤 이유로도 참아야 할 일이 아니에요. 일어난 일을 기록해 두고 사업장이나 상담 기관에 꼭 알려 주세요.</p>':''}${r.e2.length?`<p class="sub">원하는 도움: ${r.e2.join(', ')}</p>`:''}<a class="btn" href="#map" style="display:inline-block;text-decoration:none">근처 상담 기관 찾아보기</a></div>
+o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>${r.b3>=3?'<p>몸을 위협하거나 ...</p>':''}${r.e2.length?...
 <div class="card talk"><h2>내 권리 안내</h2><p>혹시 "이 정도는 참아야 하는 거 아닌가" 하고 생각한 적 있나요? 고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 투정이 아니라 법에서 보장하는 권리예요. 그렇게 말했다고 불이익을 받아서도 안 되고요.</p><p>말하기 어렵다면, 힘들었던 일을 날짜와 함께 메모해 두는 것부터 시작해 보세요. 나중에 도움을 받을 때 큰 힘이 돼요.</p><p class="sub">근거: 산업안전보건법 제41조</p></div>`;
-o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>${new Date(x.t).toLocaleDateString('ko-KR')} · ${LV[x.lv].n} · ${f1(x.st)}점</li>`).join('')}</ul><button class="btn ghost" id="del">저장된 결과 모두 지우기</button></div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">다시 진단하기</a>`;
+o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>...</li>`).join('')}</ul>
 V.innerHTML=o;document.getElementById('del').onclick=()=>{if(confirm('이 기기에 저장된 결과를 모두 지울까요?')){save([]);lastE3='';result()}}}
 
 // 상담·정신과 목록: 아래 따옴표(`) 사이에 팀이 모은 목록을 그대로 붙여 넣으세요.
