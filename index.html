@@ -102,7 +102,7 @@ const LV=[{n:'안정',m:'지금은 괜찮지만 예방이 중요해요',h:'지�
 const COL=['#B6EBD2','#FFE27A','#FFC18F','#FFB8C9','#C9B8FF'],MOUTH=['M12 25Q20 33 28 25','M13 26Q20 30 27 26','M13 27L27 27','M13 29Q20 24 27 29','M12 30Q20 21 28 30'];
 const V=document.getElementById('view');
 let stats=null,S,lastE3='';
-const face=(c,m)=>`<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="COL[c]"/><circlecx="14"cy="17"r="2.2"fill="#2B2A33"/><circlecx="26"cy="17"r="2.2"fill="#2B2A33"/><pathd="{MOUTH[m]}" fill="none" stroke="#2B2A33" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+const face=(c,m)=>`<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="${COL[c]}"/><circle cx="14" cy="17" r="2.2" fill="#2B2A33"/><circle cx="26" cy="17" r="2.2" fill="#2B2A33"/><path d="${MOUTH[m]}" fill="none" stroke="#2B2A33" stroke-width="2.2" stroke-linecap="round"/></svg>`;
 const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,f1=x=>x.toFixed(1);
 const load=()=>{try{return JSON.parse(localStorage.getItem('mc.results')||'[]')}catch(e){return[]}};
 const save=a=>{try{localStorage.setItem('mc.results',JSON.stringify(a.slice(-20)))}catch(e){}};
@@ -117,36 +117,70 @@ function home(){V.innerHTML=`<h1 class="ttl">마음 점검</h1><p class="sub ctr
 <a class="card big" href="#map"><span class="ib" style="background:#C9B8FF">${ico('map')}</span><span><h2>지도</h2><span class="sub">근처 도움 기관 (추후 제공)</span></span></a>
 <p class="sub ctr">이 검사는 의학적 진단이 아니라 스트레스 점검 도구예요.</p>`}
 
-function test(dir){if(!S)S={step:0,a:{},e2:[],e3:''};const n=Q.length+2,s=S.step;let body,ok;
-if(s<Q.length){const q=Q[s];ok=!!S.a[q[0]];body=`<p class="sub">q[1]</p><h2>{q[2]}</h2><div class="grid">${SCALE.map((t,i)=>`<button class="opt S.a[q[0]]===i+1?'on':''"data-v="{i+1}">face(i,i){t}</button>`).join('')}</div>`}
-else if(s===Q.length){ok=S.e2.length>0;body=`<h2>지금 가장 필요한 도움은?</h2><p class="sub">여러 개 고를 수 있어요.</p><div class="chips">${E2.map(t=>`<button class="chip S.e2.includes(t)?'on':''"data-e2="{t}">${t}</button>`).join('')}</div>`}
-else{ok=!!S.e3;body=`<h2>최근 2주 사이 스스로를 해치고 싶다는 생각이 들었다.</h2><p class="sub">이 답변은 저장하지 않아요.</p><div class="chips">${E3.map(t=>`<button class="chip S.e3===t?'on':''"data-e3="{t}">${t}</button>`).join('')}</div>`}
-V.innerHTML=`<div class="prog"><i style="width:(s/(n-1))*100%"></i></div><divclass="card">{body}<div class="row"><button class="btn ghost" id="pv" ${s?'':'disabled'}>이전</button><button class="btn" id="nx" ok?'':'disabled'>{s===n-1?'결과 확인':'다음'}</button></div></div>`;
-V.querySelectorAll('[data-e2]').forEach(b=>b.onclick=()=>{const t=b.dataset.e2;S.e2=S.e2.includes(t)?S.e2.filter(x=>x!==t):[...S.e2,t];test()});
-V.querySelectorAll('[data-e3]').forEach(b=>b.onclick=()=>{S.e3=b.dataset.e3;test()});
-document.getElementById('pv').onclick=()=>{S.step--;test(-1)};
-document.getElementById('nx').onclick=()=>{if(s<n-1){S.step++;test(1)}else finish()};
-if(dir)anim(dir)}
+function test(dir){
+  if(!S)S={step:0,a:{},e2:[],e3:''};
+  const n=Q.length+2,s=S.step;
+  let body,ok;
+  if(s<Q.length){
+    const q=Q[s];
+    ok=!!S.a[q[0]];
+    body=`<p class="sub">${q[1]}</p><h2>${q[2]}</h2><div class="grid">${SCALE.map((t,i)=>`<button type="button" class="opt ${S.a[q[0]]===i+1?'on':''}" data-v="${i+1}">${face(i,i)}<span>${t}</span></button>`).join('')}</div>`;
+  }else if(s===Q.length){
+    ok=S.e2.length>0;
+    body=`<h2>지금 가장 필요한 도움은?</h2><p class="sub">여러 개 고를 수 있어요.</p><div class="chips">${E2.map(t=>`<button type="button" class="chip ${S.e2.includes(t)?'on':''}" data-e2="${esc(t)}">${t}</button>`).join('')}</div>`;
+  }else{
+    ok=!!S.e3;
+    body=`<h2>최근 2주 사이 스스로를 해치고 싶다는 생각이 들었다.</h2><p class="sub">이 답변은 저장하지 않아요.</p><div class="chips">${E3.map(t=>`<button type="button" class="chip ${S.e3===t?'on':''}" data-e3="${esc(t)}">${t}</button>`).join('')}</div>`;
+  }
+  V.innerHTML=`<div class="prog"><i style="width:${(s/(n-1))*100}%"></i></div><div class="card">${body}<div class="row"><button class="btn ghost" id="pv" ${s?'':'disabled'}>이전</button><button class="btn" id="nx" ${ok?'':'disabled'}>${s===n-1?'결과 확인':'다음'}</button></div></div>`;
+  V.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const q=Q[s];S.a[q[0]]=Number(b.dataset.v);test();});
+  V.querySelectorAll('[data-e2]').forEach(b=>b.onclick=()=>{const t=b.dataset.e2;S.e2=S.e2.includes(t)?S.e2.filter(x=>x!==t):[...S.e2,t];test();});
+  V.querySelectorAll('[data-e3]').forEach(b=>b.onclick=()=>{S.e3=b.dataset.e3;test();});
+  document.getElementById('pv').onclick=()=>{if(s>0){S.step--;test(-1);}};
+  document.getElementById('nx').onclick=()=>{if(!ok)return;if(s<n-1){S.step++;test(1);}else finish();};
+  if(dir)anim(dir);
+}
 
-function finish(){const a=S.a,g=k=>Q.filter(q=>q[0][0]===k).map(q=>a[q[0]]),A=mean(g('A')),B=mean(g('B')),C=mean(g('C')),st=mean([...g('A'),...g('B'),...g('C')]);
-const lv=st<2?0:st<3?1:st<4?2:3,r={t:Date.now(),A,B,C,st,lv,d1:a.D1,d2:a.D2,d3:a.D3,b3:a.B3,a1:a.A1,e1:a.E1,e2:S.e2};
-lastE3=S.e3;const h=load();h.push(r);save(h);S=null;location.hash='#result'}
+function finish(){
+  const a=S.a;
+  const g=k=>Q.filter(q=>q[0][0]===k).map(q=>a[q[0]]);
+  const A=mean(g('A')),B=mean(g('B')),C=mean(g('C'));
+  const st=mean([...g('A'),...g('B'),...g('C')]);
+  const lv=st<2?0:st<3?1:st<4?2:3;
+  const r={t:Date.now(),A,B,C,st,lv,d1:a.D1,d2:a.D2,d3:a.D3,b3:a.B3,a1:a.A1,e1:a.E1,e2:S.e2};
+  lastE3=S.e3;
+  const h=load();h.push(r);save(h);S=null;location.hash='#result';
+}
 
-const bar=(l,v,max,cls='')=>`<div class="lab"><span>l</span><b>{f1(v)}</b></div><div class="bar cls"><istyle="width:{v/max*100}%"></i></div>`;
-function result(){const h=load();if(!h.length){V.innerHTML=`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>`;return}
-const r=h[h.length-1],p=h[h.length-2],L=LV[r.lv],ss=row('stress','소계'),ef=row('effort','소계'),d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?`f1(x-y)높아졌어요`:`{f1(y-x)} 낮아졌어요`
-const small=x=>x&&x.n<30?' (표본이 적어 참고용)':'';
-let o=`<h1>내 결과</h1>`;
-if(lastE3==='가끔'||lastE3==='자주')o+=`<div class="notice crisis"><b>먼저 확인해 주세요.</b> 지금 마음이 많이 힘들다면 혼자 있지 말고 자살예방상담전화 109로 연락해 보세요. 위급하면 112 또는 119에 바로 연락하세요.</div>`;
-o+=`<div class="card hl">face(r.lv===0?0:r.lv===1?1:r.lv===2?2:3,[0,1,3,4][r.lv])<h2>{L.n} 단계</h2><p>${L.m}</p><p class="sub">스트레스 평균 ${f1(r.st)}점 (1~5점, 높을수록 힘든 상태)</p></div>`;
-o+=`<div class="card"><h2>영역별 점수</h2>bar('감정노동부담',r.A,5){bar('악성 민원 경험',r.B,5)}bar('심신상태',r.C,5){bar('보호 부족도 (D2·D3 역채점)',mean([6-r.d2,6-r.d3]),5)}<p class="sub">사업장 노력 인지(D1): r.d1점{r.d1>=4&&r.d2<=2?' · 노력은 있지만 내게는 체감되지 않는 상태예요.':''}</p></div>`;
-o+=`<div class="card"><h2>같은 업종과 비교</h2>`+ (ss?`${bar('내 응답(A1)',r.a1,5,'me')}${bar('서비스업 전체 평균',ss.avg,5)}<p>서비스업 전체 중 <b>${ss.pos}%</b>가 스트레스가 심각하다고 답했어요${small(ss)}.</p>${ef?...
-if(p)o+=`<div class="card"><h2>지난 결과와 비교</h2><p>스트레스 평균이 지난번(${new Date(p.t).toLocaleDateString('ko-KR')}, ${LV[p.lv].n})보다 ${d(r.st,p.st)}.</p><p class="sub">감정노동 부담 ${d(r.A,p.A)} · 악성 민원 ${d(r.B,p.B)} · 심신 상태 ${d(r.C,p.C)}</p></div>`;
-else o+=`<div class="notice">지난 결과가 없어서 비교할 수 없어요. 다음 진단부터 비교해 드려요.</div>`;
-o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>${r.b3>=3?'<p>몸을 위협하거나 ...</p>':''}${r.e2.length?...
-<div class="card talk"><h2>내 권리 안내</h2><p>혹시 "이 정도는 참아야 하는 거 아닌가" 하고 생각한 적 있나요? 고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 투정이 아니라 법에서 보장하는 권리예요. 그렇게 말했다고 불이익을 받아서도 안 되고요.</p><p>말하기 어렵다면, 힘들었던 일을 날짜와 함께 메모해 두는 것부터 시작해 보세요. 나중에 도움을 받을 때 큰 힘이 돼요.</p><p class="sub">근거: 산업안전보건법 제41조</p></div>`;
-o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>...</li>`).join('')}</ul>
-V.innerHTML=o;document.getElementById('del').onclick=()=>{if(confirm('이 기기에 저장된 결과를 모두 지울까요?')){save([]);lastE3='';result()}}}
+const bar=(l,v,max,cls='')=>`<div class="lab"><span>${l}</span><b>${f1(v)}</b></div><div class="bar ${cls}"><i style="width:${Math.max(0,Math.min(100,v/max*100))}%"></i></div>`;
+function result(){
+  const h=load();
+  if(!h.length){V.innerHTML=`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>`;return;}
+  const r=h[h.length-1],p=h[h.length-2],L=LV[r.lv],ss=row('stress','소계'),ef=row('effort','소계');
+  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?`${f1(x-y)}점 높아졌어요`:`${f1(y-x)}점 낮아졌어요`;
+  const small=x=>x&&x.n<30?' (표본이 적어 참고용)':'';
+  let o=`<h1>내 결과</h1>`;
+  if(lastE3==='가끔'||lastE3==='자주')o+=`<div class="notice crisis"><b>먼저 확인해 주세요.</b><p>지금 마음이 많이 힘들다면 혼자 감당하지 말고 믿을 만한 사람에게 바로 알려 주세요. 자살예방상담전화 109로 연락할 수 있고, 당장 안전이 위급하면 112 또는 119에 도움을 요청하세요.</p></div>`;
+  o+=`<div class="card hl">${face(r.lv===0?0:r.lv===1?1:r.lv===2?3:4,[0,1,3,4][r.lv])}<h2>${L.n} 단계</h2><p>${L.m}</p><p class="sub">스트레스 평균 ${f1(r.st)}점 (1~5점, 높을수록 힘든 상태)</p></div>`;
+  o+=`<div class="card"><h2>영역별 점수</h2>${bar('감정노동 부담',r.A,5)}${bar('악성 민원 경험',r.B,5)}${bar('심신 상태',r.C,5)}${bar('보호 부족도 (D2·D3 역채점)',mean([6-r.d2,6-r.d3]),5)}<p class="sub">사업장 노력 인지(D1): ${r.d1}점${r.d1>=4&&r.d2<=2?' · 노력은 있지만 내게는 체감되지 않는 상태예요.':''}</p></div>`;
+  o+=`<div class="card"><h2>같은 업종과 비교</h2>`;
+  if(ss){
+    o+=`${bar('내 응답(A1)',r.a1,5,'me')}${bar('서비스업 전체 평균',ss.avg,5)}<p>서비스업 전체 중 <b>${ss.pos}%</b>가 고객 대상 감정노동 스트레스가 심각하다고 답했어요${small(ss)}.</p>`;
+  }else{o+=`<p class="sub">비교 통계 자료가 없어요.</p>`;}
+  if(ef)o+=`<p class="sub">참고로 서비스업 사업장의 ${ef.pos}%가 감정노동 스트레스 관리 노력을 하고 있다고 응답했어요. (평균 ${f1(ef.avg)}점)</p>`;
+  o+=`<p class="sub">공공 통계는 2020년 조사 자료로, 현재 상황이나 개인의 상태를 직접 진단하는 기준은 아니에요.</p></div>`;
+  if(p)o+=`<div class="card"><h2>지난 결과와 비교</h2><p>스트레스 평균이 지난번(${new Date(p.t).toLocaleDateString('ko-KR')}, ${LV[p.lv].n})보다 ${d(r.st,p.st)}.</p><p class="sub">감정노동 부담 ${d(r.A,p.A)} · 악성 민원 ${d(r.B,p.B)} · 심신 상태 ${d(r.C,p.C)}</p></div>`;
+  else o+=`<div class="notice">지난 결과가 없어서 비교할 수 없어요. 다음 진단부터 비교해 드려요.</div>`;
+  o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>`;
+  if(r.b3>=3)o+=`<p>신체적 위협이나 성적 언행 등으로 불안했다면, 혼자 대응하지 말고 관리자나 신뢰할 수 있는 담당자에게 알리고 안전한 장소로 이동해 도움을 요청하세요.</p>`;
+  if(r.e2.length)o+=`<p><b>선택한 도움:</b> ${r.e2.map(esc).join(' · ')}</p>`;
+  if(r.e1>=4)o+=`<p>이직을 고민할 만큼 부담이 컸다면, 현재 업무 환경과 보호 조치를 차분히 점검하고 상담 기관이나 노동 관련 지원기관에 도움을 요청해 보세요.</p>`;
+  o+=`<a class="btn" href="#map" style="display:inline-block;text-decoration:none">도움 기관 지도 보기</a></div>`;
+  o+=`<div class="card talk"><h2>내 권리 안내</h2><p>혹시 "이 정도는 참아야 하는 거 아닌가" 하고 생각한 적 있나요? 고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 투정이 아니라 법에서 보장하는 권리예요. 그렇게 말했다고 불이익을 받아서도 안 되고요.</p><p>말하기 어렵다면, 힘들었던 일을 날짜와 함께 메모해 두는 것부터 시작해 보세요. 나중에 도움을 받을 때 큰 힘이 돼요.</p><p class="sub">근거: 산업안전보건법 제41조</p></div>`;
+  o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>${new Date(x.t).toLocaleDateString('ko-KR')} · ${LV[x.lv].n} · 평균 ${f1(x.st)}점</li>`).join('')}</ul><button class="btn ghost" id="del" type="button">저장된 결과 삭제</button></div>`;
+  V.innerHTML=o;
+  document.getElementById('del').onclick=()=>{if(confirm('이 기기에 저장된 결과를 모두 지울까요?')){save([]);lastE3='';result();}};
+}
 
 // 상담·정신과 목록: 아래 따옴표(`) 사이에 팀이 모은 목록을 그대로 붙여 넣으세요.
 // 형식: 구 이름 한 줄, 다음 줄에 "상담: 이름(전화), 이름(전화)" / "정신과: 이름(전화), ..."
@@ -233,13 +267,34 @@ let kakaoP=null,kro=null,myPos=null;
 const CACHE={};
 const km=(a,b)=>{const t=x=>x*Math.PI/180,u=t(b.lat-a.lat),v=t(b.lng-a.lng),h=Math.sin(u/2)**2+Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(v/2)**2;return 12742*Math.asin(Math.sqrt(h))};
 const fmt=d=>d<1?Math.round(d*100)*10+'m':d.toFixed(1)+'km';
-function parseRaw(t){const db={};let gu='';
-t.split('\n').forEach(l=>{l=l.trim();if(!l)return;const m=l.match(/^(상담|정신과)\s*:\s*(.*)$/);
-if(!m){gu=l.replace(/\s*.*?/g,'').trim();db[gu]=db[gu]||[];return}
-if(!gu)return;let d=0,cur='';const parts=[];
-for(const ch of m[2]){if(ch==='(')d++;if(ch===')')d--;if(ch===','&&d===0){parts.push(cur);cur=''}else cur+=ch}parts.push(cur);
-parts.forEach(s=>{s=s.trim();if(!s)return;const q=s.match(/^(.*?)\s*(?:(.*))?$/),name=q[1].trim(),inn=(q[2]||'').split(',').map(x=>x.trim()).filter(Boolean),tel=inn.find(x=>/^[\d-]{7,}$/.test(x))||'';
-if(name)db[gu].push({gu,kind:m[1],name,tel,note:inn.filter(x=>x!==tel).join(', ')})})});return db}
+function parseRaw(t){
+  const db={};let gu='';
+  t.split('\n').forEach(line=>{
+    const l=line.trim();if(!l)return;
+    const m=l.match(/^(상담|정신과)\s*:\s*(.*)$/);
+    if(!m){gu=l.replace(/\s*\([^)]*\)\s*$/,'').trim();db[gu]=db[gu]||[];return;}
+    if(!gu)return;
+    let depth=0,current='';const parts=[];
+    for(const ch of m[2]){
+      if(ch==='(')depth++;
+      if(ch===')')depth--;
+      if(ch===','&&depth===0){parts.push(current);current='';}
+      else current+=ch;
+    }
+    parts.push(current);
+    parts.forEach(item=>{
+      const value=item.trim();if(!value)return;
+      const match=value.match(/^(.*?)\((.*)\)\s*$/);
+      const name=(match?match[1]:value).trim();
+      const inside=match?match[2]:'';
+      const details=inside.split(',').map(x=>x.trim()).filter(Boolean);
+      const tel=details.find(x=>/^[\d-]{7,}$/.test(x))||'';
+      const note=details.filter(x=>x!==tel).join(', ');
+      if(name)db[gu].push({gu,kind:m[1],name,tel,note});
+    });
+  });
+  return db;
+}
 const DB=parseRaw(RAW);
 function loadKakao(){if(kakaoP)return kakaoP;
 kakaoP=new Promise((ok,ng)=>{const fin=()=>{try{kakao.maps.load(ok)}catch(e){ng(e)}};
@@ -250,9 +305,10 @@ kakaoP.catch(()=>{kakaoP=null});return kakaoP}
 const ready=()=>Promise.race([loadKakao(),new Promise((_,ng)=>setTimeout(()=>ng(new Error('timeout')),8000))]);
 const tail=x=>String(x||'').replace(/\D/g,'').slice(-8),nm=x=>String(x||'').replace(/\s/g,'').toLowerCase();
 const find=(ps,p)=>new Promise(res=>ps.keywordSearch('서울 '+p.gu+' '+p.name,(d,s)=>{
-if(s!==kakao.maps.services.Status.OK){res(null);return}
+if(s!==kakao.maps.services.Status.OK){res(null);return;}
 const h=d.find(r=>tail(p.tel).length===8?tail(r.phone)===tail(p.tel):nm(r.place_name)===nm(p.name)&&String(r.address_name).includes(p.gu));
-res(h?{lat:+h.y,lng:+h.x,addr:h.road_address_name||h.address_name,tel:h.phone||p.tel}:null)},{size:5}));
+res(h?{lat:+h.y,lng:+h.x,addr:h.road_address_name||h.address_name,tel:h.phone||p.tel}:null);
+},{size:5}));
 function map(){if(kro){kro.disconnect();kro=null}
 const guList=Object.keys(DB),demo=!guList.length;let gu='',ctl=null;
 let items=demo?[...REAL_PLACES.map(p=>({...p,kind:'',practice:false})),...PRACTICE_PLACES.map(p=>({...p,kind:'',practice:true}))]:[];
@@ -320,3 +376,4 @@ go();
 </script>
 </body>
 </html>
+
