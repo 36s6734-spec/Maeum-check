@@ -4,187 +4,1246 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>마음 점검 - 서비스직 스트레스 자가진단</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F6F5FA;--card:#fff;--ink:#2B2A33;--sub:#7A7885;--line:#E7E5EF;--pill:#2B2A33;--mint:#B6EBD2;--yel:#FFE27A;--ora:#FFC18F;--pink:#FFB8C9;--pur:#C9B8FF}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
-.app{max-width:430px;margin:0 auto;min-height:100vh;padding:20px 16px 110px}
-h1{font-size:22px;margin:8px 0 4px}h2{font-size:18px;margin:0 0 8px}p{margin:0 0 8px}
-.sub{color:var(--sub);font-size:14px}
-.card{background:var(--card);border-radius:22px;padding:18px;margin:12px 0;box-shadow:0 2px 10px rgba(43,42,51,.06)}
-.big{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;cursor:pointer;width:100%;border:0;text-align:left;font:inherit}
-.big svg{flex:none;width:56px;height:56px}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0}
-.opt{border:0;background:none;padding:0;text-align:center;font:inherit;font-size:12px;color:var(--sub);cursor:pointer}
-.opt svg{width:100%;max-width:56px;border-radius:50%;border:3px solid transparent}
-.opt.on svg{border-color:var(--ink)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font:inherit;font-size:14px;cursor:pointer}
-.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.btn{border:0;border-radius:999px;background:var(--ink);color:#fff;padding:12px 22px;font:inherit;font-weight:600;cursor:pointer}
-.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
-.btn:disabled{opacity:.35;cursor:not-allowed}
-.row{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
-.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden;margin:4px 0 12px}
-.bar i{display:block;height:100%;border-radius:99px;background:var(--pur)}
-.bar.me i{background:var(--ink)}
-.lab{display:flex;justify-content:space-between;font-size:14px}
-.prog{height:6px;background:var(--line);border-radius:99px;overflow:hidden}.prog i{display:block;height:100%;background:var(--ink)}
-.notice{border-radius:16px;padding:12px 14px;margin:12px 0;font-size:14px;background:#fff;border:1.5px solid var(--line)}
-.notice.err{background:#FFF0F3;border-color:var(--pink)}.notice.crisis{background:#FFF7DB;border-color:var(--yel)}
-.src{font-size:12px;color:var(--sub);margin:18px 4px}
-.nav{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:6px;background:var(--pill);padding:8px;border-radius:999px}
-.nav a{color:#C9C7D4;text-decoration:none;font-size:14px;padding:9px 16px;border-radius:999px}
-.nav a.on{background:#fff;color:var(--ink);font-weight:600}
-a:focus-visible,button:focus-visible{outline:3px solid var(--pur);outline-offset:2px}
-.hl{text-align:center}.hl svg{width:96px;height:96px}
-ul{padding-left:18px;margin:6px 0}
-body{font-family:"Gowun Dodum",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.65}
-h1,h2{font-family:"Jua","Gowun Dodum","Malgun Gothic",sans-serif;font-weight:400}
-.ttl{text-align:center;font-size:36px;margin:14px 0 6px}.ctr{text-align:center}
-.ib{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;flex:none;color:#2B2A33}
-.big .ib svg{width:28px;height:28px}
-.nav a{display:flex;align-items:center;gap:6px}.nav svg{width:18px;height:18px}
-.talk{background:#FFFDF3}.talk p{line-height:1.85}
-.in{animation:inR .35s ease both}.inl{animation:inL .35s ease both}
-@keyframes inR{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
-@keyframes inL{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.in,.inl{animation:none}}
-.kwrap{position:relative}
-.kmap{height:340px;border-radius:18px;overflow:hidden;background:#ECEAF4}
-.kstate{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:18px;border-radius:18px;background:rgba(246,245,250,.92);font-size:14px;z-index:5}
-.kstate.bad{background:#FFF0F3}.kstate[hidden]{display:none}
-.plist{list-style:none;padding:0;margin:0}
-.pl{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:#fff;padding:12px 4px;min-height:48px;font:inherit;cursor:pointer}
-.pl .sub{display:block}
-details.card summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
-details.card ol{padding-left:20px;font-size:14px}
-.sel{width:100%;min-height:48px;border:1.5px solid var(--line);border-radius:14px;padding:0 12px;font:inherit;background:#fff;margin-bottom:10px}
-.plist li{border-bottom:1px solid var(--line);padding-bottom:4px}
-.plist .pl{border-bottom:0}
-.pl:disabled{cursor:default;opacity:.75}
-.tel{display:inline-block;padding:8px 4px 10px;min-height:44px;color:var(--ink);font-weight:600}
-.medot{width:18px;height:18px;border-radius:50%;background:#FF4D4F;border:3px solid #fff;box-shadow:0 0 0 6px rgba(255,77,79,.25),0 2px 6px rgba(0,0,0,.3)}
-</style>   
+:root {
+  --p1:#69C9A9;
+  --p2:#C9EDB3;
+  --p3:#63866B;
+  --p4:#414841;
+  --bg:color-mix(in srgb,var(--p1) 10%,#fff);
+  --card:#fff;
+  --ink:#171717;
+  --sub:#716f76;
+  --line:color-mix(in srgb,var(--p3) 20%,#fff);
+  --pill:#171717;
+  --button:var(--p4);
+  --button-text:#fff;
+  --accent:var(--p2);
+  --accent2:var(--p3);
+  --white:#fff;
+  --black:#000;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.55 Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+
+.app {
+  max-width:430px;
+  margin:0 auto;
+  min-height:100vh;
+  padding:20px 16px 110px;
+}
+
+h1 { font-size:22px; margin:8px 0 4px; }
+h2 { font-size:18px; margin:0 0 8px; }
+p { margin:0 0 8px; }
+.sub { color:var(--sub); font-size:14px; }
+
+.card {
+  background:var(--card);
+  border-radius:22px;
+  padding:18px;
+  margin:12px 0;
+  box-shadow:0 2px 10px rgba(43,42,51,.06);
+}
+
+.big {
+  display:flex;
+  gap:14px;
+  align-items:center;
+  text-decoration:none;
+  color:inherit;
+  cursor:pointer;
+  width:100%;
+  border:0;
+  text-align:left;
+  font:inherit;
+}
+
+.big svg { flex:none; width:56px; height:56px; }
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin:14px 0;
+}
+
+.opt {
+  border:0;
+  background:none;
+  padding:0;
+  text-align:center;
+  font:inherit;
+  font-size:12px;
+  color:var(--sub);
+  cursor:pointer;
+}
+
+.opt svg {
+  width:100%;
+  max-width:56px;
+  border-radius:50%;
+  border:3px solid transparent;
+}
+
+.opt.on svg { border-color:var(--ink); }
+
+.chips {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:12px 0;
+}
+
+.chip {
+  border:1.5px solid var(--line);
+  background:#fff;
+  border-radius:999px;
+  padding:9px 14px;
+  font:inherit;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.chip.on {
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
+}
+
+.btn {
+  border:0;
+  border-radius:999px;
+  background:var(--ink);
+  color:#fff;
+  padding:12px 22px;
+  font:inherit;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn.ghost {
+  background:#fff;
+  color:var(--ink);
+  border:1.5px solid var(--line);
+}
+
+.btn:disabled { opacity:.35; cursor:not-allowed; }
+
+.row {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:16px;
+}
+
+.bar {
+  height:12px;
+  border-radius:99px;
+  background:var(--line);
+  overflow:hidden;
+  margin:4px 0 12px;
+}
+
+.bar i {
+  display:block;
+  height:100%;
+  border-radius:99px;
+  background:var(--pur);
+}
+
+.bar.me i { background:var(--ink); }
+
+.lab {
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+}
+
+.prog {
+  height:6px;
+  background:var(--line);
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.prog i {
+  display:block;
+  height:100%;
+  background:var(--ink);
+}
+
+.notice {
+  border-radius:16px;
+  padding:12px 14px;
+  margin:12px 0;
+  font-size:14px;
+  background:#fff;
+  border:1.5px solid var(--line);
+}
+
+.notice.err {
+  background:#FFF0F3;
+  border-color:var(--pink);
+}
+
+.notice.crisis {
+  background:#FFF7DB;
+  border-color:var(--yel);
+}
+
+.src {
+  font-size:12px;
+  color:var(--sub);
+  margin:18px 4px;
+}
+
+.nav {
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  display:flex;
+  gap:6px;
+  background:var(--pill);
+  padding:8px;
+  border-radius:999px;
+}
+
+.nav a {
+  color:#C9C7D4;
+  text-decoration:none;
+  font-size:14px;
+  padding:9px 16px;
+  border-radius:999px;
+}
+
+.nav a.on {
+  background:#fff;
+  color:var(--ink);
+  font-weight:600;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline:3px solid var(--pur);
+  outline-offset:2px;
+}
+
+.hl { text-align:center; }
+.hl svg { width:96px; height:96px; }
+
+ul { padding-left:18px; margin:6px 0; }
+
+body {
+  font-family:"Gowun Dodum",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  line-height:1.65;
+}
+
+h1,h2 {
+  font-family:"Jua","Gowun Dodum","Malgun Gothic",sans-serif;
+  font-weight:400;
+}
+
+.ttl {
+  text-align:center;
+  font-size:36px;
+  margin:14px 0 6px;
+}
+
+.ctr { text-align:center; }
+
+.ib {
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  flex:none;
+  color:#2B2A33;
+}
+
+.big .ib svg { width:28px; height:28px; }
+
+.nav a {
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.nav svg { width:18px; height:18px; }
+
+.talk { background:#FFFDF3; }
+.talk p { line-height:1.85; }
+
+.in { animation:inR .35s ease both; }
+.inl { animation:inL .35s ease both; }
+
+@keyframes inR {
+  from { opacity:0; transform:translateX(18px); }
+  to { opacity:1; transform:none; }
+}
+
+@keyframes inL {
+  from { opacity:0; transform:translateX(-18px); }
+  to { opacity:1; transform:none; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .in,.inl { animation:none; }
+}
+
+.kwrap { position:relative; }
+
+.kmap {
+  height:340px;
+  border-radius:18px;
+  overflow:hidden;
+  background:#ECEAF4;
+}
+
+.kstate {
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:18px;
+  border-radius:18px;
+  background:rgba(246,245,250,.92);
+  font-size:14px;
+  z-index:5;
+}
+
+.kstate.bad { background:#FFF0F3; }
+.kstate[hidden] { display:none; }
+
+.plist {
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.pl {
+  display:block;
+  width:100%;
+  text-align:left;
+  border:0;
+  border-bottom:1px solid var(--line);
+  background:#fff;
+  padding:12px 4px;
+  min-height:48px;
+  font:inherit;
+  cursor:pointer;
+}
+
+.pl .sub { display:block; }
+
+details.card summary {
+  cursor:pointer;
+  font-weight:600;
+  min-height:44px;
+  display:flex;
+  align-items:center;
+}
+
+details.card ol {
+  padding-left:20px;
+  font-size:14px;
+}
+
+.sel {
+  width:100%;
+  min-height:48px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  padding:0 12px;
+  font:inherit;
+  background:#fff;
+  margin-bottom:10px;
+}
+
+.plist li {
+  border-bottom:1px solid var(--line);
+  padding-bottom:4px;
+}
+
+.plist .pl { border-bottom:0; }
+
+.pl:disabled {
+  cursor:default;
+  opacity:.75;
+}
+
+.tel {
+  display:inline-block;
+  padding:8px 4px 10px;
+  min-height:44px;
+  color:var(--ink);
+  font-weight:600;
+}
+
+.medot {
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#FF4D4F;
+  border:3px solid #fff;
+  box-shadow:0 0 0 6px rgba(255,77,79,.25),0 2px 6px rgba(0,0,0,.3);
+}
+
+/* 사용자 선택 컬러 테마 */
+
+body {
+  background:var(--bg);
+  color:var(--ink);
+  transition:background .2s,color .2s;
+}
+
+.card {
+  background:var(--card);
+  border:1px solid color-mix(in srgb,var(--p3) 10%,transparent);
+}
+
+.btn {
+  background:var(--button);
+  color:var(--button-text);
+}
+
+.btn.ghost {
+  background:var(--card);
+  color:var(--ink);
+  border-color:var(--line);
+}
+
+.chip {
+  background:var(--card);
+  color:var(--ink);
+  border-color:var(--line);
+}
+
+.chip.on {
+  background:var(--p4);
+  color:var(--button-text);
+  border-color:var(--p4);
+}
+
+.opt.on svg { border-color:var(--p4); }
+.bar i { background:var(--p2); }
+.bar.me i { background:var(--p4); }
+.prog i { background:var(--p3); }
+
+.nav { background:var(--p4); }
+
+.nav a {
+  color:color-mix(in srgb,var(--button-text) 72%,transparent);
+}
+
+.nav a.on {
+  background:#fff;
+  color:#000;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline-color:var(--p3);
+}
+
+.notice {
+  background:var(--card);
+  border-color:var(--line);
+}
+
+.notice.err {
+  background:color-mix(in srgb,var(--p1) 18%,#fff);
+  border-color:var(--p1);
+}
+
+.notice.crisis {
+  background:color-mix(in srgb,var(--p2) 35%,#fff);
+  border-color:var(--p2);
+}
+
+.talk {
+  background:color-mix(in srgb,var(--p1) 12%,#fff);
+}
+
+.kmap {
+  background:color-mix(in srgb,var(--p1) 14%,#fff);
+}
+
+.kstate {
+  background:color-mix(in srgb,var(--bg) 92%,#fff);
+}
+
+.pl {
+  background:var(--card);
+  border-bottom-color:var(--line);
+  color:var(--ink);
+}
+
+.ib.tone1 { background:var(--p1); }
+.ib.tone2 { background:var(--p2); }
+.ib.tone3 { background:var(--p3); color:#fff; }
+.ib.tone4 { background:var(--p4); color:var(--button-text); }
+
+.palette-card { padding:16px; }
+
+.palette-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:12px;
+}
+
+.palette-choice {
+  border:2px solid transparent;
+  border-radius:15px;
+  padding:5px;
+  background:var(--card);
+  cursor:pointer;
+  min-width:0;
+}
+
+.palette-choice.active {
+  border-color:var(--ink);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--p2) 65%,transparent);
+}
+
+.palette-choice:focus-visible {
+  outline:3px solid var(--p3);
+  outline-offset:2px;
+}
+
+.palette-swatches {
+  height:48px;
+  display:grid;
+  grid-template-rows:repeat(4,1fr);
+  overflow:hidden;
+  border-radius:9px;
+}
+
+.palette-swatches i { display:block; }
+
+.palette-name {
+  display:block;
+  font-size:12px;
+  color:var(--sub);
+  padding:5px 2px 1px;
+  text-align:center;
+}
+
+.palette-choice.active .palette-name {
+  color:var(--ink);
+  font-weight:700;
+}
+</style>
 </head>
 <body>
+
 <div class="app">
   <div id="err" class="notice err" hidden></div>
   <main id="view"></main>
   <footer id="src" class="src"></footer>
   <nav class="nav" aria-label="메뉴">
-    <a href="#home">홈</a><a href="#test">진단</a><a href="#result">결과</a><a href="#map">지도</a>
+    <a href="#home">홈</a>
+    <a href="#test">진단</a>
+    <a href="#result">결과</a>
+    <a href="#map">지도</a>
   </nav>
 </div>
+
 <script>
-// KOSIS 「산업안전보건실태조사」 2020 (한국산업안전보건공단) 통계표 2개를 변환한 데이터
-const DATA={"stress":{"meta":{"id":"DT_380004_MS16_1_1","title":"스트레스 요인별 심각도 - 고객 대상 감정 노동","period":"[3년] 2020~2020","source":"「산업안전보건실태조사」, 한국산업안전보건공단","downloaded":"2026.10.27 08:35"},"rows":[{"industry":"서비스업","size":"소계","n":2551,"pos":25.3,"avg":2.71}]},"effort":{"meta":{"id":"DT_380004_MS16_2_1","title":"스트레스 요인별 관리 노력 정도 - 고객 대상 감정 노동","period":"[3년] 2020~2020","source":"「산업안전보건실태조사」, 한국산업안전보건공단","downloaded":"2026.10.27 08:40"},"rows":[{"industry":"서비스업","size":"소계","n":2551,"pos":68.9,"avg":3.96}]}};
-// ── 카카오 지도 설정 (키는 이 한 곳에만 입력하세요) ──
-// 브라우저용 JavaScript 키예요. 같은 카카오 앱에서 카카오맵 사용 설정이 ON이고, 이 사이트 주소(프로토콜·호스트·포트)가 JavaScript SDK 도메인에 등록되어 있어야 해요. REST 키나 Admin 키는 넣지 마세요.
+
+// KOSIS 「산업안전보건실태조사」 2020 통계
+const DATA = {
+  "stress": {
+    "meta": {
+      "id":"DT_380004_MS16_1_1",
+      "title":"스트레스 요인별 심각도 - 고객 대상 감정 노동",
+      "period":"[3년] 2020~2020",
+      "source":"「산업안전보건실태조사」, 한국산업안전보건공단",
+      "downloaded":"2026.10.27 08:35"
+    },
+    "rows":[
+      {"industry":"서비스업","size":"소계","n":2551,"pos":25.3,"avg":2.71}
+    ]
+  },
+  "effort": {
+    "meta": {
+      "id":"DT_380004_MS16_2_1",
+      "title":"스트레스 요인별 관리 노력 정도 - 고객 대상 감정 노동",
+      "period":"[3년] 2020~2020",
+      "source":"「산업안전보건실태조사」, 한국산업안전보건공단",
+      "downloaded":"2026.10.27 08:40"
+    },
+    "rows":[
+      {"industry":"서비스업","size":"소계","n":2551,"pos":68.9,"avg":3.96}
+    ]
+  }
+};
+
+// 카카오 지도 설정
 const javascriptKey = 'af50f9b6ccd5bbec5cbfeac02ea4f430';
-// 실제 팀 데이터(공공 상담기관): 자료를 확보하면 {name, address, tel, lat, lng} 형태로 여기에 추가해요. (lat=위도, lng=경도)
+
 const REAL_PLACES = [];
-// 지도 연습용 가상 지점이에요. 실제 자료가 아니고, 서비스 공개 전에 삭제해요.
-const PRACTICE_PLACES = [{name:'가상 지점 A',lat:37.5651,lng:126.9821},{name:'가상 지점 B',lat:37.5670,lng:126.9850},{name:'가상 지점 C',lat:37.5629,lng:126.9843}];
-const Q=[['A1','감정노동 부담','고객을 대하는 일로 받는 스트레스가 심각한 편이다.'],['A2','감정노동 부담','일하는 동안 내 감정을 숨기고 표정·말투를 억지로 맞춘다.'],['A3','감정노동 부담','고객이 화를 내도 끝까지 웃거나 침착해야 한다는 압박을 느낀다.'],
-['B1','악성 민원 경험 (최근 3개월)','고객에게 욕설, 폭언, 반말을 들은 적이 있다.'],['B2','악성 민원 경험 (최근 3개월)','부당한 요구나 같은 내용의 반복 항의로 곤란했던 적이 있다.'],['B3','악성 민원 경험 (최근 3개월)','신체적 위협이나 성적 언행을 겪은 적이 있다.'],
-['C1','심신 상태 (최근 2주)','일 때문에 잠들기 어렵거나 자주 깼다.'],['C2','심신 상태 (최근 2주)','몸이 쉽게 피로하고 두통·소화불량 등이 잦았다.'],['C3','심신 상태 (최근 2주)','사소한 일에도 예민해지거나 짜증이 늘었다.'],['C4','심신 상태 (최근 2주)','퇴근 후에도 고객 응대 장면이 떠올라 마음이 편하지 않았다.'],
-['D1','보호·회복 환경','우리 사업장은 감정노동 스트레스를 줄이려고 노력한다.'],['D2','보호·회복 환경','그 노력이 실제로 내 스트레스를 줄이는 데 도움이 된다.'],['D3','보호·회복 환경','고객 응대 후 마음을 가라앉힐 휴식이 충분히 보장된다.'],
-['E1','마무리','감정노동 때문에 이직을 고민한 적이 있다.']];
-const SCALE=['전혀 아니다','아니다','보통','그렇다','매우 그렇다'];
-const E2=['마음 털어놓을 상담','사업장에 요구할 수 있는 권리','회복 방법','지금은 괜찮다'];
-const E3=['아니요','가끔','자주','답하고 싶지 않다'];
-const LV=[{n:'안정',m:'지금은 괜찮지만 예방이 중요해요',h:'지금처럼 잘 지내고 있다니 다행이에요. 그래도 사람을 대하는 일은 조금씩 쌓이는 일이라서, 퇴근길에 잠깐 숨을 고르는 시간을 만들어 두면 좋아요. 마음이 편할 때 내 권리도 미리 알아 두면 든든해요.'},
-{n:'주의',m:'쌓이기 시작한 단계예요',h:'요즘 마음에 조금씩 쌓이고 있는 것 같아요. 그건 이상한 게 아니에요. 사람을 계속 상대하다 보면 누구나 지치거든요. 오늘은 잠깐이라도 나를 챙기는 시간을 가져 보면 어때요? 힘든 일이 반복되면 혼자 삼키지 말고, 믿을 만한 사람이나 상담 기관에 이야기해 보세요.'},
-{n:'위험',m:'혼자 버티기엔 무거운 상태예요',h:'많이 애쓰고 있었네요. 지금 느끼는 무거움은 약해서가 아니라, 그만큼 오래 열심히 버텨 왔다는 신호예요. 혼자 해결하려 하지 말고, 이야기를 들어 줄 상담 기관에 먼저 연락해 보세요. 쉬는 시간도 꼭 챙겨 주세요.'},
-{n:'고위험',m:'지금 도움을 받는 게 필요해요',h:'지금 많이 힘든 상태로 보여요. 여기까지 혼자 버텨 온 것만으로도 정말 애썼어요. 이제는 도움을 받아도 괜찮아요. 가장 먼저 상담 기관에 연락해 보세요. 오늘 하루는 나를 쉬게 해 주는 것도 잊지 말아 주세요.'}];
-const COL=['#B6EBD2','#FFE27A','#FFC18F','#FFB8C9','#C9B8FF'],MOUTH=['M12 25Q20 33 28 25','M13 26Q20 30 27 26','M13 27L27 27','M13 29Q20 24 27 29','M12 30Q20 21 28 30'];
-const V=document.getElementById('view');
-let stats=null,S,lastE3='';
-const face=(c,m)=>`<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="${COL[c]}"/><circle cx="14" cy="17" r="2.2" fill="#2B2A33"/><circle cx="26" cy="17" r="2.2" fill="#2B2A33"/><path d="${MOUTH[m]}" fill="none" stroke="#2B2A33" stroke-width="2.2" stroke-linecap="round"/></svg>`;
-const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,f1=x=>x.toFixed(1);
-const load=()=>{try{return JSON.parse(localStorage.getItem('mc.results')||'[]')}catch(e){return[]}};
-const save=a=>{try{localStorage.setItem('mc.results',JSON.stringify(a.slice(-20)))}catch(e){}};
-const row=(k,size)=>stats&&(stats[k].rows.find(r=>r.industry==='서비스업'&&r.size===size)||stats[k].rows.find(r=>r.industry==='서비스업'&&r.size==='소계'));
 
-const IC={home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',test:'<rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/>',result:'<path d="M5 20V11M12 20V4M19 20v-6"/>',map:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>'};
-const ico=k=>`<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
-function anim(d){V.classList.remove('in','inl');void V.offsetWidth;V.classList.add(d>0?'in':'inl')}
-function home(){V.innerHTML=`<h1 class="ttl">마음 점검</h1><p class="sub ctr">고객을 대하는 일, 요즘 얼마나 무거운가요? 3분이면 내 상태를 확인할 수 있어요.</p>
-<a class="card big" href="#test"><span class="ib" style="background:#B6EBD2">${ico('test')}</span><span><h2>자가진단</h2><span class="sub">16문항으로 스트레스 수준 점검하기</span></span></a>
-<a class="card big" href="#result"><span class="ib" style="background:#FFE27A">${ico('result')}</span><span><h2>결과 확인</h2><span class="sub">내 결과와 지난 결과 비교하기</span></span></a>
-<a class="card big" href="#map"><span class="ib" style="background:#C9B8FF">${ico('map')}</span><span><h2>지도</h2><span class="sub">근처 도움 기관 (추후 제공)</span></span></a>
-<p class="sub ctr">이 검사는 의학적 진단이 아니라 스트레스 점검 도구예요.</p>`}
+const PRACTICE_PLACES = [
+  {name:'가상 지점 A',lat:37.5651,lng:126.9821},
+  {name:'가상 지점 B',lat:37.5670,lng:126.9850},
+  {name:'가상 지점 C',lat:37.5629,lng:126.9843}
+];
 
-function test(dir){
-  if(!S)S={step:0,a:{},e2:[],e3:''};
-  const n=Q.length+2,s=S.step;
+const Q = [
+['A1','감정노동 부담','고객을 대하는 일로 받는 스트레스가 심각한 편이다.'],
+['A2','감정노동 부담','일하는 동안 내 감정을 숨기고 표정·말투를 억지로 맞춘다.'],
+['A3','감정노동 부담','고객이 화를 내도 끝까지 웃거나 침착해야 한다는 압박을 느낀다.'],
+['B1','악성 민원 경험 (최근 3개월)','고객에게 욕설, 폭언, 반말을 들은 적이 있다.'],
+['B2','악성 민원 경험 (최근 3개월)','부당한 요구나 같은 내용의 반복 항의로 곤란했던 적이 있다.'],
+['B3','악성 민원 경험 (최근 3개월)','신체적 위협이나 성적 언행을 겪은 적이 있다.'],
+['C1','심신 상태 (최근 2주)','일 때문에 잠들기 어렵거나 자주 깼다.'],
+['C2','심신 상태 (최근 2주)','몸이 쉽게 피로하고 두통·소화불량 등이 잦았다.'],
+['C3','심신 상태 (최근 2주)','사소한 일에도 예민해지거나 짜증이 늘었다.'],
+['C4','심신 상태 (최근 2주)','퇴근 후에도 고객 응대 장면이 떠올라 마음이 편하지 않았다.'],
+['D1','보호·회복 환경','우리 사업장은 감정노동 스트레스를 줄이려고 노력한다.'],
+['D2','보호·회복 환경','그 노력이 실제로 내 스트레스를 줄이는 데 도움이 된다.'],
+['D3','보호·회복 환경','고객 응대 후 마음을 가라앉힐 휴식이 충분히 보장된다.'],
+['E1','마무리','감정노동 때문에 이직을 고민한 적이 있다.']
+];
+
+const SCALE = ['전혀 아니다','아니다','보통','그렇다','매우 그렇다'];
+
+const E2 = [
+  '마음 털어놓을 상담',
+  '사업장에 요구할 수 있는 권리',
+  '회복 방법',
+  '지금은 괜찮다'
+];
+
+const E3 = ['아니요','가끔','자주','답하고 싶지 않다'];
+
+const LV = [
+{
+  n:'안정',
+  m:'지금은 괜찮지만 예방이 중요해요',
+  h:'지금처럼 잘 지내고 있다니 다행이에요. 그래도 사람을 대하는 일은 조금씩 쌓이는 일이라서, 퇴근길에 잠깐 숨을 고르는 시간을 만들어 두면 좋아요. 마음이 편할 때 내 권리도 미리 알아 두면 든든해요.'
+},
+{
+  n:'주의',
+  m:'쌓이기 시작한 단계예요',
+  h:'요즘 마음에 조금씩 쌓이고 있는 것 같아요. 그건 이상한 게 아니에요. 사람을 계속 상대하다 보면 누구나 지치거든요. 오늘은 잠깐이라도 나를 챙기는 시간을 가져 보면 어때요? 힘든 일이 반복되면 혼자 삼키지 말고, 믿을 만한 사람이나 상담 기관에 이야기해 보세요.'
+},
+{
+  n:'위험',
+  m:'혼자 버티기엔 무거운 상태예요',
+  h:'많이 애쓰고 있었네요. 지금 느끼는 무거움은 약해서가 아니라, 그만큼 오래 열심히 버텨 왔다는 신호예요. 혼자 해결하려 하지 말고, 이야기를 들어 줄 상담 기관에 먼저 연락해 보세요. 쉬는 시간도 꼭 챙겨 주세요.'
+},
+{
+  n:'고위험',
+  m:'지금 도움을 받는 게 필요해요',
+  h:'지금 많이 힘든 상태로 보여요. 여기까지 혼자 버텨 온 것만으로도 정말 애썼어요. 이제는 도움을 받아도 괜찮아요. 가장 먼저 상담 기관에 연락해 보세요. 오늘 하루는 나를 쉬게 해 주는 것도 잊지 말아 주세요.'
+}
+];
+
+const COL = ['#B6EBD2','#FFE27A','#FFC18F','#FFB8C9','#C9B8FF'];
+
+const MOUTH = [
+'M12 25Q20 33 28 25',
+'M13 26Q20 30 27 26',
+'M13 27L27 27',
+'M13 29Q20 24 27 29',
+'M12 30Q20 21 28 30'
+];
+
+// 이미지 기반 8가지 컬러 팔레트
+const PALETTES = [
+{
+  id:'mint',
+  name:'민트 가든',
+  colors:['#69C9A9','#C9EDB3','#63866B','#414841'],
+  buttonText:'#fff'
+},
+{
+  id:'candy',
+  name:'피치 캔디',
+  colors:['#F8A0A5','#FFBD7D','#FFF36A','#B4F66B'],
+  buttonText:'#171717'
+},
+{
+  id:'berry',
+  name:'베리 나이트',
+  colors:['#291D2B','#493449','#62558B','#668BB8'],
+  buttonText:'#fff'
+},
+{
+  id:'latte',
+  name:'크림 라떼',
+  colors:['#F8E8C4','#E7B894','#A77A7D','#704A5D'],
+  buttonText:'#fff'
+},
+{
+  id:'teal',
+  name:'딥 틸',
+  colors:['#48465F','#008F86','#B9BDA0','#F2E8E4'],
+  buttonText:'#171717'
+},
+{
+  id:'terracotta',
+  name:'어스 브라운',
+  colors:['#302725','#70412E','#C75A32','#E9BE8D'],
+  buttonText:'#171717'
+},
+{
+  id:'red',
+  name:'레드 팝',
+  colors:['#FFE4E5','#F20B16','#B90008','#050505'],
+  buttonText:'#fff'
+},
+{
+  id:'ocean',
+  name:'오션 코랄',
+  colors:['#05275F','#0752BA','#FF746D','#FFD0A8'],
+  buttonText:'#171717'
+}
+];
+
+function getTheme() {
+  try {
+    return localStorage.getItem('mc.theme') || 'mint';
+  } catch(e) {
+    return 'mint';
+  }
+}
+
+function applyTheme(id, save=true) {
+  const p = PALETTES.find(x => x.id === id) || PALETTES[0];
+  const root = document.documentElement;
+
+  p.colors.forEach((c,i) => {
+    root.style.setProperty('--p' + (i+1), c);
+  });
+
+  root.style.setProperty('--button',p.colors[3]);
+  root.style.setProperty('--button-text',p.buttonText);
+  root.dataset.theme = p.id;
+
+  if(save) {
+    try {
+      localStorage.setItem('mc.theme',p.id);
+    } catch(e) {}
+  }
+
+  document.querySelectorAll('[data-theme]').forEach(b => {
+    const active = b.dataset.theme === p.id;
+    b.classList.toggle('active',active);
+    b.setAttribute('aria-pressed',String(active));
+  });
+}
+
+const V = document.getElementById('view');
+let stats = null, S, lastE3 = '';
+
+const face = (c,m) => `
+<svg viewBox="0 0 40 40" aria-hidden="true">
+  <circle cx="20" cy="20" r="20" fill="var(--p${(c%4)+1})"/>
+  <circle cx="14" cy="17" r="2.2" fill="var(--ink)"/>
+  <circle cx="26" cy="17" r="2.2" fill="var(--ink)"/>
+  <path d="${MOUTH[m]}" fill="none" stroke="var(--ink)"
+    stroke-width="2.2" stroke-linecap="round"/>
+</svg>`;
+
+const mean = a => a.reduce((x,y)=>x+y,0)/a.length;
+const f1 = x => x.toFixed(1);
+
+const load = () => {
+  try {
+    return JSON.parse(localStorage.getItem('mc.results') || '[]');
+  } catch(e) {
+    return [];
+  }
+};
+
+const save = a => {
+  try {
+    localStorage.setItem('mc.results',JSON.stringify(a.slice(-20)));
+  } catch(e) {}
+};
+
+const row = (k,size) => stats &&
+  (stats[k].rows.find(r=>r.industry==='서비스업'&&r.size===size) ||
+   stats[k].rows.find(r=>r.industry==='서비스업'&&r.size==='소계'));
+
+const IC = {
+home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',
+test:'<rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/>',
+result:'<path d="M5 20V11M12 20V4M19 20v-6"/>',
+map:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>'
+};
+
+const ico = k => `
+<svg class="ico" viewBox="0 0 24 24" fill="none"
+ stroke="currentColor" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round"
+ aria-hidden="true">${IC[k]}</svg>`;
+
+function anim(d) {
+  V.classList.remove('in','inl');
+  void V.offsetWidth;
+  V.classList.add(d>0?'in':'inl');
+}
+
+function home() {
+  V.innerHTML = `
+    <h1 class="ttl">마음 점검</h1>
+    <p class="sub ctr">고객을 대하는 일, 요즘 얼마나 무거운가요? 3분이면 내 상태를 확인할 수 있어요.</p>
+
+    <a class="card big" href="#test">
+      <span class="ib tone1">${ico('test')}</span>
+      <span>
+        <h2>자가진단</h2>
+        <span class="sub">16문항으로 스트레스 수준 점검하기</span>
+      </span>
+    </a>
+
+    <a class="card big" href="#result">
+      <span class="ib tone2">${ico('result')}</span>
+      <span>
+        <h2>결과 확인</h2>
+        <span class="sub">내 결과와 지난 결과 비교하기</span>
+      </span>
+    </a>
+
+    <a class="card big" href="#map">
+      <span class="ib tone4">${ico('map')}</span>
+      <span>
+        <h2>지도</h2>
+        <span class="sub">근처 도움 기관 (추후 제공)</span>
+      </span>
+    </a>
+
+    <section class="card palette-card">
+      <h2>앱 색상 테마</h2>
+      <p class="sub">마음에 드는 컬러 팔레트를 선택해 보세요. 선택한 색상은 앱 전체에 적용되고 자동으로 저장돼요.</p>
+
+      <div class="palette-grid" id="palette-grid" aria-label="컬러 팔레트 선택">
+        ${PALETTES.map(p => `
+          <button type="button"
+            class="palette-choice ${getTheme()===p.id?'active':''}"
+            data-theme="${p.id}"
+            aria-pressed="${getTheme()===p.id}"
+            aria-label="${p.name} 팔레트 선택">
+
+            <span class="palette-swatches">
+              ${p.colors.map(c=>`<i style="background:${c}"></i>`).join('')}
+            </span>
+
+            <span class="palette-name">${p.name}</span>
+          </button>
+        `).join('')}
+      </div>
+    </section>
+
+    <p class="sub ctr">이 검사는 의학적 진단이 아니라 스트레스 점검 도구예요.</p>
+  `;
+
+  V.querySelectorAll('[data-theme]').forEach(b => {
+    b.onclick = () => applyTheme(b.dataset.theme);
+  });
+}
+
+  function test(dir) {
+  if(!S) S={step:0,a:{},e2:[],e3:''};
+
+  const n=Q.length+2;
+  const s=S.step;
   let body,ok;
-  if(s<Q.length){
+
+  if(s<Q.length) {
     const q=Q[s];
     ok=!!S.a[q[0]];
-    body=`<p class="sub">${q[1]}</p><h2>${q[2]}</h2><div class="grid">${SCALE.map((t,i)=>`<button type="button" class="opt ${S.a[q[0]]===i+1?'on':''}" data-v="${i+1}">${face(i,i)}<span>${t}</span></button>`).join('')}</div>`;
-  }else if(s===Q.length){
-    ok=S.e2.length>0;
-    body=`<h2>지금 가장 필요한 도움은?</h2><p class="sub">여러 개 고를 수 있어요.</p><div class="chips">${E2.map(t=>`<button type="button" class="chip ${S.e2.includes(t)?'on':''}" data-e2="${esc(t)}">${t}</button>`).join('')}</div>`;
-  }else{
-    ok=!!S.e3;
-    body=`<h2>최근 2주 사이 스스로를 해치고 싶다는 생각이 들었다.</h2><p class="sub">이 답변은 저장하지 않아요.</p><div class="chips">${E3.map(t=>`<button type="button" class="chip ${S.e3===t?'on':''}" data-e3="${esc(t)}">${t}</button>`).join('')}</div>`;
+
+    body=`
+      <p class="sub">${q[1]}</p>
+      <h2>${q[2]}</h2>
+      <div class="grid">
+        ${SCALE.map((t,i)=>`
+          <button type="button"
+            class="opt ${S.a[q[0]]===i+1?'on':''}"
+            data-v="${i+1}">
+            ${face(i,i)}
+            <span>${t}</span>
+          </button>
+        `).join('')}
+      </div>`;
   }
-  V.innerHTML=`<div class="prog"><i style="width:${(s/(n-1))*100}%"></i></div><div class="card">${body}<div class="row"><button class="btn ghost" id="pv" ${s?'':'disabled'}>이전</button><button class="btn" id="nx" ${ok?'':'disabled'}>${s===n-1?'결과 확인':'다음'}</button></div></div>`;
-  V.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const q=Q[s];S.a[q[0]]=Number(b.dataset.v);test();});
-  V.querySelectorAll('[data-e2]').forEach(b=>b.onclick=()=>{const t=b.dataset.e2;S.e2=S.e2.includes(t)?S.e2.filter(x=>x!==t):[...S.e2,t];test();});
-  V.querySelectorAll('[data-e3]').forEach(b=>b.onclick=()=>{S.e3=b.dataset.e3;test();});
-  document.getElementById('pv').onclick=()=>{if(s>0){S.step--;test(-1);}};
-  document.getElementById('nx').onclick=()=>{if(!ok)return;if(s<n-1){S.step++;test(1);}else finish();};
-  if(dir)anim(dir);
+  else if(s===Q.length) {
+    ok=S.e2.length>0;
+
+    body=`
+      <h2>지금 가장 필요한 도움은?</h2>
+      <p class="sub">여러 개 고를 수 있어요.</p>
+      <div class="chips">
+        ${E2.map(t=>`
+          <button type="button"
+            class="chip ${S.e2.includes(t)?'on':''}"
+            data-e2="${esc(t)}">${t}</button>
+        `).join('')}
+      </div>`;
+  }
+  else {
+    ok=!!S.e3;
+
+    body=`
+      <h2>최근 2주 사이 스스로를 해치고 싶다는 생각이 들었다.</h2>
+      <p class="sub">이 답변은 저장하지 않아요.</p>
+      <div class="chips">
+        ${E3.map(t=>`
+          <button type="button"
+            class="chip ${S.e3===t?'on':''}"
+            data-e3="${esc(t)}">${t}</button>
+        `).join('')}
+      </div>`;
+  }
+
+  V.innerHTML=`
+    <div class="prog">
+      <i style="width:${(s/(n-1))*100}%"></i>
+    </div>
+    <div class="card">
+      ${body}
+      <div class="row">
+        <button class="btn ghost" id="pv" ${s?'':'disabled'}>이전</button>
+        <button class="btn" id="nx" ${ok?'':'disabled'}>
+          ${s===n-1?'결과 확인':'다음'}
+        </button>
+      </div>
+    </div>`;
+
+  V.querySelectorAll('[data-v]').forEach(b=>{
+    b.onclick=()=>{
+      const q=Q[s];
+      S.a[q[0]]=Number(b.dataset.v);
+      test();
+    };
+  });
+
+  V.querySelectorAll('[data-e2]').forEach(b=>{
+    b.onclick=()=>{
+      const t=b.dataset.e2;
+      S.e2=S.e2.includes(t)
+        ? S.e2.filter(x=>x!==t)
+        : [...S.e2,t];
+      test();
+    };
+  });
+
+  V.querySelectorAll('[data-e3]').forEach(b=>{
+    b.onclick=()=>{
+      S.e3=b.dataset.e3;
+      test();
+    };
+  });
+
+  document.getElementById('pv').onclick=()=>{
+    if(s>0) {
+      S.step--;
+      test(-1);
+    }
+  };
+
+  document.getElementById('nx').onclick=()=>{
+    if(!ok) return;
+
+    if(s<n-1) {
+      S.step++;
+      test(1);
+    }
+    else {
+      finish();
+    }
+  };
+
+  if(dir) anim(dir);
 }
 
-function finish(){
+function finish() {
   const a=S.a;
-  const g=k=>Q.filter(q=>q[0][0]===k).map(q=>a[q[0]]);
-  const A=mean(g('A')),B=mean(g('B')),C=mean(g('C'));
-  const st=mean([...g('A'),...g('B'),...g('C')]);
+
+  const g=k=>Q
+    .filter(q=>q[0][0]===k)
+    .map(q=>a[q[0]]);
+
+  const A=mean(g('A'));
+  const B=mean(g('B'));
+  const C=mean(g('C'));
+
+  const st=mean([
+    ...g('A'),
+    ...g('B'),
+    ...g('C')
+  ]);
+
   const lv=st<2?0:st<3?1:st<4?2:3;
-  const r={t:Date.now(),A,B,C,st,lv,d1:a.D1,d2:a.D2,d3:a.D3,b3:a.B3,a1:a.A1,e1:a.E1,e2:S.e2};
+
+  const r={
+    t:Date.now(),
+    A,B,C,st,lv,
+    d1:a.D1,
+    d2:a.D2,
+    d3:a.D3,
+    b3:a.B3,
+    a1:a.A1,
+    e1:a.E1,
+    e2:S.e2
+  };
+
   lastE3=S.e3;
-  const h=load();h.push(r);save(h);S=null;location.hash='#result';
-}
 
-const bar=(l,v,max,cls='')=>`<div class="lab"><span>${l}</span><b>${f1(v)}</b></div><div class="bar ${cls}"><i style="width:${Math.max(0,Math.min(100,v/max*100))}%"></i></div>`;
-function result(){
   const h=load();
-  if(!h.length){V.innerHTML=`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>`;return;}
-  const r=h[h.length-1],p=h[h.length-2],L=LV[r.lv],ss=row('stress','소계'),ef=row('effort','소계');
-  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?`${f1(x-y)}점 높아졌어요`:`${f1(y-x)}점 낮아졌어요`;
-  const small=x=>x&&x.n<30?' (표본이 적어 참고용)':'';
-  let o=`<h1>내 결과</h1>`;
-  if(lastE3==='가끔'||lastE3==='자주')o+=`<div class="notice crisis"><b>먼저 확인해 주세요.</b><p>지금 마음이 많이 힘들다면 혼자 감당하지 말고 믿을 만한 사람에게 바로 알려 주세요. 자살예방상담전화 109로 연락할 수 있고, 당장 안전이 위급하면 112 또는 119에 도움을 요청하세요.</p></div>`;
-  o+=`<div class="card hl">${face(r.lv===0?0:r.lv===1?1:r.lv===2?3:4,[0,1,3,4][r.lv])}<h2>${L.n} 단계</h2><p>${L.m}</p><p class="sub">스트레스 평균 ${f1(r.st)}점 (1~5점, 높을수록 힘든 상태)</p></div>`;
-  o+=`<div class="card"><h2>영역별 점수</h2>${bar('감정노동 부담',r.A,5)}${bar('악성 민원 경험',r.B,5)}${bar('심신 상태',r.C,5)}${bar('보호 부족도 (D2·D3 역채점)',mean([6-r.d2,6-r.d3]),5)}<p class="sub">사업장 노력 인지(D1): ${r.d1}점${r.d1>=4&&r.d2<=2?' · 노력은 있지만 내게는 체감되지 않는 상태예요.':''}</p></div>`;
-  o+=`<div class="card"><h2>같은 업종과 비교</h2>`;
-  if(ss){
-    o+=`${bar('내 응답(A1)',r.a1,5,'me')}${bar('서비스업 전체 평균',ss.avg,5)}<p>서비스업 전체 중 <b>${ss.pos}%</b>가 고객 대상 감정노동 스트레스가 심각하다고 답했어요${small(ss)}.</p>`;
-  }else{o+=`<p class="sub">비교 통계 자료가 없어요.</p>`;}
-  if(ef)o+=`<p class="sub">참고로 서비스업 사업장의 ${ef.pos}%가 감정노동 스트레스 관리 노력을 하고 있다고 응답했어요. (평균 ${f1(ef.avg)}점)</p>`;
-  o+=`<p class="sub">공공 통계는 2020년 조사 자료로, 현재 상황이나 개인의 상태를 직접 진단하는 기준은 아니에요.</p></div>`;
-  if(p)o+=`<div class="card"><h2>지난 결과와 비교</h2><p>스트레스 평균이 지난번(${new Date(p.t).toLocaleDateString('ko-KR')}, ${LV[p.lv].n})보다 ${d(r.st,p.st)}.</p><p class="sub">감정노동 부담 ${d(r.A,p.A)} · 악성 민원 ${d(r.B,p.B)} · 심신 상태 ${d(r.C,p.C)}</p></div>`;
-  else o+=`<div class="notice">지난 결과가 없어서 비교할 수 없어요. 다음 진단부터 비교해 드려요.</div>`;
-  o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>`;
-  if(r.b3>=3)o+=`<p>신체적 위협이나 성적 언행 등으로 불안했다면, 혼자 대응하지 말고 관리자나 신뢰할 수 있는 담당자에게 알리고 안전한 장소로 이동해 도움을 요청하세요.</p>`;
-  if(r.e2.length)o+=`<p><b>선택한 도움:</b> ${r.e2.map(esc).join(' · ')}</p>`;
-  if(r.e1>=4)o+=`<p>이직을 고민할 만큼 부담이 컸다면, 현재 업무 환경과 보호 조치를 차분히 점검하고 상담 기관이나 노동 관련 지원기관에 도움을 요청해 보세요.</p>`;
-  o+=`<a class="btn" href="#map" style="display:inline-block;text-decoration:none">도움 기관 지도 보기</a></div>`;
-  o+=`<div class="card talk"><h2>내 권리 안내</h2><p>혹시 "이 정도는 참아야 하는 거 아닌가" 하고 생각한 적 있나요? 고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 투정이 아니라 법에서 보장하는 권리예요. 그렇게 말했다고 불이익을 받아서도 안 되고요.</p><p>말하기 어렵다면, 힘들었던 일을 날짜와 함께 메모해 두는 것부터 시작해 보세요. 나중에 도움을 받을 때 큰 힘이 돼요.</p><p class="sub">근거: 산업안전보건법 제41조</p></div>`;
-  o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>${new Date(x.t).toLocaleDateString('ko-KR')} · ${LV[x.lv].n} · 평균 ${f1(x.st)}점</li>`).join('')}</ul><button class="btn ghost" id="del" type="button">저장된 결과 삭제</button></div>`;
-  V.innerHTML=o;
-  document.getElementById('del').onclick=()=>{if(confirm('이 기기에 저장된 결과를 모두 지울까요?')){save([]);lastE3='';result();}};
+  h.push(r);
+  save(h);
+
+  S=null;
+  location.hash='#result';
 }
 
-// 상담·정신과 목록: 아래 따옴표(`) 사이에 팀이 모은 목록을 그대로 붙여 넣으세요.
-// 형식: 구 이름 한 줄, 다음 줄에 "상담: 이름(전화), 이름(전화)" / "정신과: 이름(전화), ..."
-const RAW=`
+const bar=(l,v,max,cls='')=>`
+  <div class="lab">
+    <span>${l}</span>
+    <b>${f1(v)}</b>
+  </div>
+  <div class="bar ${cls}">
+    <i style="width:${Math.max(0,Math.min(100,v/max*100))}%"></i>
+  </div>`;
+
+function result() {
+  const h=load();
+
+  if(!h.length) {
+    V.innerHTML=`
+      <h1>결과 확인</h1>
+      <div class="notice">
+        아직 저장된 결과가 없어요.
+        자가진단을 먼저 해 보세요.
+      </div>
+      <a class="btn" href="#test"
+        style="display:inline-block;text-decoration:none">
+        자가진단 시작
+      </a>`;
+    return;
+  }
+
+  const r=h[h.length-1];
+  const p=h[h.length-2];
+  const L=LV[r.lv];
+  const ss=row('stress','소계');
+  const ef=row('effort','소계');
+
+  const d=(x,y)=>
+    Math.abs(x-y)<.1
+      ?'비슷해요'
+      :x>y
+        ?`${f1(x-y)}점 높아졌어요`
+        :`${f1(y-x)}점 낮아졌어요`;
+
+  const small=x=>
+    x&&x.n<30?' (표본이 적어 참고용)':'';
+
+  let o=`<h1>내 결과</h1>`;
+
+  if(lastE3==='가끔'||lastE3==='자주') {
+    o+=`
+      <div class="notice crisis">
+        <b>먼저 확인해 주세요.</b>
+        <p>
+          지금 마음이 많이 힘들다면 혼자 감당하지 말고
+          믿을 만한 사람에게 바로 알려 주세요.
+          자살예방상담전화 109로 연락할 수 있고,
+          당장 안전이 위급하면 112 또는 119에
+          도움을 요청하세요.
+        </p>
+      </div>`;
+  }
+
+  o+=`
+    <div class="card hl">
+      ${face(r.lv===0?0:r.lv===1?1:r.lv===2?3:4,[0,1,3,4][r.lv])}
+      <h2>${L.n} 단계</h2>
+      <p>${L.m}</p>
+      <p class="sub">
+        스트레스 평균 ${f1(r.st)}점
+        (1~5점, 높을수록 힘든 상태)
+      </p>
+    </div>`;
+
+  o+=`
+    <div class="card">
+      <h2>영역별 점수</h2>
+      ${bar('감정노동 부담',r.A,5)}
+      ${bar('악성 민원 경험',r.B,5)}
+      ${bar('심신 상태',r.C,5)}
+      ${bar('보호 부족도 (D2·D3 역채점)',mean([6-r.d2,6-r.d3]),5)}
+      <p class="sub">
+        사업장 노력 인지(D1): ${r.d1}점
+        ${r.d1>=4&&r.d2<=2
+          ?' · 노력은 있지만 내게는 체감되지 않는 상태예요.'
+          :''}
+      </p>
+    </div>`;
+
+  o+=`<div class="card"><h2>같은 업종과 비교</h2>`;
+
+  if(ss) {
+    o+=`
+      ${bar('내 응답(A1)',r.a1,5,'me')}
+      ${bar('서비스업 전체 평균',ss.avg,5)}
+      <p>
+        서비스업 전체 중 <b>${ss.pos}%</b>가
+        고객 대상 감정노동 스트레스가 심각하다고 답했어요
+        ${small(ss)}.
+      </p>`;
+  }
+  else {
+    o+=`<p class="sub">비교 통계 자료가 없어요.</p>`;
+  }
+
+  if(ef) {
+    o+=`
+      <p class="sub">
+        참고로 서비스업 사업장의 ${ef.pos}%가
+        감정노동 스트레스 관리 노력을 하고 있다고 응답했어요.
+        (평균 ${f1(ef.avg)}점)
+      </p>`;
+  }
+
+  o+=`
+    <p class="sub">
+      공공 통계는 2020년 조사 자료로,
+      현재 상황이나 개인의 상태를 직접 진단하는 기준은 아니에요.
+    </p>
+    </div>`;
+
+  if(p) {
+    o+=`
+      <div class="card">
+        <h2>지난 결과와 비교</h2>
+        <p>
+          스트레스 평균이 지난번
+          (${new Date(p.t).toLocaleDateString('ko-KR')},
+          ${LV[p.lv].n})보다 ${d(r.st,p.st)}.
+        </p>
+        <p class="sub">
+          감정노동 부담 ${d(r.A,p.A)} ·
+          악성 민원 ${d(r.B,p.B)} ·
+          심신 상태 ${d(r.C,p.C)}
+        </p>
+      </div>`;
+  }
+  else {
+    o+=`
+      <div class="notice">
+        지난 결과가 없어서 비교할 수 없어요.
+        다음 진단부터 비교해 드려요.
+      </div>`;
+  }
+
+  o+=`
+    <div class="card talk">
+      <h2>도움 연결</h2>
+      <p>${L.h}</p>`;
+
+  if(r.b3>=3) {
+    o+=`
+      <p>
+        신체적 위협이나 성적 언행 등으로 불안했다면,
+        혼자 대응하지 말고 관리자나 신뢰할 수 있는 담당자에게
+        알리고 안전한 장소로 이동해 도움을 요청하세요.
+      </p>`;
+  }
+
+  if(r.e2.length) {
+    o+=`
+      <p>
+        <b>선택한 도움:</b>
+        ${r.e2.map(esc).join(' · ')}
+      </p>`;
+  }
+
+  if(r.e1>=4) {
+    o+=`
+      <p>
+        이직을 고민할 만큼 부담이 컸다면,
+        현재 업무 환경과 보호 조치를 차분히 점검하고
+        상담 기관이나 노동 관련 지원기관에
+        도움을 요청해 보세요.
+      </p>`;
+  }
+
+  o+=`
+      <a class="btn" href="#map"
+        style="display:inline-block;text-decoration:none">
+        도움 기관 지도 보기
+      </a>
+    </div>`;
+
+  o+=`
+    <div class="card talk">
+      <h2>내 권리 안내</h2>
+      <p>
+        혹시 "이 정도는 참아야 하는 거 아닌가" 하고 생각한 적 있나요?
+        고객 때문에 몸이나 마음이 힘들어지면,
+        사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고
+        말할 수 있어요. 투정이 아니라 법에서 보장하는 권리예요.
+        그렇게 말했다고 불이익을 받아서도 안 되고요.
+      </p>
+      <p>
+        말하기 어렵다면, 힘들었던 일을 날짜와 함께
+        메모해 두는 것부터 시작해 보세요.
+        나중에 도움을 받을 때 큰 힘이 돼요.
+      </p>
+      <p class="sub">근거: 산업안전보건법 제41조</p>
+    </div>`;
+
+  o+=`
+    <div class="card">
+      <h2>저장된 결과 ${h.length}건</h2>
+      <ul>
+        ${h.slice().reverse().map(x=>`
+          <li>
+            ${new Date(x.t).toLocaleDateString('ko-KR')}
+            · ${LV[x.lv].n}
+            · 평균 ${f1(x.st)}점
+          </li>
+        `).join('')}
+      </ul>
+      <button class="btn ghost" id="del" type="button">
+        저장된 결과 삭제
+      </button>
+    </div>`;
+
+  V.innerHTML=o;
+
+  document.getElementById('del').onclick=()=>{
+    if(confirm('이 기기에 저장된 결과를 모두 지울까요?')) {
+      save([]);
+      lastE3='';
+      result();
+    }
+  };
+}
+
+  // 상담·정신과 기관 목록
+const RAW = `
 강남구
 상담: 강남심리상담센터(02-2135-1131), 강남심리상담센터 해맑음(010-9510-2022), 양소영 심리상담센터(02-557-9701), 숨&쉼 심리상담센터(50-71336-3616), 호시담 선릉점(02-745-1052)
 정신과: Seoul Psychiatry Clinic Gangnam(영어 가능, 02-3453-8856), 마음소담(02-565-0199), 사유(02-566-9946), 삼성공감 강남점(02-6956-1771)
@@ -208,7 +1267,7 @@ const RAW=`
 정신과: Seoul Central Mental Health Clinic(영어 가능, 02-779-7660), 시청역성모(02-318-5330), 연세웰(02-3789-9888), 다산로 정신건강의학과(02-2234-5510), 당신의숲(02-2135-1898)
 용산구
 상담: 마인드카페 용산점(02-790-9811), 인정심리상담센터, 맑은샘심리상담연구소(02-385-6494), 용산구정신건강복지센터(02-703-8340), 밝은희망부부상담클리닉(1522-5239)
-정신과: 지혜샘(02-3272-8275), 윤혜리(02-2138-7588), 오늘(02-797-8272), 서울휴, 디에프 용산(02-794-7278)
+정신과: 지혜샘(02-3272-8272), 윤혜리(02-2138-7588), 오늘(02-797-8272), 서울휴, 디에프 용산(02-794-7278)
 성동구
 상담: 살구마인드 성수점(010-7400-6934), 해피팝(02-469-9942), 헬로스마일 성수점(02-6953-5412), 새벽별심리상담센터, 마음온기(010-2313-7659)
 정신과: 서울알파(02-499-0787), 김용호(02-2291-4002), 서울숲봄(02-6954-7503), 서울나아가는(02-6953-0706)
@@ -261,119 +1320,717 @@ const RAW=`
 상담: 마음나루심리상담연구소(02-532-5628), 동작구정신건강복지센터(02-820-9540), 동작구청소년상담복지센터(02-834-1355), Healing Counseling Center(02-3280-7572), 남영(50-71310-4606)
 정신과: 사당숲(02-521-0923), 나란히(02-6484-8110), 상도연세(02-822-0345), 봄(02-812-2226), 연세광(02-3280-0375), 변재영(02-815-0353)
 `;
+
 const keyOk=()=>javascriptKey&&javascriptKey!=='YOUR_JAVASCRIPT_KEY';
-const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+}[c]));
+
 let kakaoP=null,kro=null,myPos=null;
 const CACHE={};
-const km=(a,b)=>{const t=x=>x*Math.PI/180,u=t(b.lat-a.lat),v=t(b.lng-a.lng),h=Math.sin(u/2)**2+Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(v/2)**2;return 12742*Math.asin(Math.sqrt(h))};
-const fmt=d=>d<1?Math.round(d*100)*10+'m':d.toFixed(1)+'km';
-function parseRaw(t){
-  const db={};let gu='';
+
+const km=(a,b)=>{
+  const t=x=>x*Math.PI/180;
+  const u=t(b.lat-a.lat);
+  const v=t(b.lng-a.lng);
+  const h=Math.sin(u/2)**2+
+    Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(v/2)**2;
+  return 12742*Math.asin(Math.sqrt(h));
+};
+
+const fmt=d=>d<1
+  ?Math.round(d*100)*10+'m'
+  :d.toFixed(1)+'km';
+
+function parseRaw(t) {
+  const db={};
+  let gu='';
+
   t.split('\n').forEach(line=>{
-    const l=line.trim();if(!l)return;
+    const l=line.trim();
+    if(!l) return;
+
     const m=l.match(/^(상담|정신과)\s*:\s*(.*)$/);
-    if(!m){gu=l.replace(/\s*\([^)]*\)\s*$/,'').trim();db[gu]=db[gu]||[];return;}
-    if(!gu)return;
-    let depth=0,current='';const parts=[];
-    for(const ch of m[2]){
-      if(ch==='(')depth++;
-      if(ch===')')depth--;
-      if(ch===','&&depth===0){parts.push(current);current='';}
-      else current+=ch;
+
+    if(!m) {
+      gu=l.replace(/\s*\([^)]*\)\s*$/,'').trim();
+      db[gu]=db[gu]||[];
+      return;
     }
+
+    if(!gu) return;
+
+    let depth=0,current='';
+    const parts=[];
+
+    for(const ch of m[2]) {
+      if(ch==='(') depth++;
+      if(ch===')') depth--;
+
+      if(ch===','&&depth===0) {
+        parts.push(current);
+        current='';
+      }
+      else {
+        current+=ch;
+      }
+    }
+
     parts.push(current);
+
     parts.forEach(item=>{
-      const value=item.trim();if(!value)return;
+      const value=item.trim();
+      if(!value) return;
+
       const match=value.match(/^(.*?)\((.*)\)\s*$/);
       const name=(match?match[1]:value).trim();
       const inside=match?match[2]:'';
       const details=inside.split(',').map(x=>x.trim()).filter(Boolean);
+
       const tel=details.find(x=>/^[\d-]{7,}$/.test(x))||'';
       const note=details.filter(x=>x!==tel).join(', ');
-      if(name)db[gu].push({gu,kind:m[1],name,tel,note});
+
+      if(name) db[gu].push({
+        gu,
+        kind:m[1],
+        name,
+        tel,
+        note
+      });
     });
   });
+
   return db;
 }
+
 const DB=parseRaw(RAW);
-function loadKakao(){if(kakaoP)return kakaoP;
-kakaoP=new Promise((ok,ng)=>{const fin=()=>{try{kakao.maps.load(ok)}catch(e){ng(e)}};
-if(window.kakao&&kakao.maps){fin();return}
-const s=document.createElement('script');s.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+encodeURIComponent(javascriptKey)+'&libraries=services&autoload=false';
-s.onload=fin;s.onerror=()=>{s.remove();ng(new Error('sdk'))};document.head.appendChild(s)});
-kakaoP.catch(()=>{kakaoP=null});return kakaoP}
-const ready=()=>Promise.race([loadKakao(),new Promise((_,ng)=>setTimeout(()=>ng(new Error('timeout')),8000))]);
-const tail=x=>String(x||'').replace(/\D/g,'').slice(-8),nm=x=>String(x||'').replace(/\s/g,'').toLowerCase();
-const find=(ps,p)=>new Promise(res=>ps.keywordSearch('서울 '+p.gu+' '+p.name,(d,s)=>{
-if(s!==kakao.maps.services.Status.OK){res(null);return;}
-const h=d.find(r=>tail(p.tel).length===8?tail(r.phone)===tail(p.tel):nm(r.place_name)===nm(p.name)&&String(r.address_name).includes(p.gu));
-res(h?{lat:+h.y,lng:+h.x,addr:h.road_address_name||h.address_name,tel:h.phone||p.tel}:null);
-},{size:5}));
-function map(){if(kro){kro.disconnect();kro=null}
-const guList=Object.keys(DB),demo=!guList.length;let gu='',ctl=null;
-let items=demo?[...REAL_PLACES.map(p=>({...p,kind:'',practice:false})),...PRACTICE_PLACES.map(p=>({...p,kind:'',practice:true}))]:[];
-const origin=location.protocol==='file:'?'(파일로 직접 연 상태)':location.origin;
-V.innerHTML=`<h1>지도</h1><p class="sub">근처에서 도움받을 수 있는 곳의 위치를 보여줘요.</p>
-${demo?`<div class="notice crisis"><b>지금 보이는 3곳은 가상 연습 위치예요.</b> 실제 상담 기관이 아니에요.</div>`:`<div class="notice">이 목록은 팀이 직접 모은 정보이고 특정 곳을 추천하는 게 아니에요. 운영 여부와 전화번호는 연락하기 전에 한 번 더 확인해 주세요.</div>`}
-<div class="card">${demo?'':`<select id="gu" class="sel" aria-label="구 선택"><option value="">구를 선택하세요</option>${guList.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('')}</select>`}
-<div class="locrow"><button class="btn" id="loc">내 위치 찾기</button><span id="locmsg" class="sub" role="status"></span></div>
-<p class="sub">내 위치는 거리 계산에만 쓰고 저장하지 않아요.</p>
-<div class="kwrap"><div id="kakao-map" class="kmap" aria-label="지도"></div><div id="kstate" class="kstate">지도를 준비하고 있어요…</div></div>
-<p class="src">지도: Kakao 지도 · 장소 정보: ${demo?'연습용 가상 데이터(실제 자료 아님)':'팀이 모은 목록, 위치는 카카오맵 장소 검색으로 확인'}</p></div>
-<div class="card"><h2>장소 목록</h2><p id="gmsg" class="sub">${demo?'':'구를 선택하면 상담센터와 정신건강의학과를 보여줘요.'}</p><ul class="plist" id="plist"></ul></div>
-<details class="card"><summary>지도가 안 보이면 확인해 보세요</summary><ol>
-<li>카카오 개발자 콘솔에서 이 키가 속한 앱의 <b>카카오맵 사용 설정이 ON</b>인지 확인해요.</li>
-<li>코드의 <b>javascriptKey</b>에 같은 앱의 <b>JavaScript 키</b>(REST 키 아님)를 넣었는지 확인해요.</li>
-<li>앱 키의 <b>JavaScript SDK 도메인</b>에 지금 이 사이트 주소의 프로토콜·호스트·포트를 등록했는지 확인해요. 지금 주소: <b>${esc(origin)}</b></li>
-${location.protocol==='file:'?'<li><b>파일을 더블클릭해서 연 상태</b>에서는 등록할 도메인이 없어 지도가 안 뜰 수 있어요. localhost 서버나 배포 주소로 열어 보세요.</li>':''}
-<li>광고 차단·보안 프로그램이 dapi.kakao.com을 막고 있지 않은지 확인해요.</li></ol></details>`;
-const $=id=>document.getElementById(id),st=(t,bad)=>{const e=$('kstate');if(e){e.textContent=t;e.hidden=!t;e.classList.toggle('bad',!!bad)}};
-const msg=t=>{const e=$('locmsg');if(e)e.textContent=t},setG=t=>{const e=$('gmsg');if(e)e.textContent=t};
-const renderList=()=>{const ord=items.map((p,i)=>i);
-if(myPos){items.forEach(p=>{p.d=p.lat!=null?km(myPos,p):null});ord.sort((a,b)=>(items[a].d==null?1e9:items[a].d)-(items[b].d==null?1e9:items[b].d))}
-const ul=$('plist');if(ul)ul.innerHTML=ord.map(i=>{const p=items[i],ok=p.lat!=null;
-return `<li><button class="pl" data-i="${i}" ${ok?'':'disabled'}>${esc(p.name)}${p.d!=null?' · 약 '+fmt(p.d):''}<span class="sub">${esc(p.kind)}${p.practice?'가상 연습 위치 · 실제 자료 아님':ok?(p.addr?' · '+esc(p.addr):''):' · 지도 위치를 확인하지 못했어요'}${p.note?' · '+esc(p.note):''}</span></button>${p.tel?`<a class="tel" href="tel:${p.tel.replace(/[^\d+]/g,'')}">${esc(p.tel)}</a>${ok||p.practice?'':'<span class="sub"> (전화번호 확인 필요)</span>'}`:'<span class="sub tel">전화번호 정보 없음</span>'}</li>`}).join('')};
-renderList();
-$('plist').onclick=e=>{const b=e.target.closest('.pl');if(b&&ctl)ctl.pick(+b.dataset.i)};
-const loadGu=async g=>{gu=g;items=(DB[g]||[]).map(x=>({...x}));renderList();if(ctl)ctl.set();if(!g){setG('구를 선택하면 상담센터와 정신건강의학과를 보여줘요.');return}
-setG('위치를 확인하는 중이에요…');
-try{await ready();const ps=new kakao.maps.services.Places();
-await Promise.all(items.map(async p=>{const k=g+'|'+p.name;if(!(k in CACHE))CACHE[k]=await find(ps,p);if(CACHE[k])Object.assign(p,CACHE[k])}))}
-catch(e){setG('지도 서비스를 불러오지 못해 목록만 보여드려요.');renderList();return}
-if(gu!==g)return;setG(items.length+'곳 중 '+items.filter(p=>p.lat!=null).length+'곳을 지도에서 확인했어요. 나머지는 연락처만 보여드려요.');renderList();if(ctl)ctl.set()};
-if(!demo)$('gu').onchange=e=>loadGu(e.target.value);
-const pickGu=async()=>{try{await ready();const r=await new Promise(res=>new kakao.maps.services.Geocoder().coord2RegionCode(myPos.lng,myPos.lat,(d,s)=>res(s===kakao.maps.services.Status.OK?d:[])));
-const g=(r[0]||{}).region_2depth_name;if(!g)return;if(DB[g]){if(g!==gu){$('gu').value=g;await loadGu(g)}}else setG('지금 있는 지역('+g+')의 목록은 아직 준비되지 않았어요. 구를 직접 골라 보세요.')}catch(e){}};
-$('loc').onclick=()=>{if(!navigator.geolocation||!window.isSecureContext){msg('이 주소에서는 위치 기능을 쓸 수 없어요. https 주소나 localhost에서 열어 주세요.');return}
-msg('내 위치를 확인하는 중이에요…');
-navigator.geolocation.getCurrentPosition(async pos=>{myPos={lat:pos.coords.latitude,lng:pos.coords.longitude};renderList();if(ctl)ctl.me();if(!demo)await pickGu();
-const pl=items.filter(p=>p.d!=null);msg(pl.length?'가장 가까운 곳: '+pl.reduce((a,p)=>p.d<a.d?p:a).name+' 약 '+fmt(Math.min(...pl.map(p=>p.d))):'내 위치를 찾았어요.')},
-err=>msg(err.code===1?'위치 사용이 허용되지 않았어요. 브라우저 주소창에서 위치 권한을 허용으로 바꿔 주세요.':err.code===3?'위치를 확인하는 데 시간이 너무 오래 걸렸어요. 다시 눌러 주세요.':'지금은 위치를 확인할 수 없어요. 잠시 뒤 다시 시도해 주세요.'),
-{enableHighAccuracy:true,timeout:10000,maximumAge:60000})};
-if(!keyOk()){st('지도를 쓰려면 카카오 JavaScript 키 설정이 필요해요. 코드 위쪽의 javascriptKey 값을 바꿔 주세요. (목록은 그대로 볼 수 있어요)',1);return}
-ready().then(()=>{const c=$('kakao-map');if(!c)return;
-const m=new kakao.maps.Map(c,{center:new kakao.maps.LatLng(37.5665,126.9780),level:7}),iw=new kakao.maps.InfoWindow({removable:true});let marks=[],bnd=null,meOv=null;
-const show=(p,mk)=>{iw.setContent(`<div style="padding:8px 10px;font-size:13px;line-height:1.5;min-width:170px"><b>${esc(p.name)}</b><br>${p.practice?'가상 연습 위치 · 실제 자료 아님':esc([p.addr||p.address,p.tel].filter(Boolean).join(' · '))}</div>`);iw.open(m,mk);m.panTo(mk.getPosition())};
-const fit=()=>{if(!c.isConnected)return;m.relayout();if(myPos)ctl.me();else if(marks.length>1)m.setBounds(bnd,40,40,40,40);else if(marks.length===1){m.setCenter(marks[0].getPosition());m.setLevel(3)}};
-ctl={set:()=>{marks.forEach(k=>k.setMap(null));marks=[];bnd=new kakao.maps.LatLngBounds();
-items.forEach(p=>{if(p.lat==null)return;const pos=new kakao.maps.LatLng(p.lat,p.lng);bnd.extend(pos);const mk=new kakao.maps.Marker({map:m,position:pos,title:p.name});kakao.maps.event.addListener(mk,'click',()=>show(p,mk));p.mk=mk;marks.push(mk)});fit()},
-pick:i=>{const p=items[i];if(p&&p.mk){show(p,p.mk);c.scrollIntoView({behavior:'smooth',block:'center'})}},
-me:()=>{const pos=new kakao.maps.LatLng(myPos.lat,myPos.lng);if(meOv)meOv.setMap(null);
-meOv=new kakao.maps.CustomOverlay({position:pos,content:'<div class="medot" title="내 위치"></div>',xAnchor:.5,yAnchor:.5});meOv.setMap(m);
-const near=items.filter(p=>p.mk&&p.d!=null).sort((a,b)=>a.d-b.d)[0];
-if(near){const bb=new kakao.maps.LatLngBounds();bb.extend(pos);bb.extend(near.mk.getPosition());m.setBounds(bb,60,60,60,60)}else m.setCenter(pos)}};
-ctl.set();st('');
-if(window.ResizeObserver){kro=new ResizeObserver(()=>{if(c.isConnected)m.relayout()});kro.observe(c)}
-setTimeout(fit,450)}).catch(()=>st('지도를 불러오지 못했어요. 아래 "지도가 안 보이면 확인해 보세요"를 확인해 주세요. (목록은 그대로 볼 수 있어요)',1))}
+
+function loadKakao() {
+  if(kakaoP) return kakaoP;
+
+  kakaoP=new Promise((ok,ng)=>{
+    const fin=()=>{
+      try {
+        kakao.maps.load(ok);
+      }
+      catch(e) {
+        ng(e);
+      }
+    };
+
+    if(window.kakao&&kakao.maps) {
+      fin();
+      return;
+    }
+
+    const s=document.createElement('script');
+
+    s.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+
+      encodeURIComponent(javascriptKey)+
+      '&libraries=services&autoload=false';
+
+    s.onload=fin;
+    s.onerror=()=>{
+      s.remove();
+      ng(new Error('sdk'));
+    };
+
+    document.head.appendChild(s);
+  });
+
+  kakaoP.catch(()=>{
+    kakaoP=null;
+  });
+
+  return kakaoP;
+}
+
+const ready=()=>Promise.race([
+  loadKakao(),
+  new Promise((_,ng)=>
+    setTimeout(()=>ng(new Error('timeout')),8000)
+  )
+]);
+
+const tail=x=>String(x||'').replace(/\D/g,'').slice(-8);
+const nm=x=>String(x||'').replace(/\s/g,'').toLowerCase();
+
+const find=(ps,p)=>new Promise(res=>{
+  ps.keywordSearch('서울 '+p.gu+' '+p.name,(d,s)=>{
+    if(s!==kakao.maps.services.Status.OK) {
+      res(null);
+      return;
+    }
+
+    const h=d.find(r=>
+      tail(p.tel).length===8
+        ?tail(r.phone)===tail(p.tel)
+        :nm(r.place_name)===nm(p.name)&&
+         String(r.address_name).includes(p.gu)
+    );
+
+    res(h?{
+      lat:+h.y,
+      lng:+h.x,
+      addr:h.road_address_name||h.address_name,
+      tel:h.phone||p.tel
+    }:null);
+  },{size:5});
+});
+
+function map() {
+  if(kro) {
+    kro.disconnect();
+    kro=null;
+  }
+
+  const guList=Object.keys(DB);
+  const demo=!guList.length;
+
+  let gu='',ctl=null;
+
+  let items=demo
+    ?[
+      ...REAL_PLACES.map(p=>({...p,kind:'',practice:false})),
+      ...PRACTICE_PLACES.map(p=>({...p,kind:'',practice:true}))
+    ]
+    :[];
+
+  const origin=location.protocol==='file:'
+    ?'(파일로 직접 연 상태)'
+    :location.origin;
+
+  V.innerHTML=`
+    <h1>지도</h1>
+    <p class="sub">
+      근처에서 도움받을 수 있는 곳의 위치를 보여줘요.
+    </p>
+
+    ${demo
+      ?`<div class="notice crisis">
+          <b>지금 보이는 3곳은 가상 연습 위치예요.</b>
+          실제 상담 기관이 아니에요.
+        </div>`
+      :`<div class="notice">
+          이 목록은 팀이 직접 모은 정보이고
+          특정 곳을 추천하는 게 아니에요.
+          운영 여부와 전화번호는 연락하기 전에
+          한 번 더 확인해 주세요.
+        </div>`
+    }
+
+    <div class="card">
+
+      ${demo?'':`
+        <select id="gu" class="sel" aria-label="구 선택">
+          <option value="">구를 선택하세요</option>
+          ${guList.map(g=>`
+            <option value="${esc(g)}">${esc(g)}</option>
+          `).join('')}
+        </select>
+      `}
+
+      <div class="locrow">
+        <button class="btn" id="loc">내 위치 찾기</button>
+        <span id="locmsg" class="sub" role="status"></span>
+      </div>
+
+      <p class="sub">
+        내 위치는 거리 계산에만 쓰고 저장하지 않아요.
+      </p>
+
+      <div class="kwrap">
+        <div id="kakao-map" class="kmap" aria-label="지도"></div>
+        <div id="kstate" class="kstate">
+          지도를 준비하고 있어요…
+        </div>
+      </div>
+
+      <p class="src">
+        지도: Kakao 지도 · 장소 정보:
+        ${demo
+          ?'연습용 가상 데이터(실제 자료 아님)'
+          :'팀이 모은 목록, 위치는 카카오맵 장소 검색으로 확인'}
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>장소 목록</h2>
+      <p id="gmsg" class="sub">
+        ${demo?'':'구를 선택하면 상담센터와 정신건강의학과를 보여줘요.'}
+      </p>
+      <ul class="plist" id="plist"></ul>
+    </div>
+
+    <details class="card">
+      <summary>지도가 안 보이면 확인해 보세요</summary>
+      <ol>
+        <li>
+          카카오 개발자 콘솔에서 이 키가 속한 앱의
+          <b>카카오맵 사용 설정이 ON</b>인지 확인해요.
+        </li>
+        <li>
+          코드의 <b>javascriptKey</b>에 같은 앱의
+          <b>JavaScript 키</b>(REST 키 아님)를 넣었는지 확인해요.
+        </li>
+        <li>
+          앱 키의 <b>JavaScript SDK 도메인</b>에
+          지금 이 사이트 주소의 프로토콜·호스트·포트를
+          등록했는지 확인해요.
+          지금 주소: <b>${esc(origin)}</b>
+        </li>
+        ${location.protocol==='file:'
+          ?`<li>
+              <b>파일을 더블클릭해서 연 상태</b>에서는
+              등록할 도메인이 없어 지도가 안 뜰 수 있어요.
+              localhost 서버나 배포 주소로 열어 보세요.
+            </li>`
+          :''}
+        <li>
+          광고 차단·보안 프로그램이 dapi.kakao.com을
+          막고 있지 않은지 확인해요.
+        </li>
+      </ol>
+    </details>
+  `;
+
+  const $=id=>document.getElementById(id);
+
+  const st=(t,bad)=>{
+    const e=$('kstate');
+    if(e) {
+      e.textContent=t;
+      e.hidden=!t;
+      e.classList.toggle('bad',!!bad);
+    }
+  };
+
+  const msg=t=>{
+    const e=$('locmsg');
+    if(e) e.textContent=t;
+  };
+
+  const setG=t=>{
+    const e=$('gmsg');
+    if(e) e.textContent=t;
+  };
+
+  const renderList=()=>{
+    const ord=items.map((p,i)=>i);
+
+    if(myPos) {
+      items.forEach(p=>{
+        p.d=p.lat!=null?km(myPos,p):null;
+      });
+
+      ord.sort((a,b)=>
+        (items[a].d==null?1e9:items[a].d)-
+        (items[b].d==null?1e9:items[b].d)
+      );
+    }
+
+    const ul=$('plist');
+
+    if(ul) {
+      ul.innerHTML=ord.map(i=>{
+        const p=items[i];
+        const ok=p.lat!=null;
+
+        return `
+          <li>
+            <button class="pl"
+              data-i="${i}"
+              ${ok?'':'disabled'}>
+              ${esc(p.name)}
+              ${p.d!=null?' · 약 '+fmt(p.d):''}
+
+              <span class="sub">
+                ${esc(p.kind)}
+                ${p.practice
+                  ?'가상 연습 위치 · 실제 자료 아님'
+                  :ok
+                    ?(p.addr?' · '+esc(p.addr):'')
+                    :' · 지도 위치를 확인하지 못했어요'}
+                ${p.note?' · '+esc(p.note):''}
+              </span>
+            </button>
+
+            ${p.tel
+              ?`<a class="tel" href="tel:${p.tel.replace(/[^\d+]/g,'')}">
+                  ${esc(p.tel)}
+                </a>
+                ${ok||p.practice
+                  ?''
+                  :'<span class="sub"> (전화번호 확인 필요)</span>'}`
+              :'<span class="sub tel">전화번호 정보 없음</span>'
+            }
+          </li>
+        `;
+      }).join('');
+    }
+  };
+
+  renderList();
+
+  $('plist').onclick=e=>{
+    const b=e.target.closest('.pl');
+    if(b&&ctl) ctl.pick(+b.dataset.i);
+  };
+
+  const loadGu=async g=>{
+    gu=g;
+    items=(DB[g]||[]).map(x=>({...x}));
+
+    renderList();
+
+    if(ctl) ctl.set();
+
+    if(!g) {
+      setG('구를 선택하면 상담센터와 정신건강의학과를 보여줘요.');
+      return;
+    }
+
+    setG('위치를 확인하는 중이에요…');
+
+    try {
+      await ready();
+
+      const ps=new kakao.maps.services.Places();
+
+      await Promise.all(items.map(async p=>{
+        const k=g+'|'+p.name;
+
+        if(!(k in CACHE)) {
+          CACHE[k]=await find(ps,p);
+        }
+
+        if(CACHE[k]) {
+          Object.assign(p,CACHE[k]);
+        }
+      }));
+    }
+    catch(e) {
+      setG('지도 서비스를 불러오지 못해 목록만 보여드려요.');
+      renderList();
+      return;
+    }
+
+    if(gu!==g) return;
+
+    setG(
+      items.length+'곳 중 '+
+      items.filter(p=>p.lat!=null).length+
+      '곳을 지도에서 확인했어요. 나머지는 연락처만 보여드려요.'
+    );
+
+    renderList();
+
+    if(ctl) ctl.set();
+  };
+
+  if(!demo) {
+    $('gu').onchange=e=>loadGu(e.target.value);
+  }
+
+  const pickGu=async()=>{
+    try {
+      await ready();
+
+      const r=await new Promise(res=>
+        new kakao.maps.services.Geocoder()
+          .coord2RegionCode(
+            myPos.lng,
+            myPos.lat,
+            (d,s)=>res(
+              s===kakao.maps.services.Status.OK?d:[]
+            )
+          )
+      );
+
+      const g=(r[0]||{}).region_2depth_name;
+
+      if(!g) return;
+
+      if(DB[g]) {
+        if(g!==gu) {
+          $('gu').value=g;
+          await loadGu(g);
+        }
+      }
+      else {
+        setG(
+          '지금 있는 지역('+g+')의 목록은 아직 준비되지 않았어요. 구를 직접 골라 보세요.'
+        );
+      }
+    }
+    catch(e) {}
+  };
+
+  $('loc').onclick=()=>{
+    if(!navigator.geolocation||!window.isSecureContext) {
+      msg('이 주소에서는 위치 기능을 쓸 수 없어요. https 주소나 localhost에서 열어 주세요.');
+      return;
+    }
+
+    msg('내 위치를 확인하는 중이에요…');
+
+    navigator.geolocation.getCurrentPosition(
+      async pos=>{
+        myPos={
+          lat:pos.coords.latitude,
+          lng:pos.coords.longitude
+        };
+
+        renderList();
+
+        if(ctl) ctl.me();
+
+        if(!demo) await pickGu();
+
+        const pl=items.filter(p=>p.d!=null);
+
+        msg(
+          pl.length
+            ?'가장 가까운 곳: '+
+              pl.reduce((a,p)=>p.d<a.d?p:a).name+
+              ' 약 '+fmt(Math.min(...pl.map(p=>p.d)))
+            :'내 위치를 찾았어요.'
+        );
+      },
+      err=>msg(
+        err.code===1
+          ?'위치 사용이 허용되지 않았어요. 브라우저 주소창에서 위치 권한을 허용으로 바꿔 주세요.'
+          :err.code===3
+            ?'위치를 확인하는 데 시간이 너무 오래 걸렸어요. 다시 눌러 주세요.'
+            :'지금은 위치를 확인할 수 없어요. 잠시 뒤 다시 시도해 주세요.'
+      ),
+      {
+        enableHighAccuracy:true,
+        timeout:10000,
+        maximumAge:60000
+      }
+    );
+  };
+
+  if(!keyOk()) {
+    st(
+      '지도를 쓰려면 카카오 JavaScript 키 설정이 필요해요. 코드 위쪽의 javascriptKey 값을 바꿔 주세요. (목록은 그대로 볼 수 있어요)',
+      1
+    );
+    return;
+  }
+
+  ready().then(()=>{
+    const c=$('kakao-map');
+    if(!c) return;
+
+    const m=new kakao.maps.Map(c,{
+      center:new kakao.maps.LatLng(37.5665,126.9780),
+      level:7
+    });
+
+    const iw=new kakao.maps.InfoWindow({removable:true});
+
+    let marks=[],bnd=null,meOv=null;
+
+    const show=(p,mk)=>{
+      iw.setContent(`
+        <div style="padding:8px 10px;font-size:13px;line-height:1.5;min-width:170px">
+          <b>${esc(p.name)}</b><br>
+          ${p.practice
+            ?'가상 연습 위치 · 실제 자료 아님'
+            :esc([p.addr||p.address,p.tel].filter(Boolean).join(' · '))
+          }
+        </div>
+      `);
+
+      iw.open(m,mk);
+      m.panTo(mk.getPosition());
+    };
+
+    const fit=()=>{
+      if(!c.isConnected) return;
+
+      m.relayout();
+
+      if(myPos) {
+        ctl.me();
+      }
+      else if(marks.length>1) {
+        m.setBounds(bnd,40,40,40,40);
+      }
+      else if(marks.length===1) {
+        m.setCenter(marks[0].getPosition());
+        m.setLevel(3);
+      }
+    };
+
+    ctl={
+      set:()=>{
+        marks.forEach(k=>k.setMap(null));
+
+        marks=[];
+        bnd=new kakao.maps.LatLngBounds();
+
+        items.forEach(p=>{
+          if(p.lat==null) return;
+
+          const pos=new kakao.maps.LatLng(p.lat,p.lng);
+
+          bnd.extend(pos);
+
+          const mk=new kakao.maps.Marker({
+            map:m,
+            position:pos,
+            title:p.name
+          });
+
+          kakao.maps.event.addListener(mk,'click',()=>{
+            show(p,mk);
+          });
+
+          p.mk=mk;
+          marks.push(mk);
+        });
+
+        fit();
+      },
+
+      pick:i=>{
+        const p=items[i];
+
+        if(p&&p.mk) {
+          show(p,p.mk);
+
+          c.scrollIntoView({
+            behavior:'smooth',
+            block:'center'
+          });
+        }
+      },
+
+      me:()=>{
+        const pos=new kakao.maps.LatLng(
+          myPos.lat,
+          myPos.lng
+        );
+
+        if(meOv) meOv.setMap(null);
+
+        meOv=new kakao.maps.CustomOverlay({
+          position:pos,
+          content:'<div class="medot" title="내 위치"></div>',
+          xAnchor:.5,
+          yAnchor:.5
+        });
+
+        meOv.setMap(m);
+
+        const near=items
+          .filter(p=>p.mk&&p.d!=null)
+          .sort((a,b)=>a.d-b.d)[0];
+
+        if(near) {
+          const bb=new kakao.maps.LatLngBounds();
+
+          bb.extend(pos);
+          bb.extend(near.mk.getPosition());
+
+          m.setBounds(bb,60,60,60,60);
+        }
+        else {
+          m.setCenter(pos);
+        }
+      }
+    };
+
+    ctl.set();
+    st('');
+
+    if(window.ResizeObserver) {
+      kro=new ResizeObserver(()=>{
+        if(c.isConnected) m.relayout();
+      });
+
+      kro.observe(c);
+    }
+
+    setTimeout(fit,450);
+
+  }).catch(()=>{
+    st(
+      '지도를 불러오지 못했어요. 아래 "지도가 안 보이면 확인해 보세요"를 확인해 주세요. (목록은 그대로 볼 수 있어요)',
+      1
+    );
+  });
+}
 
 
-const routes={home,test,result,map};
-function go(){const r=(location.hash||'#home').slice(1);(routes[r]||home)();document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.hash==='#'+r));scrollTo(0,0);anim(1)}
+// 화면 이동
+const routes={
+  home,
+  test,
+  result,
+  map
+};
+
+function go() {
+  const r=(location.hash||'#home').slice(1);
+
+  (routes[r]||home)();
+
+  document.querySelectorAll('.nav a').forEach(a=>{
+    a.classList.toggle('on',a.hash==='#'+r);
+  });
+
+  scrollTo(0,0);
+  anim(1);
+}
+
+
+// 저장된 테마 자동 적용
+applyTheme(getTheme(),false);
+
 addEventListener('hashchange',go);
-try{stats=DATA;const m=stats.stress.meta,e=stats.effort.meta;document.getElementById('src').textContent=`통계 출처: ${m.source} (KOSIS ${m.id}, ${e.id}) · 기준 시점: ${m.period.replace('[3년] ','')}년 · 다운로드 ${m.downloaded.slice(0,10)}`}catch(x){const e=document.getElementById('err');e.hidden=false;e.textContent='통계 데이터를 불러오지 못했어요. 코드의 DATA 부분이 손상되지 않았는지 확인해 주세요. 자가진단과 채점은 계속 쓸 수 있어요.'}
-document.querySelector('.nav').innerHTML=[['home','홈'],['test','진단'],['result','결과'],['map','지도']].map(([k,t])=>`<a href="#${k}">${ico(k)}<span>${t}</span></a>`).join('');
+
+
+// 통계 데이터 적용
+try {
+  stats=DATA;
+
+  const m=stats.stress.meta;
+  const e=stats.effort.meta;
+
+  document.getElementById('src').textContent=
+    `통계 출처: ${m.source} (KOSIS ${m.id}, ${e.id}) · 기준 시점: ${m.period.replace('[3년] ','')}년 · 다운로드 ${m.downloaded.slice(0,10)}`;
+}
+catch(x) {
+  const e=document.getElementById('err');
+
+  e.hidden=false;
+
+  e.textContent=
+    '통계 데이터를 불러오지 못했어요. 코드의 DATA 부분이 손상되지 않았는지 확인해 주세요. 자가진단과 채점은 계속 쓸 수 있어요.';
+}
+
+
+// 하단 메뉴
+document.querySelector('.nav').innerHTML=[
+  ['home','홈'],
+  ['test','진단'],
+  ['result','결과'],
+  ['map','지도']
+].map(([k,t])=>
+  `<a href="#${k}">${ico(k)}<span>${t}</span></a>`
+).join('');
+
 go();
+
 </script>
 </body>
 </html>
-
