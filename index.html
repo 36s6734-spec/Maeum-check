@@ -571,18 +571,7 @@ button:focus-visible {
       <button type="button" class="theme-close" id="theme-close" aria-label="닫기">×</button>
     </div>
     <p class="sub">원하는 분위기를 선택해 보세요. 선택한 색상은 자동 저장돼요.</p>
-    <div class="palette-grid" id="palette-grid">
-      ${PALETTES.map(p => `
-        <button type="button" class="palette-choice ${getTheme()===p.id?'active':''}"
-          data-theme="${p.id}" aria-pressed="${getTheme()===p.id}"
-          aria-label="${p.name} 팔레트 선택">
-          <span class="palette-name">${p.name}<small>${p.colors.length} COLORS</small></span>
-          <span class="palette-swatches">
-            ${p.colors.map(c=>`<span class="palette-swatch"><i style="background:${c.hex}"></i><small>${c.name}<b>${c.hex}</b></small></span>`).join('')}
-          </span>
-        </button>
-      `).join('')}
-    </div>
+    <div class="palette-grid" id="palette-grid"></div>
   </section>
   <footer id="src" class="src"></footer>
   <nav class="nav" aria-label="메뉴">
@@ -751,6 +740,18 @@ const PALETTES = [
   buttonText:'#FFFFFF'
 }
 ];
+
+// 팔레트 선택 버튼은 PALETTES 데이터가 준비된 뒤 자바스크립트로 생성
+const paletteGrid = document.getElementById('palette-grid');
+paletteGrid.innerHTML = PALETTES.map(p => `
+  <button type="button" class="palette-choice" data-theme="${p.id}"
+    aria-pressed="false" aria-label="${p.name} 팔레트 선택">
+    <span class="palette-name">${p.name}<small>${p.colors.length} COLORS</small></span>
+    <span class="palette-swatches">
+      ${p.colors.map(c => `<span class="palette-swatch"><i style="background:${c.hex}"></i><small>${c.name}<b>${c.hex}</b></small></span>`).join('')}
+    </span>
+  </button>
+`).join('');
 
 function getTheme() {
   try {
