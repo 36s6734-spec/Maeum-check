@@ -778,7 +778,7 @@ function applyTheme(id, save=true) {
     } catch(e) {}
   }
 
-  document.querySelectorAll('[data-theme]').forEach(b => {
+  document.querySelectorAll('.palette-choice[data-theme]').forEach(b => {
     const active = b.dataset.theme === p.id;
     b.classList.toggle('active',active);
     b.setAttribute('aria-pressed',String(active));
@@ -2018,12 +2018,14 @@ themeLauncher.addEventListener('click',()=>{
   themeLauncher.setAttribute('aria-expanded',String(opening));
 });
 document.getElementById('theme-close').addEventListener('click',closeThemePanel);
-themePanel.addEventListener('click',e=>{
-  const choice=e.target.closest('[data-theme]');
-  if(choice){
+// 각 팔레트 버튼에 직접 이벤트를 연결해 클릭 대상에 관계없이 전환되도록 처리
+themePanel.querySelectorAll('.palette-choice[data-theme]').forEach(choice=>{
+  choice.addEventListener('click',e=>{
+    e.preventDefault();
+    e.stopPropagation();
     applyTheme(choice.dataset.theme);
     closeThemePanel();
-  }
+  });
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!themePanel.hidden) closeThemePanel();
