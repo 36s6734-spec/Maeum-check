@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
 <style>
 :root {
-  --p1:#69C9A9;
-  --p2:#C9EDB3;
-  --p3:#63866B;
-  --p4:#414841;
+  --p1:#F0E6D8;
+  --p2:#D6A6A5;
+  --p3:#A99BB8;
+  --p4:#27344A;
   --bg:color-mix(in srgb,var(--p1) 10%,#fff);
   --card:#fff;
   --ink:#171717;
@@ -497,56 +497,59 @@ button:focus-visible {
 .ib.tone3 { background:var(--p3); color:#fff; }
 .ib.tone4 { background:var(--p4); color:var(--button-text); }
 
-.palette-card { padding:16px; }
-
-.palette-grid {
+/* 오른쪽 아래 고정 테마 선택기 */
+.theme-launcher {
+  position:fixed;
+  z-index:30;
+  right:max(18px,calc((100vw - 430px)/2 + 18px));
+  bottom:88px;
+  width:44px;
+  height:44px;
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-  margin-top:12px;
-}
-
-.palette-choice {
-  border:2px solid transparent;
-  border-radius:15px;
-  padding:5px;
+  place-items:center;
+  border:1px solid color-mix(in srgb,var(--p3) 35%,transparent);
+  border-radius:50%;
   background:var(--card);
-  cursor:pointer;
-  min-width:0;
-}
-
-.palette-choice.active {
-  border-color:var(--ink);
-  box-shadow:0 0 0 2px color-mix(in srgb,var(--p2) 65%,transparent);
-}
-
-.palette-choice:focus-visible {
-  outline:3px solid var(--p3);
-  outline-offset:2px;
-}
-
-.palette-swatches {
-  height:48px;
-  display:grid;
-  grid-template-rows:repeat(4,1fr);
-  overflow:hidden;
-  border-radius:9px;
-}
-
-.palette-swatches i { display:block; }
-
-.palette-name {
-  display:block;
-  font-size:12px;
-  color:var(--sub);
-  padding:5px 2px 1px;
-  text-align:center;
-}
-
-.palette-choice.active .palette-name {
   color:var(--ink);
-  font-weight:700;
+  box-shadow:0 5px 18px rgba(25,28,38,.16);
+  cursor:pointer;
 }
+.theme-launcher svg { width:21px;height:21px; }
+.theme-launcher:focus-visible { outline:3px solid var(--p3);outline-offset:3px; }
+
+.theme-panel {
+  position:fixed;
+  z-index:29;
+  right:max(18px,calc((100vw - 430px)/2 + 18px));
+  bottom:140px;
+  width:min(330px,calc(100vw - 36px));
+  max-height:min(68vh,560px);
+  overflow:auto;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  color:var(--ink);
+  box-shadow:0 12px 36px rgba(25,28,38,.2);
+}
+.theme-panel[hidden] { display:none; }
+.theme-panel-head { display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px; }
+.theme-panel-head h2 { margin:0; }
+.theme-close { border:0;background:transparent;color:var(--sub);font-size:22px;cursor:pointer;padding:2px 7px; }
+.palette-grid { display:grid;gap:9px;margin-top:12px; }
+.palette-choice {
+  width:100%;text-align:left;border:1.5px solid var(--line);border-radius:14px;
+  padding:10px;background:var(--card);color:var(--ink);cursor:pointer;
+}
+.palette-choice.active { border:2px solid var(--p4);background:color-mix(in srgb,var(--p1) 35%,var(--card)); }
+.palette-choice:focus-visible { outline:3px solid var(--p3);outline-offset:2px; }
+.palette-name { display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:8px; }
+.palette-name small { font-size:11px;color:var(--sub);font-weight:400; }
+.palette-swatches { display:flex;gap:5px; }
+.palette-swatch { min-width:0;flex:1; }
+.palette-swatch i { display:block;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.06); }
+.palette-swatch small { display:block;font-size:9px;line-height:1.25;color:var(--sub);margin-top:4px;overflow-wrap:anywhere; }
+.palette-swatch b { display:block;font-size:9px;font-weight:500;color:var(--ink); }
 </style>
 </head>
 <body>
@@ -554,6 +557,33 @@ button:focus-visible {
 <div class="app">
   <div id="err" class="notice err" hidden></div>
   <main id="view"></main>
+  <button type="button" class="theme-launcher" id="theme-launcher"
+    aria-label="컬러 테마 변경" aria-expanded="false" aria-controls="theme-panel"
+    title="컬러 테마 변경">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 1.5-3.3 1.8 1.8 0 0 1 1.4-3h.9A4 4 0 0 0 21 10.6C21 6.4 17 3 12 3Z"/>
+      <circle cx="7.5" cy="10" r="1"/><circle cx="10" cy="6.8" r="1"/><circle cx="15" cy="7.5" r="1"/><circle cx="17" cy="11" r="1"/>
+    </svg>
+  </button>
+  <section class="theme-panel" id="theme-panel" aria-label="컬러 테마 선택" hidden>
+    <div class="theme-panel-head">
+      <h2>컬러 테마</h2>
+      <button type="button" class="theme-close" id="theme-close" aria-label="닫기">×</button>
+    </div>
+    <p class="sub">원하는 분위기를 선택해 보세요. 선택한 색상은 자동 저장돼요.</p>
+    <div class="palette-grid" id="palette-grid">
+      ${PALETTES.map(p => `
+        <button type="button" class="palette-choice ${getTheme()===p.id?'active':''}"
+          data-theme="${p.id}" aria-pressed="${getTheme()===p.id}"
+          aria-label="${p.name} 팔레트 선택">
+          <span class="palette-name">${p.name}<small>${p.colors.length} COLORS</small></span>
+          <span class="palette-swatches">
+            ${p.colors.map(c=>`<span class="palette-swatch"><i style="background:${c.hex}"></i><small>${c.name}<b>${c.hex}</b></small></span>`).join('')}
+          </span>
+        </button>
+      `).join('')}
+    </div>
+  </section>
   <footer id="src" class="src"></footer>
   <nav class="nav" aria-label="메뉴">
     <a href="#home">홈</a>
@@ -665,55 +695,60 @@ const MOUTH = [
 'M12 30Q20 21 28 30'
 ];
 
-// 이미지 기반 8가지 컬러 팔레트
+// 사진에서 추출한 4가지 컬러 팔레트 (총 21색)
 const PALETTES = [
 {
-  id:'mint',
-  name:'민트 가든',
-  colors:['#69C9A9','#C9EDB3','#63866B','#414841'],
-  buttonText:'#fff'
+  id:'blue-hour',
+  name:'Blue Hour',
+  colors:[
+    {name:'Midnight Blue',hex:'#27344A'},
+    {name:'Twilight Blue',hex:'#626B91'},
+    {name:'Dusty Lavender',hex:'#A99BB8'},
+    {name:'Faded Rose',hex:'#D6A6A5'},
+    {name:'Moon Cream',hex:'#F0E6D8'}
+  ],
+  roles:['#F0E6D8','#D6A6A5','#A99BB8','#27344A'],
+  buttonText:'#FFFFFF'
 },
 {
-  id:'candy',
-  name:'피치 캔디',
-  colors:['#F8A0A5','#FFBD7D','#FFF36A','#B4F66B'],
-  buttonText:'#171717'
+  id:'vanilla-garden',
+  name:'Vanilla & Garden',
+  colors:[
+    {name:'Vanilla Cream',hex:'#FFF7E6'},
+    {name:'Blush Petal',hex:'#F7C8D3'},
+    {name:'Rosewood',hex:'#B46A72'},
+    {name:'Sage Leaf',hex:'#A8B58A'},
+    {name:'Misty Sky',hex:'#A9B7C6'},
+    {name:'Midnight Lagoon',hex:'#2D3A47'}
+  ],
+  roles:['#FFF7E6','#F7C8D3','#A8B58A','#2D3A47'],
+  buttonText:'#FFFFFF'
 },
 {
-  id:'berry',
-  name:'베리 나이트',
-  colors:['#291D2B','#493449','#62558B','#668BB8'],
-  buttonText:'#fff'
+  id:'buttercup-sky',
+  name:'Buttercup Sky',
+  colors:[
+    {name:'Buttercup Sky',hex:'#FFF2B2'},
+    {name:'Dewy Blue',hex:'#A8C6E7'},
+    {name:'Sunwashed',hex:'#FFE08A'},
+    {name:'Cloud Puff',hex:'#FFF7D6'},
+    {name:'Morning Breeze',hex:'#7FA8D6'}
+  ],
+  roles:['#FFF7D6','#FFE08A','#A8C6E7','#3E5F83'],
+  buttonText:'#FFFFFF'
 },
 {
-  id:'latte',
-  name:'크림 라떼',
-  colors:['#F8E8C4','#E7B894','#A77A7D','#704A5D'],
-  buttonText:'#fff'
-},
-{
-  id:'teal',
-  name:'딥 틸',
-  colors:['#48465F','#008F86','#B9BDA0','#F2E8E4'],
-  buttonText:'#171717'
-},
-{
-  id:'terracotta',
-  name:'어스 브라운',
-  colors:['#302725','#70412E','#C75A32','#E9BE8D'],
-  buttonText:'#171717'
-},
-{
-  id:'red',
-  name:'레드 팝',
-  colors:['#FFE4E5','#F20B16','#B90008','#050505'],
-  buttonText:'#fff'
-},
-{
-  id:'ocean',
-  name:'오션 코랄',
-  colors:['#05275F','#0752BA','#FF746D','#FFD0A8'],
-  buttonText:'#171717'
+  id:'seashell-midnight',
+  name:'Seashell & Midnight',
+  colors:[
+    {name:'Seashell',hex:'#FFF4EB'},
+    {name:'Wheat',hex:'#F6E0B6'},
+    {name:'Powder Blue',hex:'#A6BCC9'},
+    {name:'French Blue',hex:'#3E4B8E'},
+    {name:'Midnight Violet',hex:'#3D1534'}
+  ],
+  roles:['#FFF4EB','#F6E0B6','#A6BCC9','#3E4B8E'],
+  buttonText:'#FFFFFF'
 }
 ];
 
@@ -729,11 +764,11 @@ function applyTheme(id, save=true) {
   const p = PALETTES.find(x => x.id === id) || PALETTES[0];
   const root = document.documentElement;
 
-  p.colors.forEach((c,i) => {
+  p.roles.forEach((c,i) => {
     root.style.setProperty('--p' + (i+1), c);
   });
 
-  root.style.setProperty('--button',p.colors[3]);
+  root.style.setProperty('--button',p.roles[3]);
   root.style.setProperty('--button-text',p.buttonText);
   root.dataset.theme = p.id;
 
@@ -831,34 +866,9 @@ function home() {
       </span>
     </a>
 
-    <section class="card palette-card">
-      <h2>앱 색상 테마</h2>
-      <p class="sub">마음에 드는 컬러 팔레트를 선택해 보세요. 선택한 색상은 앱 전체에 적용되고 자동으로 저장돼요.</p>
-
-      <div class="palette-grid" id="palette-grid" aria-label="컬러 팔레트 선택">
-        ${PALETTES.map(p => `
-          <button type="button"
-            class="palette-choice ${getTheme()===p.id?'active':''}"
-            data-theme="${p.id}"
-            aria-pressed="${getTheme()===p.id}"
-            aria-label="${p.name} 팔레트 선택">
-
-            <span class="palette-swatches">
-              ${p.colors.map(c=>`<i style="background:${c}"></i>`).join('')}
-            </span>
-
-            <span class="palette-name">${p.name}</span>
-          </button>
-        `).join('')}
-      </div>
-    </section>
-
     <p class="sub ctr">이 검사는 의학적 진단이 아니라 스트레스 점검 도구예요.</p>
   `;
 
-  V.querySelectorAll('[data-theme]').forEach(b => {
-    b.onclick = () => applyTheme(b.dataset.theme);
-  });
 }
 
   function test(dir) {
@@ -1993,8 +2003,36 @@ function go() {
 }
 
 
-// 저장된 테마 자동 적용
+// 저장된 테마 자동 적용 및 플로팅 테마 선택기
 applyTheme(getTheme(),false);
+
+const themeLauncher=document.getElementById('theme-launcher');
+const themePanel=document.getElementById('theme-panel');
+const closeThemePanel=()=>{
+  themePanel.hidden=true;
+  themeLauncher.setAttribute('aria-expanded','false');
+};
+themeLauncher.addEventListener('click',()=>{
+  const opening=themePanel.hidden;
+  themePanel.hidden=!opening;
+  themeLauncher.setAttribute('aria-expanded',String(opening));
+});
+document.getElementById('theme-close').addEventListener('click',closeThemePanel);
+themePanel.addEventListener('click',e=>{
+  const choice=e.target.closest('[data-theme]');
+  if(choice){
+    applyTheme(choice.dataset.theme);
+    closeThemePanel();
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!themePanel.hidden) closeThemePanel();
+});
+document.addEventListener('click',e=>{
+  if(!themePanel.hidden&&!themePanel.contains(e.target)&&!themeLauncher.contains(e.target)){
+    closeThemePanel();
+  }
+});
 
 addEventListener('hashchange',go);
 
