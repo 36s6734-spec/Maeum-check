@@ -663,7 +663,7 @@ button, a, select { touch-action: manipulation; }
 /* 홈 첫 화면: 세로형 메뉴 카드 3개 */
 .home-menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(12px, 2vw, 22px);
   align-items: stretch;
   margin: clamp(28px, 5vw, 48px) 0 24px;
@@ -702,21 +702,30 @@ button, a, select { touch-action: manipulation; }
     margin-top: 26px;
   }
   .home-menu-card {
-    min-height: 190px;
-    padding: 20px;
-    gap: 10px;
+    min-height: 104px;
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: 54px minmax(0,1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    justify-items: start;
+    column-gap: 16px;
+    row-gap: 3px;
+    text-align: left;
   }
   .home-menu-card .ib {
+    grid-column: 1;
+    grid-row: 1 / span 2;
     width: 54px;
     height: 54px;
-    margin: 0 0 2px;
+    margin: 0;
   }
   .home-menu-card .ib svg { width: 26px; height: 26px; }
-  .home-menu-card h2 { margin: 0; }
-  .home-menu-card .sub { max-width: none; }
+  .home-menu-card h2 { grid-column: 2; grid-row: 1; margin: 0; }
+  .home-menu-card .sub { grid-column: 2; grid-row: 2; max-width: none; text-align:left; white-space:normal; }
 }
 @media (max-width: 380px) {
-  .home-menu-card { min-height: 172px; }
+  .home-menu-card { min-height: 92px; }
 }
 
 
@@ -743,7 +752,7 @@ button, a, select { touch-action: manipulation; }
   .home-menu-card .sub { font-size: 14px; }
 }
 
-/* 마음 풀기 미니 도구 */
+/* 마음 풀기 인터랙션 */
 .relax-menu{display:grid;gap:12px;margin-top:20px}
 .relax-choice{width:100%;display:flex;align-items:center;gap:16px;text-align:left;color:var(--ink);cursor:pointer}
 .relax-choice>span:nth-child(2){flex:1;min-width:0}
@@ -754,17 +763,28 @@ button, a, select { touch-action: manipulation; }
 .relax-foot{margin-top:22px}
 .relax-back{margin:0 0 14px}
 .relax-stage{text-align:center;padding:clamp(18px,4vw,32px)}
-.bead-track{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:9px;padding:24px 4px}
-.bead{width:42px;height:42px;border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 27%,#fff 0 5%,#e8c5a8 20%,#a66d54 72%,#704638 100%);box-shadow:inset -4px -5px 8px #68402f55,0 3px 6px #0002;transition:transform .15s}
-.bead:active{transform:scale(.88)}
+.bracelet-touch{display:grid;place-items:center;width:min(330px,82vw);aspect-ratio:1;margin:8px auto 0;border:0;background:transparent;cursor:grab;touch-action:manipulation}
+.bracelet-touch:active{cursor:grabbing}
+.bracelet-wheel{position:relative;display:block;width:230px;height:230px;border-radius:50%;transform:rotateX(58deg) rotateZ(-12deg);transform-style:preserve-3d;animation:bracelet-idle 16s linear infinite}
+.bracelet-bead{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px;border-radius:50%;transform:rotate(calc(var(--i)*20deg)) translateY(-94px) rotate(calc(var(--i)*-20deg));background:radial-gradient(circle at 30% 24%,#fff8 0 5%,#e8c5a8 18%,#a66d54 68%,#704638 100%);box-shadow:inset -5px -6px 9px #58352677,0 3px 7px #0004;backface-visibility:hidden}
+.bracelet-bead:nth-child(3n){background:radial-gradient(circle at 30% 24%,#fff9 0 5%,#e7d1a4 18%,#b38c4f 68%,#765b32 100%)}
+.bracelet-bead:nth-child(3n+1){background:radial-gradient(circle at 30% 24%,#fff9 0 5%,#d9b9aa 18%,#9b6c68 68%,#67464a 100%)}
+.bracelet-center{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-weight:700;font-size:14px;text-shadow:0 1px 2px #fff9;transform:rotateX(-58deg)}
+@keyframes bracelet-idle{from{transform:rotateX(58deg) rotateZ(-12deg)}to{transform:rotateX(58deg) rotateZ(348deg)}}
+.bracelet-wheel.roll-burst{animation:bracelet-roll .85s cubic-bezier(.2,.75,.25,1) 1}
+@keyframes bracelet-roll{0%{transform:rotateX(58deg) rotateZ(0deg) scale(1)}45%{transform:rotateX(58deg) rotateZ(210deg) scale(1.06)}100%{transform:rotateX(58deg) rotateZ(360deg) scale(1)}}
 .relax-count{font-family:'Jua',sans-serif;font-size:25px;margin:14px 0}
 .bubble-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:430px;margin:8px auto 20px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--p3) 22%,#fff)}
-.bubble{aspect-ratio:1;border:1px solid #ffffffaa;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 28%,#fff 0 7%,#dcecf0 18%,#a8cbd1 70%,#83aeb6 100%);box-shadow:inset -3px -4px 7px #527f8844,0 2px 4px #0002}
-.bubble.popped{transform:scale(.78);opacity:.25;box-shadow:none}
+.bubble{aspect-ratio:1;border:1px solid #ffffffaa;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 28%,#fff 0 7%,#dcecf0 18%,#a8cbd1 70%,#83aeb6 100%);box-shadow:inset -3px -4px 7px #527f8844,0 2px 4px #0002;transition:transform .12s,opacity .18s,box-shadow .18s;touch-action:manipulation}
+.bubble:active{transform:scale(.88)}
+.bubble.popping{animation:bubble-pop .18s ease-out forwards}
+.bubble.popped{transform:scale(.42);opacity:.12;box-shadow:none;cursor:default}
+@keyframes bubble-pop{0%{transform:scale(1)}35%{transform:scale(.72)}68%{transform:scale(1.18)}100%{transform:scale(.4);opacity:.15}}
 .clicker-stage{padding:34px 18px}
 .clicker-button{width:min(220px,65vw);aspect-ratio:1;border:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,color-mix(in srgb,var(--p1) 70%,#fff),var(--p2) 65%,var(--p3));color:var(--p4);font:30px 'Jua',sans-serif;box-shadow:0 12px 0 color-mix(in srgb,var(--p4) 25%,var(--p3)),0 16px 24px #0002;cursor:pointer;transition:transform .08s,box-shadow .08s}
 .clicker-button:active{transform:translateY(8px);box-shadow:0 4px 0 color-mix(in srgb,var(--p4) 25%,var(--p3)),0 7px 12px #0002}
-@media(max-width:640px){.relax-choice{padding:16px}.bead{width:36px;height:36px}.bubble-grid{gap:8px;padding:10px}}
+@media(max-width:640px){.relax-choice{padding:16px}.bracelet-wheel{width:205px;height:205px}.bracelet-bead{width:34px;height:34px;margin:-17px;transform:rotate(calc(var(--i)*20deg)) translateY(-83px) rotate(calc(var(--i)*-20deg))}.bubble-grid{gap:8px;padding:10px}}
+@media(prefers-reduced-motion:reduce){.bracelet-wheel{animation:none}.bubble.popping{animation:none}}
 </style>
 </head>
 <body>
@@ -1120,26 +1140,66 @@ function home() {
 
 }
 
-  function relax() {
+  function relaxSound(type) {
+  try {
+    const Ctx=window.AudioContext||window.webkitAudioContext;
+    if(!Ctx) return;
+    const ctx=relaxSound.ctx||(relaxSound.ctx=new Ctx());
+    if(ctx.state==='suspended') ctx.resume();
+    const now=ctx.currentTime;
+    const gain=ctx.createGain();
+    gain.connect(ctx.destination);
+    if(type==='roll') {
+      const osc=ctx.createOscillator();
+      const g=ctx.createGain();
+      osc.type='triangle'; osc.frequency.setValueAtTime(760,now);
+      osc.frequency.exponentialRampToValueAtTime(330,now+.11);
+      g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.11,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+.14);
+      osc.connect(g);g.connect(ctx.destination);osc.start(now);osc.stop(now+.15);
+      const click=ctx.createOscillator(), cg=ctx.createGain();
+      click.type='sine';click.frequency.setValueAtTime(1250,now+.045);
+      cg.gain.setValueAtTime(.0001,now);cg.gain.exponentialRampToValueAtTime(.045,now+.05);cg.gain.exponentialRampToValueAtTime(.0001,now+.10);
+      click.connect(cg);cg.connect(ctx.destination);click.start(now+.045);click.stop(now+.11);
+    } else if(type==='pop') {
+      const len=Math.floor(ctx.sampleRate*.12), buffer=ctx.createBuffer(1,len,ctx.sampleRate), data=buffer.getChannelData(0);
+      for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*(1-i/len);
+      const noise=ctx.createBufferSource(), filter=ctx.createBiquadFilter(), ng=ctx.createGain();
+      noise.buffer=buffer;filter.type='lowpass';filter.frequency.value=1800;
+      ng.gain.setValueAtTime(.0001,now);ng.gain.exponentialRampToValueAtTime(.22,now+.006);ng.gain.exponentialRampToValueAtTime(.0001,now+.12);
+      noise.connect(filter);filter.connect(ng);ng.connect(ctx.destination);noise.start(now);
+      const thump=ctx.createOscillator(), tg=ctx.createGain();
+      thump.type='sine';thump.frequency.setValueAtTime(190,now);thump.frequency.exponentialRampToValueAtTime(75,now+.075);
+      tg.gain.setValueAtTime(.0001,now);tg.gain.exponentialRampToValueAtTime(.14,now+.004);tg.gain.exponentialRampToValueAtTime(.0001,now+.09);
+      thump.connect(tg);tg.connect(ctx.destination);thump.start(now);thump.stop(now+.1);
+    } else {
+      gain.gain.value=.0001;
+    }
+  } catch(e) {}
+}
+
+function relax() {
   const V=document.getElementById('view');
   const back=()=>{relaxMode='menu';relax();};
   if(relaxMode==='menu') {
     V.innerHTML='<h1>마음 풀기</h1><p class="sub">잠깐 멈춰서, 손이 가는 걸 가볍게 눌러 봐요.</p><div class="relax-menu">'+
-      '<button class="card relax-choice" data-mode="beads"><span class="relax-emoji">📿</span><span><b>염주 굴리기</b><small>구슬을 하나씩 넘기며 천천히 호흡해요.</small></span><span class="relax-arrow">›</span></button>'+
+      '<button class="card relax-choice" data-mode="beads"><span class="relax-emoji">📿</span><span><b>염주 굴리기</b><small>팔찌를 손끝으로 굴리며 천천히 쉬어 가요.</small></span><span class="relax-arrow">›</span></button>'+
       '<button class="card relax-choice" data-mode="bubbles"><span class="relax-emoji">🫧</span><span><b>뽁뽁이 터뜨리기</b><small>마음 가는 대로 톡톡 눌러 터뜨려요.</small></span><span class="relax-arrow">›</span></button>'+
       '<button class="card relax-choice" data-mode="clicker"><span class="relax-emoji">👆</span><span><b>무한 클리커</b><small>아무 생각 없이 원하는 만큼 눌러 봐요.</small></span><span class="relax-arrow">›</span></button></div><p class="sub ctr relax-foot">기록이나 점수 경쟁 없이, 잠깐 쉬어 가는 공간이에요.</p>';
     V.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{relaxMode=b.dataset.mode;relax();}); return;
   }
   if(relaxMode==='beads') {
-    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="sub">구슬을 누르면 다음 구슬이 앞으로 와요. 천천히 하나씩 넘겨 보세요.</p><div class="card relax-stage"><div class="bead-track">'+Array.from({length:12},(_,i)=>'<button class="bead" data-bead="'+i+'" aria-label="염주 구슬 '+(i+1)+'"></button>').join('')+'</div><div class="relax-count" id="bead-count">'+relaxCount+'번 굴렸어요</div><p class="sub ctr">들이쉬고… 내쉬고… 구슬 하나.</p><button class="btn ghost" id="bead-reset">처음부터</button></div>';
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="sub">팔찌를 터치하거나 굴리기 버튼을 눌러 보세요. 손끝을 따라 구슬이 빙글빙글 돌아요.</p><div class="card relax-stage"><button class="bracelet-touch" id="bracelet-touch" aria-label="염주 팔찌 굴리기"><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" style="--i:'+i+'"></i>').join('')+'<span class="bracelet-center">굴려 보기</span></span></button><div class="relax-count" id="bead-count">'+relaxCount+'번 굴렸어요</div><p class="sub ctr">들이쉬고… 내쉬고… 구슬이 한 바퀴.</p><button class="btn ghost" id="bead-roll">한 번 굴리기</button><button class="btn ghost" id="bead-reset">횟수 초기화</button></div>';
     V.querySelector('#relax-back').onclick=back;
-    V.querySelectorAll('[data-bead]').forEach(b=>b.onclick=()=>{beadOffset=(beadOffset+1)%12;relaxCount++;const t=V.querySelector('.bead-track');t.append(t.firstElementChild);V.querySelector('#bead-count').textContent=relaxCount+'번 굴렸어요';});
-    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;beadOffset=0;relax();}; return;
+    const roll=()=>{relaxCount++;const wheel=V.querySelector('.bracelet-wheel');wheel.classList.remove('roll-burst');void wheel.offsetWidth;wheel.classList.add('roll-burst');V.querySelector('#bead-count').textContent=relaxCount+'번 굴렸어요';relaxSound('roll');};
+    V.querySelector('#bracelet-touch').onclick=roll;
+    V.querySelector('#bead-roll').onclick=roll;
+    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;V.querySelector('#bead-count').textContent='0번 굴렸어요';};
+    return;
   }
   if(relaxMode==='bubbles') {
-    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>뽁뽁이 터뜨리기</h1><p class="sub">원하는 곳을 톡톡 눌러 보세요.</p><div class="card relax-stage"><div class="bubble-grid">'+Array.from({length:30},(_,i)=>'<button class="bubble '+(bubblePopped.has(i)?'popped':'')+'" data-bubble="'+i+'" aria-label="뽁뽁이 '+(i+1)+'" '+(bubblePopped.has(i)?'disabled':'')+'></button>').join('')+'</div><div class="relax-count" id="bubble-count">'+bubblePopped.size+'개 터뜨렸어요</div><button class="btn ghost" id="bubble-reset">새 뽁뽁이</button></div>';
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>뽁뽁이 터뜨리기</h1><p class="sub">손가락으로 꾹 눌러 톡! 터뜨려 보세요.</p><div class="card relax-stage"><div class="bubble-grid">'+Array.from({length:30},(_,i)=>'<button class="bubble '+(bubblePopped.has(i)?'popped':'')+'" data-bubble="'+i+'" aria-label="뽁뽁이 '+(i+1)+'" '+(bubblePopped.has(i)?'disabled':'')+'></button>').join('')+'</div><div class="relax-count" id="bubble-count">'+bubblePopped.size+'개 터뜨렸어요</div><button class="btn ghost" id="bubble-reset">새 뽁뽁이</button></div>';
     V.querySelector('#relax-back').onclick=back;
-    V.querySelectorAll('[data-bubble]').forEach(b=>b.onclick=()=>{bubblePopped.add(Number(b.dataset.bubble));b.classList.add('popped');b.disabled=true;V.querySelector('#bubble-count').textContent=bubblePopped.size+'개 터뜨렸어요';});
+    V.querySelectorAll('[data-bubble]').forEach(b=>b.onclick=()=>{const id=Number(b.dataset.bubble);bubblePopped.add(id);b.classList.add('popping');b.disabled=true;relaxSound('pop');setTimeout(()=>b.classList.add('popped'),180);V.querySelector('#bubble-count').textContent=bubblePopped.size+'개 터뜨렸어요';});
     V.querySelector('#bubble-reset').onclick=()=>{bubblePopped=new Set();relax();}; return;
   }
   V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>무한 클리커</h1><p class="sub">큰 버튼을 원하는 만큼 눌러 보세요.</p><div class="card relax-stage clicker-stage"><div class="relax-count" id="click-count">'+relaxCount+'</div><button class="clicker-button" id="clicker-button" aria-label="클릭하기">톡!</button><p class="sub ctr">잘하고 있어요. 잠깐 쉬어 가도 괜찮아요.</p><button class="btn ghost" id="click-reset">숫자 초기화</button></div>';
@@ -1147,6 +1207,7 @@ function home() {
   V.querySelector('#clicker-button').onclick=()=>{relaxCount++;V.querySelector('#click-count').textContent=relaxCount;};
   V.querySelector('#click-reset').onclick=()=>{relaxCount=0;V.querySelector('#click-count').textContent='0';};
 }
+
 function test(dir) {
   if(!S) S={step:0,a:{},e2:[],e3:''};
 
