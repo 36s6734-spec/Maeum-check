@@ -765,15 +765,15 @@ button, a, select { touch-action: manipulation; }
 .relax-foot{margin-top:22px}
 .relax-back{margin:0 0 14px}
 .relax-stage{text-align:center;padding:clamp(18px,4vw,32px)}
-.bracelet-touch{display:grid;place-items:center;width:min(330px,82vw);height:330px;margin:8px auto 0;border:0;background:transparent;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
-.bracelet-touch:active{cursor:grabbing}
-.bracelet-wheel{position:relative;display:block;width:230px;height:230px;border-radius:50%;transform:rotateX(calc(58deg + var(--drag-y, 0deg))) rotateZ(var(--drag-x, -12deg));transform-style:preserve-3d;pointer-events:none}
-.bracelet-bead{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px;border-radius:50%;transform:rotate(calc(var(--i)*20deg)) translateY(-94px) rotate(calc(var(--i)*-20deg));background:radial-gradient(circle at 30% 24%,#fff8 0 5%,#e8c5a8 18%,#a66d54 68%,#704638 100%);box-shadow:inset -5px -6px 9px #58352677,0 3px 7px #0004;backface-visibility:hidden}
+.bracelet-hint{margin:8px 0 0;font-size:12px;color:var(--sub);text-align:center;letter-spacing:.01em}
+.bracelet-touch{display:grid;place-items:center;width:min(330px,82vw);height:300px;margin:0 auto;border:0;background:transparent;user-select:none;-webkit-user-select:none}
+.bracelet-wheel{position:relative;display:block;width:230px;height:230px;border-radius:50%;transform:rotateX(58deg) rotateZ(-12deg);transform-style:preserve-3d}
+.bracelet-bead{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px;border-radius:50%;transform:translate(var(--lift-x,0px),var(--lift-y,0px)) rotate(calc(var(--slot)*20deg)) translateY(-94px) rotate(calc(var(--slot)*-20deg));background:radial-gradient(circle at 30% 24%,#fff8 0 5%,#e8c5a8 18%,#a66d54 68%,#704638 100%);box-shadow:inset -5px -6px 9px #58352677,0 3px 7px #0004;backface-visibility:hidden;cursor:grab;touch-action:none;pointer-events:auto;transition:transform .2s ease,filter .2s}
 .bracelet-bead:nth-child(3n){background:radial-gradient(circle at 30% 24%,#fff9 0 5%,#e7d1a4 18%,#b38c4f 68%,#765b32 100%)}
 .bracelet-bead:nth-child(3n+1){background:radial-gradient(circle at 30% 24%,#fff9 0 5%,#d9b9aa 18%,#9b6c68 68%,#67464a 100%)}
-.bracelet-center{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-weight:700;font-size:14px;text-shadow:0 1px 2px #fff9;transform:rotateX(-58deg)}
-.bracelet-wheel.dragging{filter:drop-shadow(0 8px 10px #0002)}
-@media (prefers-reduced-motion:reduce){.bracelet-wheel{transition:none}}
+.bracelet-bead.dragging{z-index:5;cursor:grabbing;filter:brightness(1.15) drop-shadow(0 5px 5px #0004);transition:none}
+.bracelet-wheel{pointer-events:none}
+@media (prefers-reduced-motion:reduce){.bracelet-bead{transition:none}}
 .relax-count{font-family:'Jua',sans-serif;font-size:25px;margin:14px 0}
 .bubble-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:430px;margin:8px auto 20px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--p3) 22%,#fff)}
 .bubble{aspect-ratio:1;border:1px solid #ffffffaa;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 28%,#fff 0 7%,#dcecf0 18%,#a8cbd1 70%,#83aeb6 100%);box-shadow:inset -3px -4px 7px #527f8844,0 2px 4px #0002;transition:transform .12s,opacity .18s,box-shadow .18s;touch-action:manipulation}
@@ -1172,15 +1172,45 @@ function relax() {
     V.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{relaxMode=b.dataset.mode;relax();}); return;
   }
   if(relaxMode==='beads') {
-    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="sub">팔찌를 마우스로 잡고 원하는 방향으로 끌어 돌려 보세요.</p><div class="card relax-stage"><button type="button" class="bracelet-touch" id="bracelet-touch" aria-label="염주 팔찌를 마우스로 잡고 드래그해 돌리기"><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" style="--i:'+i+'"></i>').join('')+'<span class="bracelet-center">드래그</span></span></button><div class="relax-count" id="bead-count">'+relaxCount+'번 굴렸어요</div><p class="sub ctr">마우스를 누른 채 움직이면 염주가 따라 돌아가요.</p><button class="btn ghost" id="bead-reset">횟수 초기화</button></div>';
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="bracelet-hint">드래그해서 한 알씩 굴리세요</p><div class="card relax-stage"><div class="bracelet-touch" id="bracelet-touch" aria-label="염주 구슬을 하나씩 드래그해 넘기기"><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" data-bead="'+i+'" style="--slot:'+i+'"></i>').join('')+'</span></div><div class="relax-count" id="bead-count">'+relaxCount+'알 굴렸어요</div><button class="btn ghost" id="bead-reset">횟수 초기화</button></div>';
     V.querySelector('#relax-back').onclick=back;
-    const surface=V.querySelector('#bracelet-touch'),wheel=V.querySelector('.bracelet-wheel'),count=V.querySelector('#bead-count');
-    let dragging=false,moved=false,lastX=0,lastY=0,rotX=-12,rotY=0;
-    surface.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;dragging=true;moved=false;lastX=e.clientX;lastY=e.clientY;surface.setPointerCapture(e.pointerId);wheel.classList.add('dragging');e.preventDefault();});
-    surface.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;if(Math.abs(dx)+Math.abs(dy)>1)moved=true;rotX+=dx*.85;rotY=Math.max(-45,Math.min(45,rotY+dy*.55));wheel.style.setProperty('--drag-x',rotX+'deg');wheel.style.setProperty('--drag-y',rotY+'deg');});
-    const finishDrag=e=>{if(!dragging)return;dragging=false;wheel.classList.remove('dragging');if(moved){relaxCount++;count.textContent=relaxCount+'번 굴렸어요';relaxSound('roll');}if(surface.hasPointerCapture(e.pointerId))surface.releasePointerCapture(e.pointerId);};
-    surface.addEventListener('pointerup',finishDrag);surface.addEventListener('pointercancel',finishDrag);
-    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;count.textContent='0번 굴렸어요';};
+    const surface=V.querySelector('#bracelet-touch'),count=V.querySelector('#bead-count');
+    const beads=[...V.querySelectorAll('.bracelet-bead')];
+    let active=null,startAngle=0,lastAngle=0,direction=1,startX=0,startY=0,moved=false;
+    const angleAt=(x,y)=>{const r=surface.getBoundingClientRect();return Math.atan2(y-(r.top+r.height/2),x-(r.left+r.width/2));};
+    beads.forEach(bead=>{
+      bead.addEventListener('pointerdown',e=>{
+        if(e.pointerType==='mouse'&&e.button!==0)return;
+        active=bead;moved=false;startX=e.clientX;startY=e.clientY;
+        startAngle=angleAt(e.clientX,e.clientY);lastAngle=startAngle;direction=1;
+        bead.classList.add('dragging');bead.setPointerCapture(e.pointerId);e.preventDefault();
+      });
+      bead.addEventListener('pointermove',e=>{
+        if(active!==bead)return;
+        const a=angleAt(e.clientX,e.clientY);
+        let delta=a-lastAngle;if(delta>Math.PI)delta-=Math.PI*2;if(delta<-Math.PI)delta+=Math.PI*2;
+        if(Math.abs(e.clientX-startX)+Math.abs(e.clientY-startY)>5)moved=true;
+        if(Math.abs(delta)>.015)direction=delta>0?1:-1;
+        const dx=e.clientX-startX,dy=e.clientY-startY;
+        bead.style.setProperty('--lift-x',dx*.45+'px');bead.style.setProperty('--lift-y',dy*.45+'px');
+        lastAngle=a;
+      });
+      const finish=e=>{
+        if(active!==bead)return;
+        bead.classList.remove('dragging');bead.style.removeProperty('--lift-x');bead.style.removeProperty('--lift-y');
+        if(moved){
+          const slot=Number(bead.style.getPropertyValue('--slot'));
+          const target=(slot+direction+18)%18;
+          const other=beads.find(b=>Number(b.style.getPropertyValue('--slot'))===target);
+          if(other){other.style.setProperty('--slot',String(slot));bead.style.setProperty('--slot',String(target));}
+          relaxCount++;count.textContent=relaxCount+'알 굴렸어요';relaxSound('roll');
+        }
+        if(bead.hasPointerCapture(e.pointerId))bead.releasePointerCapture(e.pointerId);
+        active=null;
+      };
+      bead.addEventListener('pointerup',finish);bead.addEventListener('pointercancel',finish);
+    });
+    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;count.textContent='0알 굴렸어요';beads.forEach((b,i)=>b.style.setProperty('--slot',String(i)));};
     return;
   }
   if(relaxMode==='bubbles') {
