@@ -548,10 +548,6 @@ button:focus-visible {
 .palette-swatches { display:flex;gap:5px; }
 .palette-swatch { min-width:0;flex:1; }
 .palette-swatch i { display:block;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.06); }
-.palette-swatch small { display:block;font-size:9px;line-height:1.25;color:var(--sub);margin-top:4px;overflow-wrap:anywhere; }
-.palette-swatch b { display:block;font-size:9px;font-weight:500;color:var(--ink); }
-
-
 /* ===== 반응형 레이아웃: 모바일·태블릿·데스크톱 ===== */
 html {
   -webkit-text-size-adjust: 100%;
@@ -590,8 +586,6 @@ button, a, select { touch-action: manipulation; }
 }
 .nav a { white-space: nowrap; }
 .palette-swatches { gap: 7px; }
-.palette-swatch small, .palette-swatch b { overflow-wrap: anywhere; }
-
 @media (min-width: 900px) {
   .app { width: min(100% - 64px, 820px); padding-top: 36px; }
   .card { margin: 16px 0; }
