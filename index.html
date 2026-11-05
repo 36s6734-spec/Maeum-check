@@ -1266,28 +1266,28 @@ const bar=(l,v,max,cls='')=>`
 function result() {
   const h=load();
   if(!h.length) {
-    V.innerHTML=\`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>\`;
+    V.innerHTML=`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>`;
     return;
   }
   const r=h[h.length-1], p=h[h.length-2], L=LV[r.lv], ss=row('stress','소계');
-  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?\`\${f1(x-y)}점 높아졌어요\`:\`\${f1(y-x)}점 낮아졌어요\`;
-  let o=\`<h1>내 결과</h1>\`;
+  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?`${f1(x-y)}점 높아졌어요`:`${f1(y-x)}점 낮아졌어요`;
+  let o=`<h1>내 결과</h1>`;
   if(lastE3==='가끔'||lastE3==='자주') {
-    o+=\`<div class="notice crisis"><b>먼저 확인해 주세요.</b><p>지금 마음이 많이 힘들다면 혼자 감당하지 말고 믿을 만한 사람에게 바로 알려 주세요. 자살예방상담전화 109로 연락할 수 있고, 당장 안전이 위급하면 112 또는 119에 도움을 요청하세요.</p></div>\`;
+    o+=`<div class="notice crisis"><b>먼저 확인해 주세요.</b><p>지금 마음이 많이 힘들다면 혼자 감당하지 말고 믿을 만한 사람에게 바로 알려 주세요. 자살예방상담전화 109로 연락할 수 있고, 당장 안전이 위급하면 112 또는 119에 도움을 요청하세요.</p></div>`;
   }
-  o+=\`
+  o+=`
     <div class="card">
       <p class="sub">개인 점검 결과 · 앱 자체 참고용</p>
-      <div class="hl">\${face(r.lv===0?0:r.lv===1?1:r.lv===2?3:4,[0,1,3,4][r.lv])}
-        <h2>\${L.n} 단계</h2><p><b>\${L.m}</b></p>
-        <p class="sub">종합 점수 \${f1(r.st)} / 5점</p>
+      <div class="hl">${face(r.lv===0?0:r.lv===1?1:r.lv===2?3:4,[0,1,3,4][r.lv])}
+        <h2>${L.n} 단계</h2><p><b>${L.m}</b></p>
+        <p class="sub">종합 점수 ${f1(r.st)} / 5점</p>
       </div>
       <div class="notice">이 결과는 앱에서 자체 구성한 문항의 응답을 요약한 참고 정보예요. 공식 K-ELS®11 점수나 의학적 진단 결과가 아니에요.</div>
       <h2>영역별 점검</h2>
-      \${bar('감정노동 부담',r.A,5)}
-      \${bar('악성 민원 경험',r.B,5)}
-      \${bar('심신 상태',r.C,5)}
-      \${bar('보호·회복 환경의 어려움',mean([6-r.d2,6-r.d3]),5)}
+      ${bar('감정노동 부담',r.A,5)}
+      ${bar('악성 민원 경험',r.B,5)}
+      ${bar('심신 상태',r.C,5)}
+      ${bar('보호·회복 환경의 어려움',mean([6-r.d2,6-r.d3]),5)}
       <p class="sub">점수는 앱 문항 응답의 평균이며, K-ELS®11의 정상·위험 참고치와 직접 비교할 수 없어요.</p>
       <details class="card"><summary>＋ 평가 기준과 도구 안내</summary>
         <p><b>현재 앱 문항</b><br>앱에서 자체 구성한 참고용 문항이에요. 공식 도구로 표준화되거나 타당도가 검증된 문항으로 안내하지 않아요.</p>
@@ -1295,13 +1295,13 @@ function result() {
         <p>공식 도구의 성별 참고치는 해당 도구의 점수 산정 방식으로 응답했을 때만 적용할 수 있어요. 현재 앱 점수에는 적용하지 않았어요. 지침은 참고치가 절대적인 기준은 아니라고 설명해요.</p>
         <p class="sub">출처: 한국산업안전보건공단, 「고객응대 근로자의 감정노동 평가 지침」, KOSHA GUIDE H-163-2021, 2021년 12월, 5.1·5.2절 및 부록 1·2.</p>
       </details>
-    </div>\`;
-  o+=\`
+    </div>`;
+  o+=`
     <div class="card">
       <p class="sub">업종 현황 · 사업장 단위</p>
       <h2>서비스업 사업장의 감정노동 스트레스</h2>
       <div class="hl"><p class="sub">심각하다고 응답한 비율</p>
-        <p style="font-size:42px;line-height:1.2;margin:8px 0"><b>\${ss?ss.pos:'-'}%</b></p>
+        <p style="font-size:42px;line-height:1.2;margin:8px 0"><b>${ss?ss.pos:'-'}%</b></p>
         <p>조사에 응한 서비스업 사업장 중 25.3%가 고객 대상 감정노동 스트레스를 심각하다고 응답했어요.</p>
       </div>
       <div class="notice">이 통계는 <b>사업장 단위</b> 조사 결과예요. 서비스업 종사자 개인의 비율이나 개인의 현재 상태를 뜻하지 않아요.</div>
@@ -1314,22 +1314,22 @@ function result() {
         <p><b>통계 수치</b><br>심각 응답 비율 25.3%</p>
         <p class="sub">출처: 국가통계포털(KOSIS), 한국산업안전보건공단, 「산업안전보건실태조사」, 통계표 ID DT_380004_MS16_1_1, 2020년.</p>
       </details>
-    </div>\`;
+    </div>`;
   if(p) {
-    o+=\`<div class="card"><h2>지난 결과와 비교</h2>
-      <p>종합 점수가 지난번 (\${new Date(p.t).toLocaleDateString('ko-KR')}, \${LV[p.lv].n})보다 \${d(r.st,p.st)}.</p>
-      <p class="sub">감정노동 부담 \${d(r.A,p.A)} · 악성 민원 경험 \${d(r.B,p.B)} · 심신 상태 \${d(r.C,p.C)}</p></div>\`;
+    o+=`<div class="card"><h2>지난 결과와 비교</h2>
+      <p>종합 점수가 지난번 (${new Date(p.t).toLocaleDateString('ko-KR')}, ${LV[p.lv].n})보다 ${d(r.st,p.st)}.</p>
+      <p class="sub">감정노동 부담 ${d(r.A,p.A)} · 악성 민원 경험 ${d(r.B,p.B)} · 심신 상태 ${d(r.C,p.C)}</p></div>`;
   }
-  o+=\`<div class="card talk"><h2>도움 연결</h2><p>\${L.h}</p>\`;
-  if(r.b3>=3) o+=\`<p>신체적 위협이나 성적 언행 등으로 불안했다면, 혼자 대응하지 말고 관리자나 신뢰할 수 있는 담당자에게 알리고 안전한 장소로 이동해 도움을 요청하세요.</p>\`;
-  if(r.e2.length) o+=\`<p><b>선택한 도움:</b> \${r.e2.map(esc).join(' · ')}</p>\`;
-  if(r.e1>=4) o+=\`<p>이직을 고민할 만큼 부담이 컸다면, 현재 업무 환경과 보호 조치를 차분히 점검하고 상담 기관이나 노동 관련 지원기관에 도움을 요청해 보세요.</p>\`;
-  o+=\`<a class="btn" href="#map" style="display:inline-block;text-decoration:none">도움 기관 지도 보기</a></div>\`;
-  o+=\`<div class="card"><h2>내 권리 안내</h2>
+  o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>`;
+  if(r.b3>=3) o+=`<p>신체적 위협이나 성적 언행 등으로 불안했다면, 혼자 대응하지 말고 관리자나 신뢰할 수 있는 담당자에게 알리고 안전한 장소로 이동해 도움을 요청하세요.</p>`;
+  if(r.e2.length) o+=`<p><b>선택한 도움:</b> ${r.e2.map(esc).join(' · ')}</p>`;
+  if(r.e1>=4) o+=`<p>이직을 고민할 만큼 부담이 컸다면, 현재 업무 환경과 보호 조치를 차분히 점검하고 상담 기관이나 노동 관련 지원기관에 도움을 요청해 보세요.</p>`;
+  o+=`<a class="btn" href="#map" style="display:inline-block;text-decoration:none">도움 기관 지도 보기</a></div>`;
+  o+=`<div class="card"><h2>내 권리 안내</h2>
     <p>고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 힘들었던 일을 날짜와 함께 메모해 두면 나중에 도움을 받을 때 유용해요.</p>
     <details class="card"><summary>? 법적 근거 보기</summary><p>산업안전보건법 제41조(고객의 폭언 등으로 인한 건강장해 예방조치)</p><p class="sub">구체적인 적용과 조치 내용은 최신 법령 및 사업장 상황을 확인해 주세요.</p></details>
-    </div>\`;
-  o+=\`<div class="card"><h2>저장된 결과 \${h.length}건</h2><ul>\${h.slice().reverse().map(x=>\`<li>\${new Date(x.t).toLocaleDateString('ko-KR')} · \${LV[x.lv].n} · 평균 \${f1(x.st)}점</li>\`).join('')}</ul><button class="btn ghost" id="del" type="button">저장된 결과 삭제</button></div>\`;
+    </div>`;
+  o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>${new Date(x.t).toLocaleDateString('ko-KR')} · ${LV[x.lv].n} · 평균 ${f1(x.st)}점</li>`).join('')}</ul><button class="btn ghost" id="del" type="button">저장된 결과 삭제</button></div>`;
   V.innerHTML=o;
   document.getElementById('del').onclick=()=>{
     if(confirm('이 기기에 저장된 결과를 모두 지울까요?')) { save([]); lastE3=''; result(); }
