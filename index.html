@@ -743,6 +743,28 @@ button, a, select { touch-action: manipulation; }
   .home-menu-card .sub { font-size: 14px; }
 }
 
+/* 마음 풀기 미니 도구 */
+.relax-menu{display:grid;gap:12px;margin-top:20px}
+.relax-choice{width:100%;display:flex;align-items:center;gap:16px;text-align:left;color:var(--ink);cursor:pointer}
+.relax-choice>span:nth-child(2){flex:1;min-width:0}
+.relax-choice b{display:block;font-size:17px}
+.relax-choice small{display:block;color:var(--sub);font-size:13px;margin-top:3px}
+.relax-emoji{width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:17px;background:color-mix(in srgb,var(--p1) 45%,#fff);font-size:29px}
+.relax-arrow{font-size:28px;color:var(--sub)}
+.relax-foot{margin-top:22px}
+.relax-back{margin:0 0 14px}
+.relax-stage{text-align:center;padding:clamp(18px,4vw,32px)}
+.bead-track{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:9px;padding:24px 4px}
+.bead{width:42px;height:42px;border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 27%,#fff 0 5%,#e8c5a8 20%,#a66d54 72%,#704638 100%);box-shadow:inset -4px -5px 8px #68402f55,0 3px 6px #0002;transition:transform .15s}
+.bead:active{transform:scale(.88)}
+.relax-count{font-family:'Jua',sans-serif;font-size:25px;margin:14px 0}
+.bubble-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:430px;margin:8px auto 20px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--p3) 22%,#fff)}
+.bubble{aspect-ratio:1;border:1px solid #ffffffaa;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 28%,#fff 0 7%,#dcecf0 18%,#a8cbd1 70%,#83aeb6 100%);box-shadow:inset -3px -4px 7px #527f8844,0 2px 4px #0002}
+.bubble.popped{transform:scale(.78);opacity:.25;box-shadow:none}
+.clicker-stage{padding:34px 18px}
+.clicker-button{width:min(220px,65vw);aspect-ratio:1;border:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,color-mix(in srgb,var(--p1) 70%,#fff),var(--p2) 65%,var(--p3));color:var(--p4);font:30px 'Jua',sans-serif;box-shadow:0 12px 0 color-mix(in srgb,var(--p4) 25%,var(--p3)),0 16px 24px #0002;cursor:pointer;transition:transform .08s,box-shadow .08s}
+.clicker-button:active{transform:translateY(8px);box-shadow:0 4px 0 color-mix(in srgb,var(--p4) 25%,var(--p3)),0 7px 12px #0002}
+@media(max-width:640px){.relax-choice{padding:16px}.bead{width:36px;height:36px}.bubble-grid{gap:8px;padding:10px}}
 </style>
 </head>
 <body>
@@ -1006,6 +1028,7 @@ function applyTheme(id, save=true) {
 
 const V = document.getElementById('view');
 let stats = null, S, lastE3 = '', testEnterHandler = null;
+let relaxMode='menu', relaxCount=0, beadOffset=0, bubblePopped=new Set();
 
 const face = (c,m) => {
   const tone = (c%5)+1;
@@ -1085,6 +1108,11 @@ function home() {
         <h2>지도</h2>
         <span class="sub">가까운 상담·도움 기관 찾기</span>
       </a>
+      <a class="card home-menu-card" href="#relax">
+        <span class="ib tone3" aria-hidden="true">🌿</span>
+        <h2>마음 풀기</h2>
+        <span class="sub">염주·뽁뽁이·클리커로 잠깐 쉬어 가기</span>
+      </a>
     </section>
 
     <p class="sub ctr">이 검사는 의학적 진단이 아니라 스트레스 점검 도구예요.</p>
@@ -1092,7 +1120,34 @@ function home() {
 
 }
 
-  function test(dir) {
+  function relax() {
+  const V=document.getElementById('view');
+  const back=()=>{relaxMode='menu';relax();};
+  if(relaxMode==='menu') {
+    V.innerHTML='<h1>마음 풀기</h1><p class="sub">잠깐 멈춰서, 손이 가는 걸 가볍게 눌러 봐요.</p><div class="relax-menu">'+
+      '<button class="card relax-choice" data-mode="beads"><span class="relax-emoji">📿</span><span><b>염주 굴리기</b><small>구슬을 하나씩 넘기며 천천히 호흡해요.</small></span><span class="relax-arrow">›</span></button>'+
+      '<button class="card relax-choice" data-mode="bubbles"><span class="relax-emoji">🫧</span><span><b>뽁뽁이 터뜨리기</b><small>마음 가는 대로 톡톡 눌러 터뜨려요.</small></span><span class="relax-arrow">›</span></button>'+
+      '<button class="card relax-choice" data-mode="clicker"><span class="relax-emoji">👆</span><span><b>무한 클리커</b><small>아무 생각 없이 원하는 만큼 눌러 봐요.</small></span><span class="relax-arrow">›</span></button></div><p class="sub ctr relax-foot">기록이나 점수 경쟁 없이, 잠깐 쉬어 가는 공간이에요.</p>';
+    V.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{relaxMode=b.dataset.mode;relax();}); return;
+  }
+  if(relaxMode==='beads') {
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="sub">구슬을 누르면 다음 구슬이 앞으로 와요. 천천히 하나씩 넘겨 보세요.</p><div class="card relax-stage"><div class="bead-track">'+Array.from({length:12},(_,i)=>'<button class="bead" data-bead="'+i+'" aria-label="염주 구슬 '+(i+1)+'"></button>').join('')+'</div><div class="relax-count" id="bead-count">'+relaxCount+'번 굴렸어요</div><p class="sub ctr">들이쉬고… 내쉬고… 구슬 하나.</p><button class="btn ghost" id="bead-reset">처음부터</button></div>';
+    V.querySelector('#relax-back').onclick=back;
+    V.querySelectorAll('[data-bead]').forEach(b=>b.onclick=()=>{beadOffset=(beadOffset+1)%12;relaxCount++;const t=V.querySelector('.bead-track');t.append(t.firstElementChild);V.querySelector('#bead-count').textContent=relaxCount+'번 굴렸어요';});
+    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;beadOffset=0;relax();}; return;
+  }
+  if(relaxMode==='bubbles') {
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>뽁뽁이 터뜨리기</h1><p class="sub">원하는 곳을 톡톡 눌러 보세요.</p><div class="card relax-stage"><div class="bubble-grid">'+Array.from({length:30},(_,i)=>'<button class="bubble '+(bubblePopped.has(i)?'popped':'')+'" data-bubble="'+i+'" aria-label="뽁뽁이 '+(i+1)+'" '+(bubblePopped.has(i)?'disabled':'')+'></button>').join('')+'</div><div class="relax-count" id="bubble-count">'+bubblePopped.size+'개 터뜨렸어요</div><button class="btn ghost" id="bubble-reset">새 뽁뽁이</button></div>';
+    V.querySelector('#relax-back').onclick=back;
+    V.querySelectorAll('[data-bubble]').forEach(b=>b.onclick=()=>{bubblePopped.add(Number(b.dataset.bubble));b.classList.add('popped');b.disabled=true;V.querySelector('#bubble-count').textContent=bubblePopped.size+'개 터뜨렸어요';});
+    V.querySelector('#bubble-reset').onclick=()=>{bubblePopped=new Set();relax();}; return;
+  }
+  V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>무한 클리커</h1><p class="sub">큰 버튼을 원하는 만큼 눌러 보세요.</p><div class="card relax-stage clicker-stage"><div class="relax-count" id="click-count">'+relaxCount+'</div><button class="clicker-button" id="clicker-button" aria-label="클릭하기">톡!</button><p class="sub ctr">잘하고 있어요. 잠깐 쉬어 가도 괜찮아요.</p><button class="btn ghost" id="click-reset">숫자 초기화</button></div>';
+  V.querySelector('#relax-back').onclick=back;
+  V.querySelector('#clicker-button').onclick=()=>{relaxCount++;V.querySelector('#click-count').textContent=relaxCount;};
+  V.querySelector('#click-reset').onclick=()=>{relaxCount=0;V.querySelector('#click-count').textContent='0';};
+}
+function test(dir) {
   if(!S) S={step:0,a:{},e2:[],e3:''};
 
   const n=Q.length+2;
@@ -2078,7 +2133,8 @@ const routes={
   home,
   test,
   result,
-  map
+  map,
+  relax
 };
 
 function go() {
@@ -2156,7 +2212,8 @@ document.querySelector('.nav').innerHTML=[
   ['home','홈'],
   ['test','진단'],
   ['result','결과'],
-  ['map','지도']
+  ['map','지도'],
+  ['relax','마음 풀기']
 ].map(([k,t])=>
   `<a href="#${k}">${ico(k)}<span>${t}</span></a>`
 ).join('');
