@@ -1858,7 +1858,7 @@ function map() {
   };
 
   const renderList=()=>{
-    const ord=items.map((p,i)=>i);
+    const ord=items.map((p,i)=>i).filter(i=>items[i].lat!=null);
 
     if(myPos) {
       items.forEach(p=>{
@@ -1960,9 +1960,8 @@ function map() {
     if(gu!==g) return;
 
     setG(
-      items.length+'곳 중 '+
       items.filter(p=>p.lat!=null).length+
-      '곳을 지도에서 확인했어요. 나머지는 연락처만 보여드려요.'
+      '곳의 위치를 확인했어요. 위치가 확인된 기관만 목록에 표시해요.'
     );
 
     renderList();
