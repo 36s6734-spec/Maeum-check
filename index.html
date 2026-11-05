@@ -665,6 +665,66 @@ button, a, select { touch-action: manipulation; }
   *, *::before, *::after { transition-duration: .01ms !important; }
 }
 
+
+/* 홈 첫 화면: 세로형 메뉴 카드 3개 */
+.home-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 22px);
+  align-items: stretch;
+  margin: clamp(28px, 5vw, 48px) 0 24px;
+}
+.home-menu-card {
+  min-width: 0;
+  min-height: clamp(330px, 42vw, 430px);
+  margin: 0;
+  padding: clamp(18px, 2.4vw, 28px) clamp(12px, 1.8vw, 22px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.home-menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 26px rgba(43,42,51,.12);
+}
+.home-menu-card .ib {
+  width: 66px;
+  height: 66px;
+  margin: 18px 0 8px;
+}
+.home-menu-card .ib svg { width: 30px; height: 30px; }
+.home-menu-card h2 { margin: 8px 0 0; }
+.home-menu-card .sub { max-width: 18ch; line-height: 1.7; }
+@media (max-width: 640px) {
+  .home-menu-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 26px;
+  }
+  .home-menu-card {
+    min-height: 190px;
+    padding: 20px;
+    gap: 10px;
+  }
+  .home-menu-card .ib {
+    width: 54px;
+    height: 54px;
+    margin: 0 0 2px;
+  }
+  .home-menu-card .ib svg { width: 26px; height: 26px; }
+  .home-menu-card h2 { margin: 0; }
+  .home-menu-card .sub { max-width: none; }
+}
+@media (max-width: 380px) {
+  .home-menu-card { min-height: 172px; }
+}
+
 </style>
 </head>
 <body>
@@ -958,29 +1018,25 @@ function home() {
     <h1 class="ttl">마음 점검</h1>
     <p class="sub ctr">고객을 대하는 일, 요즘 얼마나 무거운가요? 3분이면 내 상태를 확인할 수 있어요.</p>
 
-    <a class="card big" href="#test">
-      <span class="ib tone1">${ico('test')}</span>
-      <span>
+    <section class="home-menu-grid" aria-label="주요 메뉴">
+      <a class="card home-menu-card" href="#test">
+        <span class="ib tone1">${ico('test')}</span>
         <h2>자가진단</h2>
         <span class="sub">16문항으로 스트레스 수준 점검하기</span>
-      </span>
-    </a>
+      </a>
 
-    <a class="card big" href="#result">
-      <span class="ib tone2">${ico('result')}</span>
-      <span>
+      <a class="card home-menu-card" href="#result">
+        <span class="ib tone2">${ico('result')}</span>
         <h2>결과 확인</h2>
         <span class="sub">내 결과와 지난 결과 비교하기</span>
-      </span>
-    </a>
+      </a>
 
-    <a class="card big" href="#map">
-      <span class="ib tone4">${ico('map')}</span>
-      <span>
+      <a class="card home-menu-card" href="#map">
+        <span class="ib tone4">${ico('map')}</span>
         <h2>지도</h2>
-        <span class="sub">근처 도움 기관 (추후 제공)</span>
-      </span>
-    </a>
+        <span class="sub">근처 도움 기관 찾아보기</span>
+      </a>
+    </section>
 
     <p class="sub ctr">이 검사는 의학적 진단이 아니라 스트레스 점검 도구예요.</p>
   `;
