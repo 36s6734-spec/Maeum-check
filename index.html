@@ -945,9 +945,9 @@ const paletteGrid = document.getElementById('palette-grid');
 paletteGrid.innerHTML = PALETTES.map(p => `
   <button type="button" class="palette-choice" data-theme="${p.id}"
     aria-pressed="false" aria-label="${p.name} 팔레트 선택">
-    <span class="palette-name">${p.name}<small>${p.colors.length} COLORS</small></span>
+    <span class="palette-name">${p.name}</span>
     <span class="palette-swatches">
-      ${p.colors.map(c => `<span class="palette-swatch"><i style="background:${c.hex}"></i><small>${c.name}<b>${c.hex}</b></small></span>`).join('')}
+      ${p.colors.map(c => `<span class="palette-swatch"><i style="background:${c.hex}" title="${c.name}"></i></span>`).join('')}
     </span>
   </button>
 `).join('');
@@ -1011,7 +1011,7 @@ function applyTheme(id, save=true) {
 }
 
 const V = document.getElementById('view');
-let stats = null, S, lastE3 = '';
+let stats = null, S, lastE3 = '', testEnterHandler = null;
 
 const face = (c,m) => {
   const tone = (c%5)+1;
@@ -1198,9 +1198,8 @@ function home() {
     }
   };
 
-  document.getElementById('nx').onclick=()=>{
+  const advance=()=>{
     if(!ok) return;
-
     if(s<n-1) {
       S.step++;
       test(1);
@@ -1209,6 +1208,22 @@ function home() {
       finish();
     }
   };
+
+  document.getElementById('nx').onclick=advance;
+
+  // 선택을 마친 뒤 Enter를 누르면 다음 문항으로 이동
+  if(testEnterHandler) document.removeEventListener('keydown',testEnterHandler);
+  testEnterHandler=e=>{
+    if(e.key!=='Enter'||e.repeat||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey) return;
+    const target=e.target;
+    if(target && (target.closest('button#nx,button#pv,input,textarea,select,a,[contenteditable="true"]'))) return;
+    const next=document.getElementById('nx');
+    if(next && !next.disabled) {
+      e.preventDefault();
+      next.click();
+    }
+  };
+  document.addEventListener('keydown',testEnterHandler);
 
   if(dir) anim(dir);
 }
