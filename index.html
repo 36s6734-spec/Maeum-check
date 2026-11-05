@@ -550,6 +550,121 @@ button:focus-visible {
 .palette-swatch i { display:block;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.06); }
 .palette-swatch small { display:block;font-size:9px;line-height:1.25;color:var(--sub);margin-top:4px;overflow-wrap:anywhere; }
 .palette-swatch b { display:block;font-size:9px;font-weight:500;color:var(--ink); }
+
+
+/* ===== 반응형 레이아웃: 모바일·태블릿·데스크톱 ===== */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+body {
+  min-width: 320px;
+  min-height: 100vh;
+}
+.app {
+  width: min(100% - 40px, 820px);
+  max-width: 820px;
+  min-height: 100vh;
+  padding: 28px 0 120px;
+}
+#view {
+  width: 100%;
+  min-width: 0;
+}
+.card {
+  width: 100%;
+  padding: clamp(16px, 2.5vw, 24px);
+  border-radius: clamp(16px, 2vw, 22px);
+}
+h1 { font-size: clamp(22px, 3vw, 30px); }
+h2 { font-size: clamp(18px, 2.2vw, 22px); }
+p, li, button, select { overflow-wrap: anywhere; }
+button, a, select { touch-action: manipulation; }
+.kmap { height: clamp(300px, 48vw, 480px); }
+.theme-launcher { right: 24px; bottom: 96px; }
+.theme-panel { right: 24px; bottom: 150px; }
+.nav {
+  bottom: max(18px, env(safe-area-inset-bottom));
+  max-width: calc(100vw - 32px);
+  justify-content: center;
+}
+.nav a { white-space: nowrap; }
+.palette-swatches { gap: 7px; }
+.palette-swatch small, .palette-swatch b { overflow-wrap: anywhere; }
+
+@media (min-width: 900px) {
+  .app { width: min(100% - 64px, 820px); padding-top: 36px; }
+  .card { margin: 16px 0; }
+  .nav { bottom: 24px; }
+  .theme-launcher { right: max(24px, calc((100vw - 820px)/2 - 68px)); }
+  .theme-panel { right: max(24px, calc((100vw - 820px)/2 - 68px)); }
+}
+
+@media (max-width: 640px) {
+  .app {
+    width: calc(100% - 28px);
+    padding: 18px 0 112px;
+  }
+  .ttl { font-size: clamp(28px, 8vw, 36px); }
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 8px;
+  }
+  .opt { font-size: 12px; }
+  .opt svg { max-width: 64px; }
+  .row { gap: 8px; }
+  .row .btn { flex: 1; padding: 12px 14px; }
+  .nav {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+    transform: none;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    gap: 3px;
+    padding: 6px;
+    justify-content: space-around;
+    box-shadow: 0 4px 18px rgba(0,0,0,.16);
+  }
+  .nav a {
+    flex: 1;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+  .nav svg { width: 17px; height: 17px; }
+  .theme-launcher { right: 16px; bottom: 82px; width: 42px; height: 42px; }
+  .theme-panel {
+    right: 12px;
+    bottom: 134px;
+    width: min(340px, calc(100vw - 24px));
+    max-height: min(65vh, 520px);
+  }
+  .locrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .locrow .btn { flex: 0 0 auto; }
+  #locmsg { min-width: 0; flex: 1 1 160px; }
+  .kmap { height: 320px; }
+  .palette-swatch small { font-size: 8px; }
+  .palette-swatch b { font-size: 8px; }
+}
+
+@media (max-width: 380px) {
+  .app { width: calc(100% - 22px); }
+  .card { padding: 14px; }
+  .grid { gap: 10px 5px; }
+  .chip { padding: 8px 11px; font-size: 13px; }
+  .nav a { font-size: 12px; padding: 9px 3px; }
+  .nav svg { width: 15px; height: 15px; }
+  .theme-panel { padding: 13px; }
+  .palette-swatches { gap: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}
+
 </style>
 </head>
 <body>
