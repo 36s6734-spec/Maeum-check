@@ -37,7 +37,7 @@ body {
 }
 
 .app {
-  max-width:430px;
+  max-width:1180px;
   margin:0 auto;
   min-height:100vh;
   padding:20px 16px 110px;
@@ -696,6 +696,7 @@ button, a, select { touch-action: manipulation; }
 .home-menu-card h2 { margin: 8px 0 0; }
 .home-menu-card .sub { max-width: 18ch; line-height: 1.7; }
 @media (max-width: 640px) {
+  .app { max-width:430px; padding:20px 16px 110px; }
   .home-menu-grid {
     grid-template-columns: 1fr;
     gap: 14px;
@@ -759,6 +760,7 @@ button, a, select { touch-action: manipulation; }
 .relax-choice b{display:block;font-size:17px}
 .relax-choice small{display:block;color:var(--sub);font-size:13px;margin-top:3px}
 .relax-emoji{width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:17px;background:color-mix(in srgb,var(--p1) 45%,#fff);font-size:29px}
+.relax-emoji svg{width:27px;height:27px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .relax-arrow{font-size:28px;color:var(--sub)}
 .relax-foot{margin-top:22px}
 .relax-back{margin:0 0 14px}
@@ -780,9 +782,17 @@ button, a, select { touch-action: manipulation; }
 .bubble.popping{animation:bubble-pop .18s ease-out forwards}
 .bubble.popped{transform:scale(.42);opacity:.12;box-shadow:none;cursor:default}
 @keyframes bubble-pop{0%{transform:scale(1)}35%{transform:scale(.72)}68%{transform:scale(1.18)}100%{transform:scale(.4);opacity:.15}}
-.clicker-stage{padding:34px 18px}
-.clicker-button{width:min(220px,65vw);aspect-ratio:1;border:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,color-mix(in srgb,var(--p1) 70%,#fff),var(--p2) 65%,var(--p3));color:var(--p4);font:30px 'Jua',sans-serif;box-shadow:0 12px 0 color-mix(in srgb,var(--p4) 25%,var(--p3)),0 16px 24px #0002;cursor:pointer;transition:transform .08s,box-shadow .08s}
-.clicker-button:active{transform:translateY(8px);box-shadow:0 4px 0 color-mix(in srgb,var(--p4) 25%,var(--p3)),0 7px 12px #0002}
+.clicker-stage{padding:28px 18px;text-align:center;background:#fff}
+.clicker-upload{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:min(100%,360px);margin:0 auto 22px;padding:12px;border:1.5px dashed #d7d7d7;border-radius:14px;color:#555;cursor:pointer}
+.clicker-upload>span{font-size:22px}.clicker-upload small{width:100%;font-size:12px;color:#888}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.clicker-keychain{position:relative;width:min(270px,76vw);margin:24px auto 12px;padding:25px 18px 18px;background:linear-gradient(145deg,#fff,#f2f2f2);border:1px solid #e3e3e3;border-radius:28px;box-shadow:0 12px 26px #0001,inset 0 2px 3px #fff}
+.keychain-ring{position:absolute;top:-15px;left:calc(50% - 13px);width:26px;height:26px;border:5px solid #c8c8c8;border-radius:50%;box-shadow:0 1px 2px #0002}
+.clicker-button{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1.08;border:1px solid #d9d9d9;border-radius:20px;background:linear-gradient(145deg,#fff,#f7f7f7);color:#555;box-shadow:0 7px 0 #d5d5d5,0 10px 16px #0001;cursor:pointer;transition:transform .08s,box-shadow .08s;overflow:hidden}
+.clicker-button.pressed{animation:key-press .16s ease-out}@keyframes key-press{0%{transform:translateY(0);box-shadow:0 7px 0 #d5d5d5}45%{transform:translateY(6px);box-shadow:0 1px 0 #d5d5d5}100%{transform:translateY(0);box-shadow:0 7px 0 #d5d5d5}}
+.keycap-photo{position:absolute;inset:0;background-position:center;background-size:cover;opacity:.88}.keycap-label{position:relative;z-index:1;padding:5px 10px;border-radius:8px;background:#ffffffc9;font:600 13px Pretendard,sans-serif;letter-spacing:.12em}
+.clicker-sounds{display:flex;justify-content:center;gap:12px;margin:18px 0}.sound-choice{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:68px;padding:10px 14px;border:1px solid #e3e3e3;border-radius:14px;background:#fff;color:#666;font:inherit;cursor:pointer}
+.sound-choice svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.sound-choice.on{border-color:#777;background:#f4f4f4;color:#111;box-shadow:inset 0 0 0 1px #aaa}
 @media(max-width:640px){.relax-choice{padding:16px}.bracelet-wheel{width:205px;height:205px}.bracelet-bead{width:34px;height:34px;margin:-17px;transform:rotate(calc(var(--i)*20deg)) translateY(-83px) rotate(calc(var(--i)*-20deg))}.bubble-grid{gap:8px;padding:10px}}
 @media(prefers-reduced-motion:reduce){.bracelet-wheel{animation:none}.bubble.popping{animation:none}}
 </style>
@@ -1049,6 +1059,7 @@ function applyTheme(id, save=true) {
 const V = document.getElementById('view');
 let stats = null, S, lastE3 = '', testEnterHandler = null;
 let relaxMode='menu', relaxCount=0, beadOffset=0, bubblePopped=new Set();
+let clickerImage='', clickerSoundMode='click';
 
 const face = (c,m) => {
   const tone = (c%5)+1;
@@ -1090,7 +1101,7 @@ const IC = {
 home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',
 test:'<rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/>',
 result:'<path d="M5 20V11M12 20V4M19 20v-6"/>',
-map:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>'
+map:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>', relax:'<path d="M20 4c-8 0-14 3-14 10 0 3 2 5 5 5 7 0 9-7 9-15Z"/><path d="M4 21c3-5 7-8 12-11"/>''
 };
 
 const ico = k => `
@@ -1129,7 +1140,7 @@ function home() {
         <span class="sub">가까운 상담·도움 기관 찾기</span>
       </a>
       <a class="card home-menu-card" href="#relax">
-        <span class="ib tone3" aria-hidden="true">🌿</span>
+        <span class="ib tone3">${ico('relax')}</span>
         <h2>마음 풀기</h2>
         <span class="sub">염주·뽁뽁이·클리커로 잠깐 쉬어 가기</span>
       </a>
@@ -1142,41 +1153,15 @@ function home() {
 
   function relaxSound(type) {
   try {
-    const Ctx=window.AudioContext||window.webkitAudioContext;
-    if(!Ctx) return;
-    const ctx=relaxSound.ctx||(relaxSound.ctx=new Ctx());
-    if(ctx.state==='suspended') ctx.resume();
-    const now=ctx.currentTime;
-    const gain=ctx.createGain();
-    gain.connect(ctx.destination);
-    if(type==='roll') {
-      const osc=ctx.createOscillator();
-      const g=ctx.createGain();
-      osc.type='triangle'; osc.frequency.setValueAtTime(760,now);
-      osc.frequency.exponentialRampToValueAtTime(330,now+.11);
-      g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.11,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+.14);
-      osc.connect(g);g.connect(ctx.destination);osc.start(now);osc.stop(now+.15);
-      const click=ctx.createOscillator(), cg=ctx.createGain();
-      click.type='sine';click.frequency.setValueAtTime(1250,now+.045);
-      cg.gain.setValueAtTime(.0001,now);cg.gain.exponentialRampToValueAtTime(.045,now+.05);cg.gain.exponentialRampToValueAtTime(.0001,now+.10);
-      click.connect(cg);cg.connect(ctx.destination);click.start(now+.045);click.stop(now+.11);
-    } else if(type==='pop') {
-      const len=Math.floor(ctx.sampleRate*.12), buffer=ctx.createBuffer(1,len,ctx.sampleRate), data=buffer.getChannelData(0);
-      for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*(1-i/len);
-      const noise=ctx.createBufferSource(), filter=ctx.createBiquadFilter(), ng=ctx.createGain();
-      noise.buffer=buffer;filter.type='lowpass';filter.frequency.value=1800;
-      ng.gain.setValueAtTime(.0001,now);ng.gain.exponentialRampToValueAtTime(.22,now+.006);ng.gain.exponentialRampToValueAtTime(.0001,now+.12);
-      noise.connect(filter);filter.connect(ng);ng.connect(ctx.destination);noise.start(now);
-      const thump=ctx.createOscillator(), tg=ctx.createGain();
-      thump.type='sine';thump.frequency.setValueAtTime(190,now);thump.frequency.exponentialRampToValueAtTime(75,now+.075);
-      tg.gain.setValueAtTime(.0001,now);tg.gain.exponentialRampToValueAtTime(.14,now+.004);tg.gain.exponentialRampToValueAtTime(.0001,now+.09);
-      thump.connect(tg);tg.connect(ctx.destination);thump.start(now);thump.stop(now+.1);
-    } else {
-      gain.gain.value=.0001;
-    }
+    const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;
+    const ctx=relaxSound.ctx||(relaxSound.ctx=new Ctx());if(ctx.state==='suspended')ctx.resume();const now=ctx.currentTime;
+    const tone=(freq,duration,shape,volume,delay=0)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=shape;o.frequency.setValueAtTime(freq,now+delay);o.frequency.exponentialRampToValueAtTime(Math.max(35,freq*.52),now+delay+duration);g.gain.setValueAtTime(.0001,now+delay);g.gain.exponentialRampToValueAtTime(volume,now+delay+.006);g.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);o.connect(g);g.connect(ctx.destination);o.start(now+delay);o.stop(now+delay+duration+.01);};
+    if(type==='roll'){tone(690,.17,'triangle',.095);tone(1180,.075,'sine',.035,.055);}
+    else if(type==='pop'){const len=Math.floor(ctx.sampleRate*.12),buf=ctx.createBuffer(1,len,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len);const src=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();src.buffer=buf;f.type='lowpass';f.frequency.value=1700;g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.2,now+.006);g.gain.exponentialRampToValueAtTime(.0001,now+.12);src.connect(f);f.connect(g);g.connect(ctx.destination);src.start(now);tone(180,.08,'sine',.12);}
+    else if(type==='click'){tone(1450,.045,'square',.075);tone(520,.055,'triangle',.035,.025);}
+    else if(type==='thock'){tone(210,.105,'triangle',.14);tone(780,.045,'sine',.025,.015);}
   } catch(e) {}
 }
-
 function relax() {
   const V=document.getElementById('view');
   const back=()=>{relaxMode='menu';relax();};
@@ -1202,10 +1187,19 @@ function relax() {
     V.querySelectorAll('[data-bubble]').forEach(b=>b.onclick=()=>{const id=Number(b.dataset.bubble);bubblePopped.add(id);b.classList.add('popping');b.disabled=true;relaxSound('pop');setTimeout(()=>b.classList.add('popped'),180);V.querySelector('#bubble-count').textContent=bubblePopped.size+'개 터뜨렸어요';});
     V.querySelector('#bubble-reset').onclick=()=>{bubblePopped=new Set();relax();}; return;
   }
-  V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>무한 클리커</h1><p class="sub">큰 버튼을 원하는 만큼 눌러 보세요.</p><div class="card relax-stage clicker-stage"><div class="relax-count" id="click-count">'+relaxCount+'</div><button class="clicker-button" id="clicker-button" aria-label="클릭하기">톡!</button><p class="sub ctr">잘하고 있어요. 잠깐 쉬어 가도 괜찮아요.</p><button class="btn ghost" id="click-reset">숫자 초기화</button></div>';
+  V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>무한 클리커</h1><p class="sub">사진을 넣어 나만의 키링을 꾸미고, 축을 눌러 소리를 바꿔 보세요.</p>'+
+    '<div class="card clicker-stage"><label class="clicker-upload" for="clicker-photo"><span>＋</span><b>사진 넣기</b><small>선택한 사진은 이 브라우저에서만 보여요.</small></label><input id="clicker-photo" class="visually-hidden" type="file" accept="image/*">'+
+    '<div class="clicker-keychain"><span class="keychain-ring"></span><button class="clicker-button" id="clicker-button" aria-label="클리커 누르기"><span class="keycap-photo" id="keycap-photo"></span><span class="keycap-label">CLICK</span></button></div>'+
+    '<div class="relax-count" id="click-count">'+relaxCount+'번 눌렀어요</div><div class="clicker-sounds" aria-label="클리커 소리 선택">'+
+    '<button class="sound-choice '+(clickerSoundMode==='click'?'on':'')+'" data-sound="click"><svg viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="M17 9l4 6m0-6-4 6"/></svg><span>찰칵</span></button>'+
+    '<button class="sound-choice '+(clickerSoundMode==='thock'?'on':'')+'" data-sound="thock"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M8 12h8"/></svg><span>도각</span></button>'+
+    '<button class="sound-choice '+(clickerSoundMode==='pop'?'on':'')+'" data-sound="pop"><svg viewBox="0 0 24 24"><path d="M12 3v4m0 10v4M3 12h4m10 0h4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8m0-12.8-2.8 2.8m-7.2 7.2-2.8 2.8"/></svg><span>뽁</span></button></div><button class="btn ghost" id="click-reset">횟수 초기화</button></div>';
   V.querySelector('#relax-back').onclick=back;
-  V.querySelector('#clicker-button').onclick=()=>{relaxCount++;V.querySelector('#click-count').textContent=relaxCount;};
-  V.querySelector('#click-reset').onclick=()=>{relaxCount=0;V.querySelector('#click-count').textContent='0';};
+  V.querySelector('#clicker-photo').onchange=e=>{const file=e.target.files&&e.target.files[0];if(!file||!file.type.startsWith('image/'))return;const reader=new FileReader();reader.onload=()=>{clickerImage=String(reader.result||'');const p=V.querySelector('#keycap-photo');if(p)p.style.backgroundImage='url("'+clickerImage.replace(/"/g,'%22')+'")';};reader.readAsDataURL(file);};
+  if(clickerImage)V.querySelector('#keycap-photo').style.backgroundImage='url("'+clickerImage.replace(/"/g,'%22')+'")';
+  V.querySelector('#clicker-button').onclick=()=>{relaxCount++;V.querySelector('#click-count').textContent=relaxCount+'번 눌렀어요';const b=V.querySelector('#clicker-button');b.classList.remove('pressed');void b.offsetWidth;b.classList.add('pressed');relaxSound(clickerSoundMode);};
+  V.querySelectorAll('[data-sound]').forEach(b=>b.onclick=()=>{clickerSoundMode=b.dataset.sound;V.querySelectorAll('[data-sound]').forEach(x=>x.classList.toggle('on',x===b));relaxSound(clickerSoundMode);});
+  V.querySelector('#click-reset').onclick=()=>{relaxCount=0;V.querySelector('#click-count').textContent='0번 눌렀어요';};
 }
 
 function test(dir) {
