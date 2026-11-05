@@ -756,25 +756,24 @@ button, a, select { touch-action: manipulation; }
 /* 마음 풀기 인터랙션 */
 .relax-menu{display:grid;gap:12px;margin-top:20px}
 .relax-choice{width:100%;display:flex;align-items:center;gap:16px;text-align:left;color:var(--ink);cursor:pointer}
-.relax-choice>span:nth-child(2){flex:1;min-width:0}
-.relax-choice b{display:block;font-size:17px}
-.relax-choice small{display:block;color:var(--sub);font-size:13px;margin-top:3px}
+.relax-choice>span:nth-child(2){flex:1 1 0;min-width:0;max-width:100%}
+.relax-choice b{display:block;font-size:17px;overflow-wrap:break-word}
+.relax-choice small{display:block;color:var(--sub);font-size:13px;margin-top:3px;line-height:1.55;white-space:normal;overflow-wrap:anywhere;word-break:keep-all;max-width:100%}
 .relax-emoji{width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:17px;background:color-mix(in srgb,var(--p1) 45%,#fff);font-size:29px}
 .relax-emoji svg{width:27px;height:27px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .relax-arrow{font-size:28px;color:var(--sub)}
 .relax-foot{margin-top:22px}
 .relax-back{margin:0 0 14px}
 .relax-stage{text-align:center;padding:clamp(18px,4vw,32px)}
-.bracelet-touch{display:grid;place-items:center;width:min(330px,82vw);aspect-ratio:1;margin:8px auto 0;border:0;background:transparent;cursor:grab;touch-action:manipulation}
+.bracelet-touch{display:grid;place-items:center;width:min(330px,82vw);height:330px;margin:8px auto 0;border:0;background:transparent;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
 .bracelet-touch:active{cursor:grabbing}
-.bracelet-wheel{position:relative;display:block;width:230px;height:230px;border-radius:50%;transform:rotateX(58deg) rotateZ(-12deg);transform-style:preserve-3d;animation:bracelet-idle 16s linear infinite}
+.bracelet-wheel{position:relative;display:block;width:230px;height:230px;border-radius:50%;transform:rotateX(calc(58deg + var(--drag-y, 0deg))) rotateZ(var(--drag-x, -12deg));transform-style:preserve-3d;pointer-events:none}
 .bracelet-bead{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px;border-radius:50%;transform:rotate(calc(var(--i)*20deg)) translateY(-94px) rotate(calc(var(--i)*-20deg));background:radial-gradient(circle at 30% 24%,#fff8 0 5%,#e8c5a8 18%,#a66d54 68%,#704638 100%);box-shadow:inset -5px -6px 9px #58352677,0 3px 7px #0004;backface-visibility:hidden}
 .bracelet-bead:nth-child(3n){background:radial-gradient(circle at 30% 24%,#fff9 0 5%,#e7d1a4 18%,#b38c4f 68%,#765b32 100%)}
 .bracelet-bead:nth-child(3n+1){background:radial-gradient(circle at 30% 24%,#fff9 0 5%,#d9b9aa 18%,#9b6c68 68%,#67464a 100%)}
 .bracelet-center{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-weight:700;font-size:14px;text-shadow:0 1px 2px #fff9;transform:rotateX(-58deg)}
-@keyframes bracelet-idle{from{transform:rotateX(58deg) rotateZ(-12deg)}to{transform:rotateX(58deg) rotateZ(348deg)}}
-.bracelet-wheel.roll-burst{animation:bracelet-roll .85s cubic-bezier(.2,.75,.25,1) 1}
-@keyframes bracelet-roll{0%{transform:rotateX(58deg) rotateZ(0deg) scale(1)}45%{transform:rotateX(58deg) rotateZ(210deg) scale(1.06)}100%{transform:rotateX(58deg) rotateZ(360deg) scale(1)}}
+.bracelet-wheel.dragging{filter:drop-shadow(0 8px 10px #0002)}
+@media (prefers-reduced-motion:reduce){.bracelet-wheel{transition:none}}
 .relax-count{font-family:'Jua',sans-serif;font-size:25px;margin:14px 0}
 .bubble-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:430px;margin:8px auto 20px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--p3) 22%,#fff)}
 .bubble{aspect-ratio:1;border:1px solid #ffffffaa;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 28%,#fff 0 7%,#dcecf0 18%,#a8cbd1 70%,#83aeb6 100%);box-shadow:inset -3px -4px 7px #527f8844,0 2px 4px #0002;transition:transform .12s,opacity .18s,box-shadow .18s;touch-action:manipulation}
@@ -1173,12 +1172,15 @@ function relax() {
     V.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{relaxMode=b.dataset.mode;relax();}); return;
   }
   if(relaxMode==='beads') {
-    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="sub">팔찌를 터치하거나 굴리기 버튼을 눌러 보세요. 손끝을 따라 구슬이 빙글빙글 돌아요.</p><div class="card relax-stage"><button class="bracelet-touch" id="bracelet-touch" aria-label="염주 팔찌 굴리기"><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" style="--i:'+i+'"></i>').join('')+'<span class="bracelet-center">굴려 보기</span></span></button><div class="relax-count" id="bead-count">'+relaxCount+'번 굴렸어요</div><p class="sub ctr">들이쉬고… 내쉬고… 구슬이 한 바퀴.</p><button class="btn ghost" id="bead-roll">한 번 굴리기</button><button class="btn ghost" id="bead-reset">횟수 초기화</button></div>';
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="sub">팔찌를 마우스로 잡고 원하는 방향으로 끌어 돌려 보세요.</p><div class="card relax-stage"><button type="button" class="bracelet-touch" id="bracelet-touch" aria-label="염주 팔찌를 마우스로 잡고 드래그해 돌리기"><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" style="--i:'+i+'"></i>').join('')+'<span class="bracelet-center">드래그</span></span></button><div class="relax-count" id="bead-count">'+relaxCount+'번 굴렸어요</div><p class="sub ctr">마우스를 누른 채 움직이면 염주가 따라 돌아가요.</p><button class="btn ghost" id="bead-reset">횟수 초기화</button></div>';
     V.querySelector('#relax-back').onclick=back;
-    const roll=()=>{relaxCount++;const wheel=V.querySelector('.bracelet-wheel');wheel.classList.remove('roll-burst');void wheel.offsetWidth;wheel.classList.add('roll-burst');V.querySelector('#bead-count').textContent=relaxCount+'번 굴렸어요';relaxSound('roll');};
-    V.querySelector('#bracelet-touch').onclick=roll;
-    V.querySelector('#bead-roll').onclick=roll;
-    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;V.querySelector('#bead-count').textContent='0번 굴렸어요';};
+    const surface=V.querySelector('#bracelet-touch'),wheel=V.querySelector('.bracelet-wheel'),count=V.querySelector('#bead-count');
+    let dragging=false,moved=false,lastX=0,lastY=0,rotX=-12,rotY=0;
+    surface.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;dragging=true;moved=false;lastX=e.clientX;lastY=e.clientY;surface.setPointerCapture(e.pointerId);wheel.classList.add('dragging');e.preventDefault();});
+    surface.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;if(Math.abs(dx)+Math.abs(dy)>1)moved=true;rotX+=dx*.85;rotY=Math.max(-45,Math.min(45,rotY+dy*.55));wheel.style.setProperty('--drag-x',rotX+'deg');wheel.style.setProperty('--drag-y',rotY+'deg');});
+    const finishDrag=e=>{if(!dragging)return;dragging=false;wheel.classList.remove('dragging');if(moved){relaxCount++;count.textContent=relaxCount+'번 굴렸어요';relaxSound('roll');}if(surface.hasPointerCapture(e.pointerId))surface.releasePointerCapture(e.pointerId);};
+    surface.addEventListener('pointerup',finishDrag);surface.addEventListener('pointercancel',finishDrag);
+    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;count.textContent='0번 굴렸어요';};
     return;
   }
   if(relaxMode==='bubbles') {
