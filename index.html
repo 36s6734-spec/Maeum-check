@@ -725,6 +725,30 @@ button, a, select { touch-action: manipulation; }
   .home-menu-card { min-height: 172px; }
 }
 
+
+/* 타이포그래피와 카드 안 정보의 정돈 */
+.ttl {
+  font-size: clamp(44px, 6vw, 58px);
+  line-height: 1.15;
+  letter-spacing: -.045em;
+  margin: 18px 0 12px;
+}
+.home-menu-card .sub {
+  width: 100%;
+  max-width: none;
+  white-space: nowrap;
+  word-break: keep-all;
+  font-size: clamp(12px, 1.35vw, 14px);
+  letter-spacing: -.025em;
+  line-height: 1.5;
+}
+.home-menu-card { padding-left: 10px; padding-right: 10px; }
+.opt svg { display: block; margin: 0 auto 5px; }
+@media (max-width: 640px) {
+  .ttl { font-size: clamp(42px, 11vw, 52px); }
+  .home-menu-card .sub { font-size: 14px; }
+}
+
 </style>
 </head>
 <body>
@@ -944,6 +968,31 @@ function applyTheme(id, save=true) {
     root.style.setProperty('--p' + (i+1), c);
   });
 
+  // 진단 표정 색상은 팔레트의 명도 순서대로 밝은색에서 어두운색으로 배열
+  const toRgb = hex => {
+    const h = hex.replace('#','');
+    return [0,2,4].map(i => parseInt(h.slice(i,i+2),16));
+  };
+  const toHex = rgb => '#' + rgb.map(v => Math.round(v).toString(16).padStart(2,'0')).join('');
+  const luminance = hex => {
+    const [r,g,b] = toRgb(hex).map(v => {
+      v /= 255;
+      return v <= .04045 ? v/12.92 : Math.pow((v+.055)/1.055,2.4);
+    });
+    return .2126*r + .7152*g + .0722*b;
+  };
+  const mix = (a,b,t) => toHex(toRgb(a).map((v,i)=>v+(toRgb(b)[i]-v)*t));
+  const stops = [...p.roles].sort((a,b)=>luminance(b)-luminance(a));
+  const faceColors = Array.from({length:5},(_,i)=>{
+    const pos = i*(stops.length-1)/4;
+    const left = Math.floor(pos), right = Math.min(stops.length-1,left+1);
+    return mix(stops[left],stops[right],pos-left);
+  });
+  faceColors.forEach((color,i)=>{
+    root.style.setProperty('--face-'+(i+1),color);
+    root.style.setProperty('--face-ink-'+(i+1),luminance(color)<.28?'#FFFFFF':'#20202A');
+  });
+
   root.style.setProperty('--button',p.roles[3]);
   root.style.setProperty('--button-text',p.buttonText);
   root.dataset.theme = p.id;
@@ -964,14 +1013,20 @@ function applyTheme(id, save=true) {
 const V = document.getElementById('view');
 let stats = null, S, lastE3 = '';
 
-const face = (c,m) => `
-<svg viewBox="0 0 40 40" aria-hidden="true">
-  <circle cx="20" cy="20" r="20" fill="var(--p${(c%4)+1})"/>
-  <circle cx="14" cy="17" r="2.2" fill="var(--ink)"/>
-  <circle cx="26" cy="17" r="2.2" fill="var(--ink)"/>
-  <path d="${MOUTH[m]}" fill="none" stroke="var(--ink)"
-    stroke-width="2.2" stroke-linecap="round"/>
-</svg>`;
+const face = (c,m) => {
+  const tone = (c%5)+1;
+  return `
+  <svg viewBox="0 0 40 40" aria-hidden="true">
+    <circle cx="20" cy="20" r="20" fill="var(--face-${tone},var(--p${tone}))"/>
+    <g fill="var(--face-ink-${tone},var(--ink))">
+      <circle cx="14" cy="17" r="2.2"/>
+      <circle cx="26" cy="17" r="2.2"/>
+    </g>
+    <path d="${MOUTH[m]}" fill="none"
+      stroke="var(--face-ink-${tone},var(--ink))"
+      stroke-width="2.2" stroke-linecap="round"/>
+  </svg>`;
+};
 
 const mean = a => a.reduce((x,y)=>x+y,0)/a.length;
 const f1 = x => x.toFixed(1);
@@ -1022,19 +1077,19 @@ function home() {
       <a class="card home-menu-card" href="#test">
         <span class="ib tone1">${ico('test')}</span>
         <h2>자가진단</h2>
-        <span class="sub">16문항으로 스트레스 수준 점검하기</span>
+        <span class="sub">16문항 스트레스 점검</span>
       </a>
 
       <a class="card home-menu-card" href="#result">
         <span class="ib tone2">${ico('result')}</span>
         <h2>결과 확인</h2>
-        <span class="sub">내 결과와 지난 결과 비교하기</span>
+        <span class="sub">내 결과와 이전 기록 비교</span>
       </a>
 
       <a class="card home-menu-card" href="#map">
         <span class="ib tone4">${ico('map')}</span>
         <h2>지도</h2>
-        <span class="sub">근처 도움 기관 찾아보기</span>
+        <span class="sub">가까운 상담·도움 기관 찾기</span>
       </a>
     </section>
 
