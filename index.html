@@ -515,6 +515,10 @@ button:focus-visible {
   cursor:pointer;
 }
 .theme-launcher svg { width:21px;height:21px; }
+.bead-easter-egg{position:fixed;z-index:30;right:max(8px,calc((100vw - 820px)/2 - 122px));bottom:96px;width:38px;height:38px;display:grid;place-items:center;padding:5px;border:1px solid color-mix(in srgb,var(--p3) 18%,transparent);border-radius:50%;background:color-mix(in srgb,var(--card) 92%,transparent);color:var(--sub);box-shadow:0 3px 12px rgba(25,28,38,.09);opacity:.72;cursor:pointer;transition:opacity .18s,transform .18s,box-shadow .18s}
+.bead-easter-egg svg{width:27px;height:27px;display:block}
+.bead-easter-egg:hover,.bead-easter-egg:focus-visible{opacity:1;transform:scale(1.08);box-shadow:0 5px 16px rgba(25,28,38,.15)}
+.bead-easter-egg:focus-visible{outline:3px solid var(--p3);outline-offset:3px}
 .theme-launcher:focus-visible { outline:3px solid var(--p3);outline-offset:3px; }
 
 .theme-panel {
@@ -629,6 +633,7 @@ button, a, select { touch-action: manipulation; }
   }
   .nav svg { width: 17px; height: 17px; }
   .theme-launcher { right: 16px; bottom: 82px; width: 42px; height: 42px; }
+  .bead-easter-egg{right:66px;bottom:84px;width:34px;height:34px}
   .theme-panel {
     right: 12px;
     bottom: 134px;
@@ -872,6 +877,15 @@ button, a, select { touch-action: manipulation; }
 <div class="app">
   <div id="err" class="notice err" hidden></div>
   <main id="view"></main>
+  <button type="button" class="bead-easter-egg" id="bead-easter-egg" aria-label="숨겨진 염주 열기" title="작은 쉼표">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M8 10.5c3.5-5 12.5-5 16 0 3.5 5-1 13-8 13s-11.5-8-8-13Z" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
+      <circle cx="8" cy="10.5" r="3" fill="#c89b70"/><circle cx="13.5" cy="6.8" r="3" fill="#d9b9aa"/>
+      <circle cx="20" cy="7.2" r="3" fill="#c89b70"/><circle cx="24" cy="12.5" r="3" fill="#d9b9aa"/>
+      <circle cx="22" cy="19" r="3" fill="#c89b70"/><circle cx="15.5" cy="23.5" r="3" fill="#d9b9aa"/>
+      <circle cx="9.5" cy="19.5" r="3" fill="#c89b70"/>
+    </svg>
+  </button>
   <button type="button" class="theme-launcher" id="theme-launcher"
     aria-label="컬러 테마 변경" aria-expanded="false" aria-controls="theme-panel"
     title="컬러 테마 변경">
@@ -1237,7 +1251,6 @@ function relax() {
   const back=()=>{relaxMode='menu';relax();};
   if(relaxMode==='menu') {
     V.innerHTML='<h1>마음 풀기</h1><p class="sub">잠깐 멈춰서, 손이 가는 걸 가볍게 눌러 봐요.</p><div class="relax-menu">'+
-      '<button class="card relax-choice" data-mode="beads"><span class="relax-emoji">📿</span><span><b>염주 굴리기</b><small>팔찌를 손끝으로 굴리며 천천히 쉬어 가요.</small></span><span class="relax-arrow">›</span></button>'+
       '<button class="card relax-choice" data-mode="bubbles"><span class="relax-emoji">🫧</span><span><b>뽁뽁이 터뜨리기</b><small>마음 가는 대로 톡톡 눌러 터뜨려요.</small></span><span class="relax-arrow">›</span></button>'+
       '<button class="card relax-choice" data-mode="clicker"><span class="relax-emoji">👆</span><span><b>무한 클리커</b><small>아무 생각 없이 원하는 만큼 눌러 봐요.</small></span><span class="relax-arrow">›</span></button></div><p class="sub ctr relax-foot">기록이나 점수 경쟁 없이, 잠깐 쉬어 가는 공간이에요.</p>';
     V.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{relaxMode=b.dataset.mode;relax();}); return;
@@ -2318,6 +2331,11 @@ const closeThemePanel=()=>{
   themePanel.hidden=true;
   themeLauncher.setAttribute('aria-expanded','false');
 };
+document.getElementById('bead-easter-egg').addEventListener('click',()=>{
+  relaxMode='beads';
+  if(location.hash==='#relax') relax();
+  else location.hash='relax';
+});
 themeLauncher.addEventListener('click',()=>{
   const opening=themePanel.hidden;
   themePanel.hidden=!opening;
