@@ -1289,7 +1289,7 @@ function relax() {
     const completeMala=()=>{
       if(completionStarted)return;
       completionStarted=true;
-      beads.forEach((b,i)=>{const angle=(-Math.PI/2)+(i*2.399963);const distance=76+(i%5)*25;b.style.setProperty('--burst-x',Math.round(Math.cos(angle)*distance)+'px');b.style.setProperty('--burst-y',Math.round(Math.sin(angle)*distance*.72)+'px');b.style.setProperty('--burst-delay',(i%6)*.035+'s');});
+      beads.forEach((b,i)=>{const angle=(-Math.PI/2)+(i*2.399963);const distance=62+((i*37)%89);const x=Math.cos(angle)*distance;const y=Math.sin(angle)*distance*.72+((i*17)%35);b.style.setProperty('--burst-x',Math.round(x)+'px');b.style.setProperty('--burst-y',Math.round(y)+'px');b.style.setProperty('--burst-delay',(((i*13)%17)*.012).toFixed(3)+'s');});
       surface.classList.add('bead-burst');
       relaxSound('pop');
       V.querySelector('#bead-reset').disabled=true;
