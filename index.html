@@ -1275,6 +1275,7 @@ function relax() {
     const completeMala=()=>{
       if(completionStarted)return;
       completionStarted=true;
+      beads.forEach((b,i)=>{const angle=(-Math.PI/2)+(i*2.399963);const distance=76+(i%5)*25;b.style.setProperty('--burst-x',Math.round(Math.cos(angle)*distance)+'px');b.style.setProperty('--burst-y',Math.round(Math.sin(angle)*distance*.72)+'px');b.style.setProperty('--burst-delay',(i%6)*.035+'s');});
       surface.classList.add('bead-burst');
       relaxSound('pop');
       V.querySelector('#bead-reset').disabled=true;
