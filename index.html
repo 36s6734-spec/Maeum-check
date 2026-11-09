@@ -747,6 +747,18 @@ button, a, select { touch-action: manipulation; }
   line-height: 1.5;
 }
 .home-menu-card { padding-left: 10px; padding-right: 10px; }
+/* 홈 메뉴 설명이 카드 밖으로 밀려나지 않도록 줄바꿈과 너비 제한 */
+.home-menu-card { width:100%; min-width:0; }
+.home-menu-card .sub {
+  display:block;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:keep-all;
+  text-align:center;
+}
 .opt svg { display: block; margin: 0 auto 5px; }
 @media (max-width: 640px) {
   .ttl { font-size: clamp(42px, 11vw, 52px); }
