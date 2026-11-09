@@ -792,6 +792,18 @@ button, a, select { touch-action: manipulation; }
 .bracelet-wheel{pointer-events:none}
 @media (prefers-reduced-motion:reduce){.bracelet-bead{transition:none}}
 .relax-count{font-family:'Jua',sans-serif;font-size:25px;margin:14px 0}
+.bracelet-touch.bead-burst .bracelet-bead{animation:bead-burst .85s cubic-bezier(.15,.75,.25,1) forwards;pointer-events:none}
+.bracelet-touch.bead-burst .bracelet-bead:nth-child(3n){--burst-x:112px;--burst-y:-90px}
+.bracelet-touch.bead-burst .bracelet-bead:nth-child(3n+1){--burst-x:-118px;--burst-y:68px}
+.bracelet-touch.bead-burst .bracelet-bead:nth-child(3n+2){--burst-x:24px;--burst-y:132px}
+@keyframes bead-burst{0%{opacity:1;transform:rotate(calc(var(--slot)*20deg)) translateY(-94px) rotate(calc(var(--slot)*-20deg)) scale(1)}65%{opacity:1}100%{opacity:0;transform:translate(var(--burst-x),var(--burst-y)) scale(.35) rotate(160deg)}}
+.bead-complete{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;animation:bead-message-in .7s ease both}
+.bead-complete h2{font-family:'Jua',sans-serif;font-size:clamp(25px,5vw,34px);margin:0;color:var(--ink)}
+.bead-complete p{margin:0;color:var(--sub);line-height:1.7}
+.bead-complete .bracelet-wheel{width:170px;height:170px}
+.bead-complete .bracelet-bead{width:22px;height:22px;margin:-11px;transform:rotate(calc(var(--slot)*20deg)) translateY(-68px) rotate(calc(var(--slot)*-20deg))}
+@keyframes bead-message-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.bracelet-touch.bead-burst .bracelet-bead,.bead-complete{animation:none}}
 .bubble-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:430px;margin:8px auto 20px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--p3) 22%,#fff)}
 .bubble{aspect-ratio:1;border:1px solid #ffffffaa;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 28%,#fff 0 7%,#dcecf0 18%,#a8cbd1 70%,#83aeb6 100%);box-shadow:inset -3px -4px 7px #527f8844,0 2px 4px #0002;transition:transform .12s,opacity .18s,box-shadow .18s;touch-action:manipulation}
 .bubble:active{transform:scale(.88)}
@@ -1256,12 +1268,27 @@ function relax() {
     V.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{relaxMode=b.dataset.mode;relax();}); return;
   }
   if(relaxMode==='beads') {
-    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="bracelet-hint">드래그해서 한 알씩 굴리세요</p><div class="card relax-stage"><div class="bracelet-touch" id="bracelet-touch" aria-label="염주 구슬을 하나씩 드래그해 넘기기"><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" data-bead="'+i+'" style="--slot:'+i+'"></i>').join('')+'</span></div><div class="relax-count" id="bead-count">'+relaxCount+'알 굴렸어요</div><button class="btn ghost" id="bead-reset">횟수 초기화</button></div>';
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>염주 굴리기</h1><p class="bracelet-hint">드래그해서 한 알씩 굴리세요 · 108알을 모으면 작은 의식이 완성돼요</p><div class="card relax-stage"><div class="bracelet-touch" id="bracelet-touch" aria-label="염주 구슬을 하나씩 드래그해 넘기기"><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" data-bead="'+i+'" style="--slot:'+i+'"></i>').join('')+'</span></div><div class="relax-count" id="bead-count">'+relaxCount+' / 108알 굴렸어요</div><button class="btn ghost" id="bead-reset">횟수 초기화</button></div>';
     V.querySelector('#relax-back').onclick=back;
     const surface=V.querySelector('#bracelet-touch'),count=V.querySelector('#bead-count');
     const beads=[...V.querySelectorAll('.bracelet-bead')];
     let active=null,startAngle=0,lastAngle=0,direction=1,startX=0,startY=0,moved=false;
     const angleAt=(x,y)=>{const r=surface.getBoundingClientRect();return Math.atan2(y-(r.top+r.height/2),x-(r.left+r.width/2));};
+    let completionStarted=false;
+    const completeMala=()=>{
+      if(completionStarted)return;
+      completionStarted=true;
+      surface.classList.add('bead-burst');
+      relaxSound('pop');
+      V.querySelector('#bead-reset').disabled=true;
+      setTimeout(()=>{
+        if(!V.isConnected)return;
+        const stage=V.querySelector('.relax-stage');
+        if(!stage)return;
+        stage.innerHTML='<div class="bead-complete"><h2>번뇌가 해소되었습니다.</h2><p>108번의 마음 돌봄을 마쳤어요.<br>가벼워진 마음으로 다시 시작해 보세요.</p><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" style="--slot:'+i+'"></i>').join('')+'</span><p class="bracelet-hint">새로운 염주가 준비되었어요.</p><button class="btn ghost" id="bead-again">새 염주로 다시 시작</button></div>';
+        stage.querySelector('#bead-again').onclick=()=>{relaxCount=0;relax();};
+      },900);
+    };
     beads.forEach(bead=>{
       bead.addEventListener('pointerdown',e=>{
         if(e.pointerType==='mouse'&&e.button!==0)return;
@@ -1287,14 +1314,19 @@ function relax() {
           const target=(slot+direction+18)%18;
           const other=beads.find(b=>Number(b.style.getPropertyValue('--slot'))===target);
           if(other){other.style.setProperty('--slot',String(slot));bead.style.setProperty('--slot',String(target));}
-          relaxCount++;count.textContent=relaxCount+'알 굴렸어요';relaxSound('roll');
+          if(relaxCount<108){
+            relaxCount++;
+            count.textContent=relaxCount+' / 108알 굴렸어요';
+            relaxSound('roll');
+            if(relaxCount===108)completeMala();
+          }
         }
         if(bead.hasPointerCapture(e.pointerId))bead.releasePointerCapture(e.pointerId);
         active=null;
       };
       bead.addEventListener('pointerup',finish);bead.addEventListener('pointercancel',finish);
     });
-    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;count.textContent='0알 굴렸어요';beads.forEach((b,i)=>b.style.setProperty('--slot',String(i)));};
+    V.querySelector('#bead-reset').onclick=()=>{relaxCount=0;count.textContent='0 / 108알 굴렸어요';beads.forEach((b,i)=>{b.style.setProperty('--slot',String(i));b.style.removeProperty('--lift-x');b.style.removeProperty('--lift-y');});};
     return;
   }
   if(relaxMode==='bubbles') {
