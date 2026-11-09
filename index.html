@@ -1297,9 +1297,9 @@ function relax() {
         if(!V.isConnected)return;
         const stage=V.querySelector('.relax-stage');
         if(!stage)return;
-        stage.innerHTML='<div class="bead-complete"><h2>번뇌가 해소되었습니다.</h2><p>108번의 마음 돌봄을 마쳤어요.<br>가벼워진 마음으로 다시 시작해 보세요.</p><span class="bracelet-wheel">'+Array.from({length:18},(_,i)=>'<i class="bracelet-bead" style="--slot:'+i+'"></i>').join('')+'</span><p class="bracelet-hint">새로운 염주가 준비되었어요.</p><button class="btn ghost" id="bead-again">새 염주로 다시 시작</button></div>';
+        stage.innerHTML='<div class="bead-complete"><div class="bead-debris" aria-hidden="true">'+Array.from({length:108},(_,i)=>'<i style="left:'+((i*47)%97)+'%;top:'+((i*29)%88+6)+'%"></i>').join('')+'</div><h2>번뇌가 해소되었습니다.</h2><p>108번의 마음 돌봄을 마쳤어요.<br>가벼워진 마음으로 다시 시작해 보세요.</p><span class="bracelet-wheel">'+Array.from({length:108},(_,i)=>'<i class="bracelet-bead" style="--slot:'+i+'"></i>').join('')+'</span><p class="bracelet-hint">새로운 염주가 준비되었어요.</p><button class="btn ghost" id="bead-again">새 염주로 다시 시작</button></div>';
         stage.querySelector('#bead-again').onclick=()=>{relaxCount=0;relax();};
-      },900);
+      },3650);
     };
     beads.forEach(bead=>{
       bead.addEventListener('pointerdown',e=>{
