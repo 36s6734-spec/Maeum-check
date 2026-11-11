@@ -786,9 +786,9 @@ button, a, select { touch-action: manipulation; }
 .relax-back{margin:0 0 14px}
 .relax-stage{text-align:center;padding:clamp(18px,4vw,32px)}
 .breath-stage{max-width:620px;margin:20px auto 0;text-align:center;padding:clamp(22px,5vw,38px)}
-.breath-orb{position:relative;width:min(66vw,260px);height:min(66vw,260px);max-width:260px;max-height:260px;margin:12px auto 22px;border:1.5px solid color-mix(in srgb,var(--p3) 45%,#fff);border-radius:50%;background:linear-gradient(145deg,#ffffff66,#ffffff12);box-shadow:inset 0 0 28px #ffffff88,0 12px 34px #243b5310;overflow:hidden;isolation:isolate}
-.breath-water{position:absolute;left:-12%;bottom:0;width:124%;height:18%;border-radius:48% 52% 0 0 / 12% 15% 0 0;background:linear-gradient(180deg,#b8d9d3bb,#80b7b1dd);box-shadow:0 -3px 14px #a6d0c855;transition:height .1s linear}
-.breath-water:before{content:"";position:absolute;left:-5%;top:-9px;width:110%;height:18px;border-radius:50%;background:#d9eee8bb;filter:blur(2px)}
+.breath-orb{position:relative;width:min(66vw,260px);height:min(66vw,260px);max-width:260px;max-height:260px;margin:12px auto 22px;border:1.5px solid color-mix(in srgb,var(--p3) 45%,#fff);border-radius:50%;background:linear-gradient(145deg,#f5fdff88,#d8f6ff22);box-shadow:inset 0 0 28px #ffffffaa,0 12px 34px #1686b81a;overflow:hidden;isolation:isolate}
+.breath-water{position:absolute;left:-12%;bottom:0;width:124%;height:18%;border-radius:48% 52% 0 0 / 12% 15% 0 0;background:linear-gradient(180deg,#8de4e9e8 0%,#39b9d1ed 48%,#1686b8f2 100%);box-shadow:0 -3px 18px #39b9d177;transition:height .1s linear}
+.breath-water:before{content:"";position:absolute;left:-5%;top:-9px;width:110%;height:18px;border-radius:50%;background:#d8fbffdd;filter:blur(2px)}
 .breath-glass-shine{position:absolute;inset:12px;border:1px solid #ffffff9c;border-radius:50%;pointer-events:none;z-index:2}
 .breath-glass-shine:before{content:"";position:absolute;left:17%;top:13%;width:18%;height:34%;border-left:3px solid #fff9;border-radius:50%;transform:rotate(18deg);filter:blur(.4px)}
 .breath-orb-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;color:var(--ink);text-shadow:0 1px 8px #fff9}
@@ -1321,13 +1321,13 @@ function relax() {
   const back=()=>{relaxMode='menu';relax();};
   if(relaxMode==='menu') {
     V.innerHTML='<h1>마음 풀기</h1><p class="sub">잠깐 멈춰서, 손이 가는 걸 가볍게 눌러 봐요.</p><div class="relax-menu">'+
-      '<button class="card relax-choice" data-mode="breathing"><span class="relax-emoji">◌</span><span><b>4·6 호흡하기</b><small>4초 들이쉬고 6초 내쉬며 천천히 쉬어 가요.</small></span><span class="relax-arrow">›</span></button>'+
+      '<button class="card relax-choice" data-mode="breathing"><span class="relax-emoji">💧</span><span><b>호흡</b><small>4초 들이쉬고 6초 내쉬며 천천히 쉬어 가요.</small></span><span class="relax-arrow">›</span></button>'+
       '<button class="card relax-choice" data-mode="bubbles"><span class="relax-emoji">🫧</span><span><b>뽁뽁이 터뜨리기</b><small>마음 가는 대로 톡톡 눌러 터뜨려요.</small></span><span class="relax-arrow">›</span></button>'+
       '<button class="card relax-choice" data-mode="clicker"><span class="relax-emoji">👆</span><span><b>무한 클리커</b><small>아무 생각 없이 원하는 만큼 눌러 봐요.</small></span><span class="relax-arrow">›</span></button></div><p class="sub ctr relax-foot">기록이나 점수 경쟁 없이, 잠깐 쉬어 가는 공간이에요.</p>';
     V.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{relaxMode=b.dataset.mode;relax();}); return;
   }
   if(relaxMode==='breathing') {
-    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>4·6 호흡하기</h1><p class="sub">물결을 바라보며 편안한 호흡을 따라가 보세요.</p>'+
+    V.innerHTML='<button class="btn ghost relax-back" id="relax-back">← 마음 풀기</button><h1>호흡</h1><p class="sub">물결을 바라보며 한 번의 호흡에 집중해 보세요.</p>'+
       '<div class="card breath-stage"><div class="breath-orb" role="img" aria-label="호흡에 따라 물이 차오르고 내려가는 원형 물시계"><div class="breath-water" id="breath-water"></div><div class="breath-glass-shine"></div><div class="breath-orb-content"><div class="breath-phase" id="breath-phase">들이쉬기</div><div class="breath-number" id="breath-number">4</div><div class="breath-caption">초</div></div></div>'+
       '<div class="breath-progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div><p class="breath-status" id="breath-status">코로 부드럽게 숨을 들이쉬어요.</p>'+
       '<div class="breath-controls"><button class="btn primary" id="breath-toggle">시작하기</button><button class="btn ghost" id="breath-reset">처음부터</button></div>'+
@@ -1346,14 +1346,15 @@ function relax() {
     const tick=()=>{
       if(!V.contains(water)){stop();return;}
       remaining=Math.max(0,(deadline-Date.now())/1000);
-      if(remaining<=0){phase=phase==='in'?'out':'in';remaining=phase==='in'?4:6;deadline=Date.now()+remaining*1000;}
+      if(remaining<=0){if(phase==='out'){remaining=0;running=false;if(window.__breathTimer)clearInterval(window.__breathTimer);window.__breathTimer=null;phaseEl.textContent='완료';num.textContent='✓';status.textContent='한 번의 호흡을 마쳤어요. 편안한 상태로 잠시 머물러 보세요.';water.style.height='18%';toggle.textContent='다시 하기';toggle.dataset.finished='true';dots.forEach(d=>d.classList.add('on'));return;}phase='out';remaining=6;deadline=Date.now()+6000;}
       paint();
     };
     toggle.onclick=()=>{
+      if(toggle.dataset.finished==='true'){phase='in';remaining=4;toggle.dataset.finished='false';water.style.height='18%';paint();}
       if(running){remaining=Math.max(0,(deadline-Date.now())/1000);stop();return;}
       running=true;deadline=Date.now()+remaining*1000;toggle.textContent='일시정지';tick();window.__breathTimer=setInterval(tick,100);
     };
-    V.querySelector('#breath-reset').onclick=()=>{stop();phase='in';remaining=4;water.style.height='18%';toggle.textContent='시작하기';paint();};
+    V.querySelector('#breath-reset').onclick=()=>{stop();phase='in';remaining=4;water.style.height='18%';toggle.dataset.finished='false';toggle.textContent='시작하기';paint();};
     paint();return;
   }
   if(relaxMode==='beads') {
