@@ -787,8 +787,13 @@ button, a, select { touch-action: manipulation; }
 .relax-stage{text-align:center;padding:clamp(18px,4vw,32px)}
 .breath-stage{max-width:620px;margin:20px auto 0;text-align:center;padding:clamp(22px,5vw,38px)}
 .breath-orb{position:relative;width:min(66vw,260px);height:min(66vw,260px);max-width:260px;max-height:260px;margin:12px auto 22px;border:1.5px solid color-mix(in srgb,var(--p3) 45%,#fff);border-radius:50%;background:linear-gradient(145deg,#f5fdff88,#d8f6ff22);box-shadow:inset 0 0 28px #ffffffaa,0 12px 34px #1686b81a;overflow:hidden;isolation:isolate}
-.breath-water{position:absolute;left:-12%;bottom:0;width:124%;height:18%;border-radius:48% 52% 0 0 / 12% 15% 0 0;background:linear-gradient(180deg,#8de4e9e8 0%,#39b9d1ed 48%,#1686b8f2 100%);box-shadow:0 -3px 18px #39b9d177;transition:height .1s linear}
-.breath-water:before{content:"";position:absolute;left:-5%;top:-9px;width:110%;height:18px;border-radius:50%;background:#d8fbffdd;filter:blur(2px)}
+.breath-water{position:absolute;left:-14%;bottom:0;width:128%;height:18%;border-radius:48% 52% 0 0 / 12% 15% 0 0;background:linear-gradient(180deg,#f5ffffd9 0%,#b9f2f5c9 24%,#70d9e8d9 62%,#3caed2df 100%);box-shadow:0 -3px 22px #a8f0f477,inset 0 8px 18px #ffffff88;transition:height .12s ease-out}
+.breath-water:before{content:"";position:absolute;left:-7%;top:-13px;width:114%;height:27px;border-radius:48% 52% 50% 50%;background:linear-gradient(180deg,#ffffffef 0%,#e5fcffdc 55%,#b8f4f4a8 100%);filter:blur(1px);box-shadow:0 2px 12px #d9ffff99;animation:breath-wave 3.2s ease-in-out infinite alternate}
+.breath-water:after{content:"";position:absolute;left:-18%;top:-7px;width:136%;height:23px;border-radius:50%;background:#d7fbff88;filter:blur(5px);animation:breath-wave 4.4s ease-in-out infinite alternate-reverse}
+@keyframes breath-wave{0%{transform:translateX(-2%) translateY(2px) rotate(-2deg) scaleX(1.02)}50%{transform:translateX(2%) translateY(-2px) rotate(1.5deg) scaleX(.98)}100%{transform:translateX(-1%) translateY(1px) rotate(-1deg) scaleX(1.03)}}
+.breath-orb{background:linear-gradient(145deg,#ffffffa8,#eafaff38);box-shadow:inset 0 0 34px #ffffffc9,0 12px 34px #1686b812}
+.breath-glass-shine{border-color:#ffffffd9;box-shadow:inset 0 0 18px #ffffff42}
+
 .breath-glass-shine{position:absolute;inset:12px;border:1px solid #ffffff9c;border-radius:50%;pointer-events:none;z-index:2}
 .breath-glass-shine:before{content:"";position:absolute;left:17%;top:13%;width:18%;height:34%;border-left:3px solid #fff9;border-radius:50%;transform:rotate(18deg);filter:blur(.4px)}
 .breath-orb-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;color:var(--ink);text-shadow:0 1px 8px #fff9}
@@ -1338,7 +1343,9 @@ function relax() {
     const paint=()=>{
       const duration=phase==='in'?4:6,elapsed=duration-remaining,progress=Math.max(0,Math.min(1,elapsed/duration));
       phaseEl.textContent=phase==='in'?'들이쉬기':'내쉬기';num.textContent=String(Math.max(1,Math.ceil(remaining)));
-      water.style.height=(phase==='in'?18+64*progress:82-64*progress)+'%';
+      const target=phase==='in'?18+64*progress:82-64*progress;
+      water.style.height=target+'%';
+      water.style.setProperty('--wave-level',target+'%');
       status.textContent=phase==='in'?'코로 부드럽게 숨을 들이쉬어요.':'입술을 가볍게 오므리고 천천히 내쉬어요.';
       dots.forEach((d,i)=>d.classList.toggle('on',phase==='in'?i<2:i>=2));
     };
