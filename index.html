@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="./favicon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
 <style>
 :root {
   --p1:#F0E6D8;
@@ -957,29 +957,6 @@ button, a, select { touch-action: manipulation; }
 .report-area.is-focus .bar i{background:var(--p2)}
 @media(max-width:380px){.report-status{gap:11px}.report-face{width:64px;height:64px;border-radius:18px}.report-face svg{width:54px;height:54px}.report-area .lab{font-size:13px}}
 
-/* 마음 다이어리 */
-.diary-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:8px 0 18px}
-.diary-head .ttl{margin:0;text-align:left}.diary-head>svg{width:34px;height:34px;flex:none;color:var(--p3)}
-.diary-paper{position:relative;overflow:hidden;background:#fffaf0;border:1px solid #eee3d2;border-radius:18px;padding:22px 20px 20px;box-shadow:0 5px 18px rgba(70,55,40,.08);color:#51483f}
-.diary-paper:before{content:'';position:absolute;inset:0 auto 0 42px;width:1px;background:rgba(210,145,145,.28);pointer-events:none}
-.diary-paper>*{position:relative;z-index:1}
-.diary-date{width:100%;border:0;border-bottom:1px solid #e8dccb;background:transparent;color:#75695d;padding:5px 0 12px;font:inherit;font-size:14px;outline:none}
-.diary-prompt{font-size:14px;font-weight:700;color:#766b61;margin:17px 0 10px}
-.diary-moods{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-.diary-mood{border:1px solid transparent;border-radius:13px;background:rgba(239,231,218,.55);padding:8px 3px 6px;color:#766b61;font:inherit;font-size:11px;cursor:pointer;min-width:0}
-.diary-mood svg{display:block;width:39px;height:39px;margin:0 auto 4px}
-.diary-mood.on{border-color:var(--p3);background:color-mix(in srgb,var(--p3) 18%,#fffaf0);box-shadow:0 0 0 2px color-mix(in srgb,var(--p3) 12%,transparent)}
-.diary-writing{display:block;width:100%;min-height:190px;resize:vertical;border:0;outline:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 32px,#e8dfd3 33px,#e8dfd3 34px);background-position:0 4px;color:#62584f;padding:3px 4px 0 13px;font:17px/34px 'Gaegu','Gowun Dodum',sans-serif}
-.diary-writing::placeholder{color:#b7aa9b}
-.diary-note{display:block;width:100%;min-height:62px;resize:vertical;border:0;border-bottom:1px dashed #dfd2c2;background:transparent;color:#766b61;padding:5px 4px;font:16px/1.8 'Gaegu','Gowun Dodum',sans-serif;outline:0}
-.diary-actions{display:flex;gap:8px;margin-top:16px}.diary-actions .btn{flex:1}
-.diary-list{display:grid;gap:9px;margin-top:12px}
-.diary-entry{width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:15px;padding:12px 14px;color:var(--ink);font:inherit;cursor:pointer}
-.diary-entry-face{width:42px;height:42px;flex:none}.diary-entry-face svg{width:100%;height:100%}
-.diary-entry-copy{min-width:0;flex:1}.diary-entry-copy b,.diary-entry-copy small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.diary-entry-copy small{font-size:12px;color:var(--sub);margin-top:2px}
-.diary-empty{padding:18px;text-align:center;color:var(--sub);font-size:13px;background:var(--card);border-radius:15px}
-@media(max-width:640px){.diary-paper{padding:18px 14px}.diary-paper:before{left:30px}.diary-mood svg{width:33px;height:33px}.diary-mood{font-size:10px}.diary-writing{font-size:16px}}
 </style>
 </head>
 <body>
@@ -1018,7 +995,6 @@ button, a, select { touch-action: manipulation; }
     <a href="#test">진단</a>
     <a href="#result">결과</a>
     <a href="#map">지도</a>
-    <a href="#diary">기록</a>
   </nav>
 </div>
 
@@ -1323,7 +1299,7 @@ const IC = {
 home:'<path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',
 test:'<rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/>',
 result:'<path d="M5 20V11M12 20V4M19 20v-6"/>',
-map:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>', diary:'<path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v18H7.5A2.5 2.5 0 0 1 5 17.5z"/><path d="M5 5h15M5 17h15M9 8h7M9 12h5"/>', relax:'<path d="M20 4c-8 0-14 3-14 10 0 3 2 5 5 5 7 0 9-7 9-15Z"/><path d="M4 21c3-5 7-8 12-11"/>'
+map:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>', relax:'<path d="M20 4c-8 0-14 3-14 10 0 3 2 5 5 5 7 0 9-7 9-15Z"/><path d="M4 21c3-5 7-8 12-11"/>'
 };
 
 const ico = k => `
@@ -1336,31 +1312,6 @@ function anim(d) {
   V.classList.remove('in','inl');
   void V.offsetWidth;
   V.classList.add(d>0?'in':'inl');
-}
-
-let diaryDraft={date:'',mood:-1,body:'',note:''};
-function diaryToday(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');}
-function diaryRead(){try{return JSON.parse(localStorage.getItem('mc.diary')||'[]');}catch(e){return [];}}
-function diary(){
-  const records=diaryRead();
-  if(!diaryDraft.date) diaryDraft={date:diaryToday(),mood:-1,body:'',note:''};
-  const saved=records.find(x=>x.date===diaryDraft.date);
-  if(saved&&diaryDraft.mood<0&&!diaryDraft.body&&!diaryDraft.note) diaryDraft={...saved};
-  V.innerHTML='<div class="diary-head"><div><h1 class="ttl">마음 다이어리</h1><p class="sub">오늘의 마음을 천천히 적어 보세요.</p></div>'+ico('diary')+'</div>'+
-    '<section class="diary-paper"><input class="diary-date" id="diary-date" type="date" value="'+esc(diaryDraft.date)+'" aria-label="기록 날짜">'+
-    '<p class="diary-prompt">오늘 내 마음은 어떤 표정인가요?</p><div class="diary-moods" role="group" aria-label="오늘의 기분">'+
-    SCALE.map((label,i)=>'<button type="button" class="diary-mood '+(diaryDraft.mood===i?'on':'')+'" data-diary-mood="'+i+'" aria-pressed="'+(diaryDraft.mood===i)+'">'+face(i,i)+'<span>'+label+'</span></button>').join('')+'</div>'+
-    '<p class="diary-prompt">오늘 있었던 일과 마음을 적어 보세요.</p><textarea class="diary-writing" id="diary-body" placeholder="오늘은 이런 일이 있었어요...">'+esc(diaryDraft.body)+'</textarea>'+
-    '<p class="diary-prompt">오늘 나에게 해주고 싶은 말</p><textarea class="diary-note" id="diary-note" placeholder="오늘도 여기까지 온 것만으로 충분해.">'+esc(diaryDraft.note)+'</textarea>'+
-    '<div class="diary-actions"><button type="button" class="btn" id="diary-save">이 페이지 저장하기</button></div></section>'+
-    '<p class="src">기록은 이 브라우저에 저장돼요. 다른 기기와 자동으로 공유되지는 않아요.</p>'+
-    '<section class="card"><h2>지난 마음 기록</h2><div class="diary-list">'+(records.length?records.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>'<button type="button" class="diary-entry" data-diary-open="'+esc(x.date)+'"><span class="diary-entry-face">'+face(Math.max(0,x.mood),Math.max(0,x.mood))+'</span><span class="diary-entry-copy"><b>'+esc(x.date)+' · '+esc(SCALE[Math.max(0,x.mood)]||'기록')+'</b><small>'+esc((x.body||x.note||'마음을 남겼어요.').replace(/\s+/g,' ').slice(0,65))+'</small></span><span>›</span></button>').join(''):'<div class="diary-empty">아직 기록이 없어요.<br>첫 페이지를 남겨 볼까요?</div>')+'</div></section>';
-  const body=document.getElementById('diary-body'),note=document.getElementById('diary-note');
-  body.addEventListener('input',()=>diaryDraft.body=body.value);note.addEventListener('input',()=>diaryDraft.note=note.value);
-  document.getElementById('diary-date').addEventListener('change',e=>{const x=diaryRead().find(r=>r.date===e.target.value);diaryDraft=x?{...x}:{date:e.target.value,mood:-1,body:'',note:''};diary();});
-  V.querySelectorAll('[data-diary-mood]').forEach(b=>b.addEventListener('click',()=>{diaryDraft.body=body.value;diaryDraft.note=note.value;diaryDraft.mood=Number(b.dataset.diaryMood);diary();}));
-  document.getElementById('diary-save').addEventListener('click',()=>{diaryDraft.body=body.value;diaryDraft.note=note.value;if(diaryDraft.mood<0){alert('오늘의 마음 표정을 먼저 골라 주세요.');return;}const all=diaryRead().filter(x=>x.date!==diaryDraft.date);all.push({...diaryDraft});try{localStorage.setItem('mc.diary',JSON.stringify(all));}catch(e){alert('저장 공간을 사용할 수 없어요.');return;}diaryDraft={...diaryDraft};diary();});
-  V.querySelectorAll('[data-diary-open]').forEach(b=>b.addEventListener('click',()=>{const x=diaryRead().find(r=>r.date===b.dataset.diaryOpen);if(x){diaryDraft={...x};diary();}}));
 }
 
 function home() {
@@ -2577,8 +2528,7 @@ const routes={
   test,
   result,
   map,
-  relax,
-  diary
+  relax
 };
 
 function go() {
