@@ -396,12 +396,12 @@ details.card ol {
 }
 
 .medot {
-  width:18px;
-  height:18px;
+  width:12px;
+  height:12px;
   border-radius:50%;
-  background:#FF4D4F;
+  background:#899968;
   border:3px solid #fff;
-  box-shadow:0 0 0 6px rgba(255,77,79,.25),0 2px 6px rgba(0,0,0,.3);
+  box-shadow:0 0 0 3px rgba(137,153,104,.22),0 1px 4px rgba(61,72,43,.22);
 }
 
 /* 사용자 선택 컬러 테마 */
@@ -2306,15 +2306,10 @@ function map() {
 
     const iw=new kakao.maps.InfoWindow({removable:true});
 
-    const markerSvg=`<svg xmlns="http://www.w3.org/2000/svg" width="44" height="54" viewBox="0 0 44 54">
-      <path d="M22 2C10.4 2 1 11.2 1 22.5C1 37.2 22 52 22 52S43 37.2 43 22.5C43 11.2 33.6 2 22 2Z" fill="#899968" stroke="#718052" stroke-width="1.5"/>
-      <circle cx="22" cy="22" r="13.2" fill="#FFF9EC" stroke="#F5EEDC" stroke-width="1"/>
-      <image href="./favicon.png" x="12.5" y="12.5" width="19" height="19" preserveAspectRatio="xMidYMid meet"/>
-    </svg>`;
     const markerImage=new kakao.maps.MarkerImage(
-      'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(markerSvg),
-      new kakao.maps.Size(44,54),
-      {offset:new kakao.maps.Point(22,52)}
+      './counseling-marker.svg?v=2',
+      new kakao.maps.Size(36,44),
+      {offset:new kakao.maps.Point(18,43)}
     );
 
     let marks=[],bnd=null,meOv=null;
