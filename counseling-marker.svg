@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="44" viewBox="0 0 36 44">
+  <path d="M18 1.5C8.9 1.5 1.5 8.8 1.5 17.8C1.5 29.1 18 42.5 18 42.5S34.5 29.1 34.5 17.8C34.5 8.8 27.1 1.5 18 1.5Z" fill="#899968" stroke="#718052" stroke-width="1.2"/>
+  <circle cx="18" cy="17.5" r="10.8" fill="#FFFDF7" stroke="#F2ECD9" stroke-width=".8"/>
+  <image x="10.5" y="10" width="15" height="15" preserveAspectRatio="xMidYMid meet" xlink:href="https://36s6734-spec.github.io/Maeum-check/favicon.png?v=2"/>
+</svg>
