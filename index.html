@@ -918,6 +918,45 @@ button, a, select { touch-action: manipulation; }
   }
 }
 
+
+/* 자가진단 결과: 기존 테마를 따르는 정돈된 리포트 */
+.report-page-title{margin:8px 0 2px;font-size:clamp(28px,5vw,36px);letter-spacing:-.035em}
+.report-intro{margin:0 0 18px}
+.report-hero{padding:clamp(20px,4vw,30px);background:color-mix(in srgb,var(--card) 94%,var(--p1))}
+.report-eyebrow{font-size:10px;letter-spacing:.13em;font-weight:700;color:var(--sub)}
+.report-kicker{margin:10px 0 12px;font-size:12px}
+.report-status{display:flex;align-items:center;gap:16px;padding:8px 0 18px}
+.report-face{width:76px;height:76px;flex:none;display:grid;place-items:center;border-radius:22px;background:color-mix(in srgb,var(--p1) 42%,var(--card))}
+.report-face svg{width:62px;height:62px}
+.report-status-copy{min-width:0}
+.report-status-copy h2{font-size:clamp(25px,5vw,32px);margin:0 0 3px}
+.report-status-copy p{margin:0;color:var(--sub);font-size:14px;overflow-wrap:anywhere}
+.report-score{display:grid;grid-template-columns:1fr;gap:9px;padding:16px 0 8px;border-top:1px solid var(--line)}
+.report-score>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.report-score strong{font-size:27px;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.report-score strong small,.report-focus-score small{font-size:13px;color:var(--sub);font-weight:400;letter-spacing:0}
+.report-score-track{height:9px;overflow:hidden;border-radius:99px;background:var(--line)}
+.report-score-track i{display:block;height:100%;border-radius:inherit;background:var(--p3)}
+.report-disclaimer{margin:14px 0 0;font-size:12px;line-height:1.65}
+.report-section-head{margin-bottom:16px}
+.report-section-head h2{margin:3px 0 0;font-size:21px}
+.report-focus{border-color:color-mix(in srgb,var(--p2) 42%,var(--line))}
+.report-focus-names{font-size:17px;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
+.report-focus-score{font-size:32px;font-weight:700;letter-spacing:-.04em;margin:7px 0 10px;font-variant-numeric:tabular-nums}
+.report-focus-desc{margin:13px 0 0;line-height:1.7}
+.report-note{font-size:12px;line-height:1.65;margin:12px 0 0}
+.report-area{padding:12px 0 2px}
+.report-area+.report-area{border-top:1px solid var(--line)}
+.report-area .lab{align-items:center;gap:8px;line-height:1.5}
+.report-area .lab span{min-width:0;overflow-wrap:anywhere}
+.report-area .lab b{white-space:nowrap;font-variant-numeric:tabular-nums}
+.report-area .bar{height:9px;margin:8px 0 10px}
+.report-area .bar i{background:var(--p3)}
+.report-area.is-focus .lab span{font-weight:700}
+.report-area.is-focus .lab em{display:inline-block;margin-left:5px;padding:2px 7px;border-radius:99px;background:color-mix(in srgb,var(--p2) 24%,var(--card));color:var(--ink);font-size:10px;font-style:normal;font-weight:600;white-space:nowrap}
+.report-area.is-focus .bar i{background:var(--p2)}
+@media(max-width:380px){.report-status{gap:11px}.report-face{width:64px;height:64px;border-radius:18px}.report-face svg{width:54px;height:54px}.report-area .lab{font-size:13px}}
+
 </style>
 </head>
 <body>
@@ -1631,70 +1670,43 @@ const bar=(l,v,max,cls='')=>`
 function result() {
   const h=load();
   if(!h.length) {
-    V.innerHTML=`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>`;
+    V.innerHTML=\`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>\`;
     return;
   }
   const r=h[h.length-1], p=h[h.length-2], L=LV[r.lv], ss=row('stress','소계');
-  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?`${f1(x-y)}점 높아졌어요`:`${f1(y-x)}점 낮아졌어요`;
-  let o=`<h1>내 결과</h1>`;
+  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?\`\${f1(x-y)}점 높아졌어요\`:\`\${f1(y-x)}점 낮아졌어요\`;
+  const areas=[
+    {name:'감정노동 부담',score:r.A,desc:'고객을 응대하며 감정을 조절해야 했던 부담을 살펴보는 영역이에요.'},
+    {name:'악성 민원 경험',score:r.B,desc:'폭언이나 무리한 요구 등 응대 과정에서 겪은 어려움을 살펴보는 영역이에요.'},
+    {name:'심신 상태',score:r.C,desc:'업무 경험과 함께 나타난 마음과 몸의 상태를 돌아보는 영역이에요.'},
+    {name:'보호·회복 환경의 어려움',score:mean([6-r.d2,6-r.d3]),desc:'업무 중 보호받고 회복할 수 있는 환경을 함께 살펴보는 영역이에요.'}
+  ];
+  const highest=Math.max(...areas.map(x=>x.score));
+  const focus=areas.filter(x=>Math.abs(x.score-highest)<.05);
+  const focusNames=focus.map(x=>esc(x.name)).join(' · ');
+  let o='<h1 class="report-page-title">나의 마음 점검 결과</h1><p class="sub report-intro">점검 결과를 바탕으로 현재 상태를 차분히 살펴봐요.</p>';
   if(lastE3==='가끔'||lastE3==='자주') {
-    o+=`<div class="notice crisis"><b>먼저 확인해 주세요.</b><p>지금 마음이 많이 힘들다면 혼자 감당하지 말고 믿을 만한 사람에게 바로 알려 주세요. 자살예방상담전화 109로 연락할 수 있고, 당장 안전이 위급하면 112 또는 119에 도움을 요청하세요.</p></div>`;
+    o+='<div class="notice crisis"><b>먼저 확인해 주세요.</b><p>지금 마음이 많이 힘들다면 혼자 감당하지 말고 믿을 만한 사람에게 바로 알려 주세요. 자살예방상담전화 109로 연락할 수 있고, 당장 안전이 위급하면 112 또는 119에 도움을 요청하세요.</p></div>';
   }
-  o+=`
-    <div class="card">
-      <p class="sub">개인 점검 결과 · 앱 자체 참고용</p>
-      <div class="hl">${face(r.lv===0?0:r.lv===1?1:r.lv===2?3:4,[0,1,3,4][r.lv])}
-        <h2>${L.n} 단계</h2><p><b>${L.m}</b></p>
-        <p class="sub">종합 점수 ${f1(r.st)} / 5점</p>
-      </div>
-      <div class="notice">이 결과는 앱에서 자체 구성한 문항의 응답을 요약한 참고 정보예요. 공식 K-ELS®11 점수나 의학적 진단 결과가 아니에요.</div>
-      <h2>영역별 점검</h2>
-      ${bar('감정노동 부담',r.A,5)}
-      ${bar('악성 민원 경험',r.B,5)}
-      ${bar('심신 상태',r.C,5)}
-      ${bar('보호·회복 환경의 어려움',mean([6-r.d2,6-r.d3]),5)}
-      <p class="sub">점수는 앱 문항 응답의 평균이며, K-ELS®11의 정상·위험 참고치와 직접 비교할 수 없어요.</p>
-      <details class="card"><summary>＋ 평가 기준과 도구 안내</summary>
-        <p><b>현재 앱 문항</b><br>앱에서 자체 구성한 참고용 문항이에요. 공식 도구로 표준화되거나 타당도가 검증된 문항으로 안내하지 않아요.</p>
-        <p><b>공식 참고 도구: 한국형 감정노동 평가도구 K-ELS®11</b><br>한국산업안전보건공단 KOSHA GUIDE H-163-2021에 수록되어 있으며, 감정규제(2문항), 감정부조화(3문항), 조직모니터링(2문항), 감정노동 보호체계(4문항)의 총 11문항·4개 영역으로 구성돼요. 4점 척도이며 보호체계 영역은 역채점해요.</p>
-        <p>공식 도구의 성별 참고치는 해당 도구의 점수 산정 방식으로 응답했을 때만 적용할 수 있어요. 현재 앱 점수에는 적용하지 않았어요. 지침은 참고치가 절대적인 기준은 아니라고 설명해요.</p>
-        <p class="sub">출처: 한국산업안전보건공단, 「고객응대 근로자의 감정노동 평가 지침」, KOSHA GUIDE H-163-2021, 2021년 12월, 5.1·5.2절 및 부록 1·2.</p>
-      </details>
-    </div>`;
-  o+=`
-    <div class="card">
-      <p class="sub">업종 현황 · 사업장 단위</p>
-      <h2>서비스업 사업장의 감정노동 스트레스</h2>
-      <div class="hl"><p class="sub">심각하다고 응답한 비율</p>
-        <p style="font-size:42px;line-height:1.2;margin:8px 0"><b>${ss?ss.pos:'-'}%</b></p>
-        <p>조사에 응한 서비스업 사업장 중 25.3%가 고객 대상 감정노동 스트레스를 심각하다고 응답했어요.</p>
-      </div>
-      <div class="notice">이 통계는 <b>사업장 단위</b> 조사 결과예요. 서비스업 종사자 개인의 비율이나 개인의 현재 상태를 뜻하지 않아요.</div>
-      <details class="card"><summary>＋ 통계 출처와 조사 정보</summary>
-        <p><b>조사명</b><br>산업안전보건실태조사</p>
-        <p><b>조사 연도</b><br>2020년</p>
-        <p><b>통계표</b><br>스트레스 요인별 심각도 - 고객 대상 감정 노동</p>
-        <p><b>조사 단위</b><br>사업장 단위로 표본을 추출하고 응답을 수집한 조사예요. 응답자 개인의 직종이나 직책, 질문 원문은 확인되지 않았어요.</p>
-        <p><b>서비스업 응답 사업장 수</b><br>2,551개 사업장</p>
-        <p><b>통계 수치</b><br>심각 응답 비율 25.3%</p>
-        <p class="sub">출처: 국가통계포털(KOSIS), 한국산업안전보건공단, 「산업안전보건실태조사」, 통계표 ID DT_380004_MS16_1_1, 2020년.</p>
-      </details>
-    </div>`;
+  o+='<section class="card report-hero"><div class="report-eyebrow">MY CHECK · PERSONAL REPORT</div><p class="sub report-kicker">개인 점검 결과 · 앱 자체 참고용</p><div class="report-status"><div class="report-face">'+face(r.lv===0?0:r.lv===1?1:r.lv===2?3:4,[0,1,3,4][r.lv])+'</div><div class="report-status-copy"><h2>'+L.n+' 단계</h2><p>'+L.m+'</p></div></div><div class="report-score"><div><span class="sub">종합 점수</span><strong>'+f1(r.st)+'<small> / 5점</small></strong></div><div class="report-score-track"><i style="width:'+Math.max(0,Math.min(100,r.st/5*100))+'%"></i></div></div><div class="notice report-disclaimer">이 결과는 앱에서 자체 구성한 문항의 응답을 요약한 참고 정보예요. 공식 K-ELS®11 점수나 의학적 진단 결과가 아니에요.</div></section>';
+  o+='<section class="card report-focus"><div class="report-section-head"><span class="report-eyebrow">CHECK POINT</span><h2>가장 눈여겨볼 영역</h2></div><div class="report-focus-names">'+focusNames+'</div><p class="report-focus-score">'+f1(highest)+'<small> / 5점</small></p><div class="report-score-track"><i style="width:'+Math.max(0,Math.min(100,highest/5*100))+'%"></i></div><p class="sub report-focus-desc">'+focus.map(x=>x.desc).join(' ')+'</p><p class="sub report-note">다른 영역과 비교해 상대적으로 높은 점수라는 뜻이며, 위험도나 진단을 의미하지 않아요.</p></section>';
+  o+='<section class="card report-areas"><div class="report-section-head"><span class="report-eyebrow">AREA SUMMARY</span><h2>영역별 점검</h2></div>';
+  areas.forEach(x=>{
+    const isFocus=focus.includes(x);
+    o+='<div class="report-area'+(isFocus?' is-focus':'')+'"><div class="lab"><span>'+x.name+(isFocus?' <em>눈여겨보기</em>':'')+'</span><b>'+f1(x.score)+' / 5</b></div><div class="bar"><i style="width:'+Math.max(0,Math.min(100,x.score/5*100))+'%"></i></div></div>';
+  });
+  o+='<p class="sub report-note">점수는 앱 문항 응답의 평균이며, K-ELS®11의 정상·위험 참고치와 직접 비교할 수 없어요.</p><details class="card"><summary>＋ 평가 기준과 도구 안내</summary><p><b>현재 앱 문항</b><br>앱에서 자체 구성한 참고용 문항이에요. 공식 도구로 표준화되거나 타당도가 검증된 문항으로 안내하지 않아요.</p><p><b>공식 참고 도구: 한국형 감정노동 평가도구 K-ELS®11</b><br>한국산업안전보건공단 KOSHA GUIDE H-163-2021에 수록되어 있으며, 감정규제(2문항), 감정부조화(3문항), 조직모니터링(2문항), 감정노동 보호체계(4문항)의 총 11문항·4개 영역으로 구성돼요. 4점 척도이며 보호체계 영역은 역채점해요.</p><p>공식 도구의 성별 참고치는 해당 도구의 점수 산정 방식으로 응답했을 때만 적용할 수 있어요. 현재 앱 점수에는 적용하지 않았어요. 지침은 참고치가 절대적인 기준은 아니라고 설명해요.</p><p class="sub">출처: 한국산업안전보건공단, 「고객응대 근로자의 감정노동 평가 지침」, KOSHA GUIDE H-163-2021, 2021년 12월, 5.1·5.2절 및 부록 1·2.</p></details></section>';
+  o+='<div class="card"><p class="sub">업종 현황 · 사업장 단위</p><h2>서비스업 사업장의 감정노동 스트레스</h2><div class="hl"><p class="sub">심각하다고 응답한 비율</p><p style="font-size:42px;line-height:1.2;margin:8px 0"><b>'+(ss?ss.pos:'-')+'%</b></p><p>조사에 응한 서비스업 사업장 중 25.3%가 고객 대상 감정노동 스트레스를 심각하다고 응답했어요.</p></div><div class="notice">이 통계는 <b>사업장 단위</b> 조사 결과예요. 서비스업 종사자 개인의 비율이나 개인의 현재 상태를 뜻하지 않아요.</div><details class="card"><summary>＋ 통계 출처와 조사 정보</summary><p><b>조사명</b><br>산업안전보건실태조사</p><p><b>조사 연도</b><br>2020년</p><p><b>통계표</b><br>스트레스 요인별 심각도 - 고객 대상 감정 노동</p><p><b>조사 단위</b><br>사업장 단위로 표본을 추출하고 응답을 수집한 조사예요. 응답자 개인의 직종이나 직책, 질문 원문은 확인되지 않았어요.</p><p><b>서비스업 응답 사업장 수</b><br>2,551개 사업장</p><p><b>통계 수치</b><br>심각 응답 비율 25.3%</p><p class="sub">출처: 국가통계포털(KOSIS), 한국산업안전보건공단, 「산업안전보건실태조사」, 통계표 ID DT_380004_MS16_1_1, 2020년.</p></details></div>';
   if(p) {
-    o+=`<div class="card"><h2>지난 결과와 비교</h2>
-      <p>종합 점수가 지난번 (${new Date(p.t).toLocaleDateString('ko-KR')}, ${LV[p.lv].n})보다 ${d(r.st,p.st)}.</p>
-      <p class="sub">감정노동 부담 ${d(r.A,p.A)} · 악성 민원 경험 ${d(r.B,p.B)} · 심신 상태 ${d(r.C,p.C)}</p></div>`;
+    o+='<div class="card"><h2>지난 결과와 비교</h2><p>종합 점수가 지난번 ('+new Date(p.t).toLocaleDateString('ko-KR')+', '+LV[p.lv].n+')보다 '+d(r.st,p.st)+'.</p><p class="sub">감정노동 부담 '+d(r.A,p.A)+' · 악성 민원 경험 '+d(r.B,p.B)+' · 심신 상태 '+d(r.C,p.C)+'</p></div>';
   }
-  o+=`<div class="card talk"><h2>도움 연결</h2><p>${L.h}</p>`;
-  if(r.b3>=3) o+=`<p>신체적 위협이나 성적 언행 등으로 불안했다면, 혼자 대응하지 말고 관리자나 신뢰할 수 있는 담당자에게 알리고 안전한 장소로 이동해 도움을 요청하세요.</p>`;
-  if(r.e2.length) o+=`<p><b>선택한 도움:</b> ${r.e2.map(esc).join(' · ')}</p>`;
-  if(r.e1>=4) o+=`<p>이직을 고민할 만큼 부담이 컸다면, 현재 업무 환경과 보호 조치를 차분히 점검하고 상담 기관이나 노동 관련 지원기관에 도움을 요청해 보세요.</p>`;
-  o+=`<a class="btn" href="#map" style="display:inline-block;text-decoration:none">도움 기관 지도 보기</a></div>`;
-  o+=`<div class="card"><h2>내 권리 안내</h2>
-    <p>고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 힘들었던 일을 날짜와 함께 메모해 두면 나중에 도움을 받을 때 유용해요.</p>
-    <details class="card"><summary>? 법적 근거 보기</summary><p>산업안전보건법 제41조(고객의 폭언 등으로 인한 건강장해 예방조치)</p><p class="sub">구체적인 적용과 조치 내용은 최신 법령 및 사업장 상황을 확인해 주세요.</p></details>
-    </div>`;
-  o+=`<div class="card"><h2>저장된 결과 ${h.length}건</h2><ul>${h.slice().reverse().map(x=>`<li>${new Date(x.t).toLocaleDateString('ko-KR')} · ${LV[x.lv].n} · 평균 ${f1(x.st)}점</li>`).join('')}</ul><button class="btn ghost" id="del" type="button">저장된 결과 삭제</button></div>`;
+  o+='<div class="card talk"><h2>도움 연결</h2><p>'+L.h+'</p>';
+  if(r.b3>=3) o+='<p>신체적 위협이나 성적 언행 등으로 불안했다면, 혼자 대응하지 말고 관리자나 신뢰할 수 있는 담당자에게 알리고 안전한 장소로 이동해 도움을 요청하세요.</p>';
+  if(r.e2.length) o+='<p><b>선택한 도움:</b> '+r.e2.map(esc).join(' · ')+'</p>';
+  if(r.e1>=4) o+='<p>이직을 고민할 만큼 부담이 컸다면, 현재 업무 환경과 보호 조치를 차분히 점검하고 상담 기관이나 노동 관련 지원기관에 도움을 요청해 보세요.</p>';
+  o+='<a class="btn" href="#map" style="display:inline-block;text-decoration:none">도움 기관 지도 보기</a></div>';
+  o+='<div class="card"><h2>내 권리 안내</h2><p>고객 때문에 몸이나 마음이 힘들어지면, 사업장에 잠깐 응대를 멈추거나 다른 일로 바꿔 달라고 말할 수 있어요. 힘들었던 일을 날짜와 함께 메모해 두면 나중에 도움을 받을 때 유용해요.</p><details class="card"><summary>? 법적 근거 보기</summary><p>산업안전보건법 제41조(고객의 폭언 등으로 인한 건강장해 예방조치)</p><p class="sub">구체적인 적용과 조치 내용은 최신 법령 및 사업장 상황을 확인해 주세요.</p></details></div>';
+  o+='<div class="card"><h2>저장된 결과 '+h.length+'건</h2><ul>'+h.slice().reverse().map(x=>'<li>'+new Date(x.t).toLocaleDateString('ko-KR')+' · '+LV[x.lv].n+' · 평균 '+f1(x.st)+'점</li>').join('')+'</ul><button class="btn ghost" id="del" type="button">저장된 결과 삭제</button></div>';
   V.innerHTML=o;
   document.getElementById('del').onclick=()=>{
     if(confirm('이 기기에 저장된 결과를 모두 지울까요?')) { save([]); lastE3=''; result(); }
