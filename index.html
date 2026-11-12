@@ -1963,7 +1963,7 @@ function map() {
   const guList=Object.keys(DB);
   const demo=!guList.length;
 
-  let gu='',ctl=null;
+  let gu='',ctl=null,mapItems=[],districtBusy=false,lastMapGu='';
 
   let items=demo
     ?[
@@ -2156,6 +2156,8 @@ function map() {
   const loadGu=async g=>{
     gu=g;
     items=(DB[g]||[]).map(x=>({...x}));
+    mapItems=items;
+    lastMapGu='';
 
     renderList();
 
@@ -2368,13 +2370,14 @@ function map() {
     };
 
     ctl={
-      set:()=>{
+      set:(preserveView=false)=>{
         marks.forEach(k=>k.setMap(null));
 
+        clusterer.clear();
         marks=[];
         bnd=new kakao.maps.LatLngBounds();
 
-        items.forEach(p=>{
+        mapItems.forEach(p=>{
           if(p.lat==null) return;
 
           const pos=new kakao.maps.LatLng(p.lat,p.lng);
@@ -2396,7 +2399,7 @@ function map() {
         });
 
         clusterer.addMarkers(marks);
-        fit();
+        if(!preserveView) fit();
       },
 
       pick:i=>{
@@ -2429,7 +2432,7 @@ function map() {
 
         meOv.setMap(m);
 
-        const near=items
+        const near=mapItems
           .filter(p=>p.mk&&p.d!=null)
           .sort((a,b)=>a.d-b.d)[0];
 
@@ -2448,7 +2451,57 @@ function map() {
     };
 
     ctl.set();
-    st('');
+
+    // 지도 중심이 다른 구로 이동하면 해당 구 기관도 지도에 추가해요.
+    const regionAt=pos=>new Promise(resolve=>{
+      new kakao.maps.services.Geocoder().coord2RegionCode(
+        pos.getLng(),pos.getLat(),(data,status)=>{
+          const row=status===kakao.maps.services.Status.OK
+            ?data.find(x=>x.region_type==='H')||data[0]
+            :null;
+          resolve(row&&row.region_2depth_name||'');
+        }
+      );
+    });
+
+    const loadMapDistrict=async district=>{
+      if(!district||!DB[district]||district===gu||lastMapGu===district||districtBusy) return;
+      districtBusy=true;
+      try {
+        const ps=new kakao.maps.services.Places();
+        const extra=(DB[district]||[])
+          .filter(p=>!mapItems.some(x=>x.gu===district&&x.name===p.name))
+          .map(x=>({...x}));
+        await Promise.all(extra.map(async p=>{
+          const key=district+'|'+p.name;
+          if(!(key in CACHE)) CACHE[key]=await find(ps,p);
+          if(CACHE[key]) Object.assign(p,CACHE[key]);
+        }));
+        if(extra.some(p=>p.lat!=null)) {
+          mapItems.push(...extra.filter(p=>p.lat!=null));
+          lastMapGu=district;
+          ctl.set(true);
+        } else {
+          lastMapGu=district;
+        }
+      } catch(e) {
+        // 다른 구의 위치 확인에 실패해도 선택한 구의 지도는 유지해요.
+      } finally {
+        districtBusy=false;
+      }
+    };
+
+    let regionTimer=null;
+    kakao.maps.event.addListener(m,'idle',()=>{
+      if(!gu||demo||districtBusy) return;
+      clearTimeout(regionTimer);
+      regionTimer=setTimeout(async()=>{
+        const district=await regionAt(m.getCenter());
+        if(district&&district!==gu) await loadMapDistrict(district);
+      },350);
+    });
+
+    st('')
 
     if(window.ResizeObserver) {
       kro=new ResizeObserver(()=>{
