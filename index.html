@@ -1670,11 +1670,11 @@ const bar=(l,v,max,cls='')=>`
 function result() {
   const h=load();
   if(!h.length) {
-    V.innerHTML=\`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>\`;
+    V.innerHTML=`<h1>결과 확인</h1><div class="notice">아직 저장된 결과가 없어요. 자가진단을 먼저 해 보세요.</div><a class="btn" href="#test" style="display:inline-block;text-decoration:none">자가진단 시작</a>`;
     return;
   }
   const r=h[h.length-1], p=h[h.length-2], L=LV[r.lv], ss=row('stress','소계');
-  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?\`\${f1(x-y)}점 높아졌어요\`:\`\${f1(y-x)}점 낮아졌어요\`;
+  const d=(x,y)=>Math.abs(x-y)<.1?'비슷해요':x>y?`${f1(x-y)}점 높아졌어요`:`${f1(y-x)}점 낮아졌어요`;
   const areas=[
     {name:'감정노동 부담',score:r.A,desc:'고객을 응대하며 감정을 조절해야 했던 부담을 살펴보는 영역이에요.'},
     {name:'악성 민원 경험',score:r.B,desc:'폭언이나 무리한 요구 등 응대 과정에서 겪은 어려움을 살펴보는 영역이에요.'},
