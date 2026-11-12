@@ -2314,6 +2314,14 @@ function map() {
 
     let marks=[],bnd=null,meOv=null;
 
+    // 지도를 충분히 확대했을 때만 기관 마커를 표시해 한눈에 보기 쉽게 해요.
+    const syncMarkerVisibility=()=>{
+      const showNearby=m.getLevel()<=6;
+      marks.forEach(mk=>mk.setVisible(showNearby));
+    };
+
+    kakao.maps.event.addListener(m,'zoom_changed',syncMarkerVisibility);
+
     const show=(p,mk)=>{
       iw.setContent(`
         <div style="padding:8px 10px;font-size:13px;line-height:1.5;min-width:170px">
@@ -2376,6 +2384,7 @@ function map() {
         });
 
         fit();
+        syncMarkerVisibility();
       },
 
       pick:i=>{
