@@ -1903,7 +1903,7 @@ function loadKakao() {
 
     s.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+
       encodeURIComponent(javascriptKey)+
-      '&libraries=services&autoload=false';
+      '&libraries=services,clusterer&autoload=false';
 
     s.onload=fin;
     s.onerror=()=>{
@@ -2314,13 +2314,26 @@ function map() {
 
     let marks=[],bnd=null,meOv=null;
 
-    // 지도를 충분히 확대했을 때만 기관 마커를 표시해 한눈에 보기 쉽게 해요.
-    const syncMarkerVisibility=()=>{
-      const showNearby=m.getLevel()<=6;
-      marks.forEach(mk=>mk.setVisible(showNearby));
-    };
-
-    kakao.maps.event.addListener(m,'zoom_changed',syncMarkerVisibility);
+    // 가까운 기관 마커는 묶어서 표시하고, 확대하면 개별 마커로 펼쳐요.
+    const clusterer=new kakao.maps.MarkerClusterer({
+      map:m,
+      averageCenter:true,
+      minLevel:6,
+      disableClickZoom:false,
+      styles:[{
+        width:'38px',
+        height:'38px',
+        background:'rgba(0,151,164,.92)',
+        border:'2px solid #fff',
+        borderRadius:'50%',
+        color:'#fff',
+        textAlign:'center',
+        lineHeight:'34px',
+        fontSize:'13px',
+        fontWeight:'700',
+        boxShadow:'0 2px 7px rgba(0,0,0,.22)'
+      }]
+    });
 
     const show=(p,mk)=>{
       iw.setContent(`
@@ -2369,7 +2382,6 @@ function map() {
           bnd.extend(pos);
 
           const mk=new kakao.maps.Marker({
-            map:m,
             position:pos,
             title:p.name,
             image:markerImage
@@ -2383,8 +2395,8 @@ function map() {
           marks.push(mk);
         });
 
+        clusterer.addMarkers(marks);
         fit();
-        syncMarkerVisibility();
       },
 
       pick:i=>{
