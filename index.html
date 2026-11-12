@@ -2306,6 +2306,17 @@ function map() {
 
     const iw=new kakao.maps.InfoWindow({removable:true});
 
+    const markerSvg=`<svg xmlns="http://www.w3.org/2000/svg" width="44" height="54" viewBox="0 0 44 54">
+      <path d="M22 2C10.4 2 1 11.2 1 22.5C1 37.2 22 52 22 52S43 37.2 43 22.5C43 11.2 33.6 2 22 2Z" fill="#899968" stroke="#718052" stroke-width="1.5"/>
+      <circle cx="22" cy="22" r="13.2" fill="#FFF9EC" stroke="#F5EEDC" stroke-width="1"/>
+      <image href="./favicon.png" x="12.5" y="12.5" width="19" height="19" preserveAspectRatio="xMidYMid meet"/>
+    </svg>`;
+    const markerImage=new kakao.maps.MarkerImage(
+      'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(markerSvg),
+      new kakao.maps.Size(44,54),
+      {offset:new kakao.maps.Point(22,52)}
+    );
+
     let marks=[],bnd=null,meOv=null;
 
     const show=(p,mk)=>{
@@ -2357,7 +2368,8 @@ function map() {
           const mk=new kakao.maps.Marker({
             map:m,
             position:pos,
-            title:p.name
+            title:p.name,
+            image:markerImage
           });
 
           kakao.maps.event.addListener(mk,'click',()=>{
